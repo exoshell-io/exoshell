@@ -177,6 +177,9 @@ dist
 # Turbo
 .turbo/
 
-# Data
-/data/
-/apps/*/data/
+# Rust
+/target/
+/apps/desktop/src-tauri/target/
+
+# Next.js static build
+/apps/*/out/
