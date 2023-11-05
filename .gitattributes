@@ -1,0 +1,7 @@
+# Ensure new lines are \n on every platforms
+*               text=auto eol=lf
+
+*.lockb         merge=binary diff=lockb
+Cargo.lock      merge=binary
+
+*.json          linguist-language=JSON-with-Comments
