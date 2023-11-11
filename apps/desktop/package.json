@@ -2,8 +2,10 @@
   "name": "@exoterm/desktop",
   "private": true,
   "scripts": {
-    "build": "tauri build",
+    "build": "turbo run build:",
+    "build:": "tauri build",
     "build:web": "next build",
+    "clean": "rm -rf -- out/",
     "dev": "RUST_BACKTRACE=1 tauri dev",
     "dev:web": "next dev -p 3333",
     "lint": "next lint"
