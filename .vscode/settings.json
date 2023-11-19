@@ -14,5 +14,11 @@
   },
   "files.eol": "\n",
   "files.insertFinalNewline": true,
-  "typescript.tsdk": "node_modules/typescript/lib"
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "json.schemas": [
+    {
+      "fileMatch": ["manifest.json"],
+      "url": "https://json.schemastore.org/chrome-manifest"
+    }
+  ]
 }

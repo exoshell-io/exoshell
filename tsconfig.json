@@ -7,10 +7,10 @@
     "incremental": true,
 
     /* Modules */
-    "types": ["bun-types"],
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
 
     /* Language and Environment */
     "lib": ["ESNext"],
@@ -53,6 +53,7 @@
     "skipLibCheck": true
   },
   "include": [
+    "node_modules/bun-types/*.d.ts",
     ".lintstagedrc.mjs",
     ".eslintrc.cjs",
     "apps/*/src/**/*",

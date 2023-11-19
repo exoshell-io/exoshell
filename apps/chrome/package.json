@@ -1,0 +1,15 @@
+{
+  "name": "@exoterm/chrome",
+  "private": true,
+  "scripts": {
+    "build": "turbo run build:",
+    "build:": "bun scripts/build.ts",
+    "clean": "rm -rf -- dist/",
+    "lint": "eslint --ext js,cjs,mjs,ts --max-warnings=0 .",
+    "test": "bun test --coverage"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/chrome": "0.0.251"
+  }
+}

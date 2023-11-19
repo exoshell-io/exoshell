@@ -1,0 +1,12 @@
+{
+  "manifest_version": 3,
+  "name": "ExoTerm",
+  "version": "1.0",
+  "action": {},
+  "content_scripts": [
+    {
+      "matches": ["*://*/*"],
+      "js": ["content.js"]
+    }
+  ]
+}
