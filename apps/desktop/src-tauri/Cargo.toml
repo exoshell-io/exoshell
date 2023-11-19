@@ -10,11 +10,13 @@ edition.workspace = true
 tauri-build = { version = "1.5.0", features = [] }
 
 [dependencies]
+anyhow = { workspace = true }
 serde_json = { workspace = true }
 serde = { workspace = true }
 tauri = { version = "1.5.2", features = [] }
 tracing = { workspace = true }
 tracing-subscriber = { workspace = true }
+surrealdb = { workspace = true }
 
 [features]
 # this feature is used for production builds or when `devPath` points to the filesystem and the built-in dev server is disabled.

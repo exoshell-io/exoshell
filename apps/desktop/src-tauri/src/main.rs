@@ -4,6 +4,10 @@
 use tauri::Manager;
 use tracing::debug;
 
+mod db;
+mod ipc;
+mod prelude;
+
 fn main() {
     tracing_subscriber::fmt::init();
     tauri::Builder::default()
@@ -25,12 +29,7 @@ fn main() {
             }
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![greet])
+        .plugin(ipc::init())
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
-}
-
-#[tauri::command]
-fn greet(name: &str) -> String {
-    format!("Hello, {}!", name)
 }
