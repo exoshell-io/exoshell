@@ -6,7 +6,7 @@
     "build:": "tauri build",
     "build:web": "next build",
     "clean": "rm -rf -- out/",
-    "dev": "RUST_BACKTRACE=1 tauri dev",
+    "dev": "RUST_BACKTRACE=1 RUST_LOG=debug tauri dev",
     "dev:web": "next dev -p 3333",
     "lint": "next lint"
   },

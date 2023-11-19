@@ -70,6 +70,8 @@ dependencies = [
  "serde_json",
  "tauri",
  "tauri-build",
+ "tracing",
+ "tracing-subscriber",
 ]
 
 [[package]]
@@ -3042,6 +3044,7 @@ dependencies = [
  "matchers",
  "nu-ansi-term",
  "once_cell",
+ "parking_lot",
  "regex",
  "sharded-slab",
  "smallvec",
