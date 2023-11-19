@@ -1,18 +1,13 @@
-import styles from './page.module.css';
+'use client';
+
+import { ScriptEditor } from './ScriptEditor';
+import { ScriptList } from './ScriptList';
 
 export default function Home() {
   return (
-    <main className={styles.main}>
-      <TaskEditor />
-      <TaskList />
+    <main>
+      <ScriptEditor />
+      <ScriptList />
     </main>
   );
 }
-
-const TaskList: React.FC = () => {
-  return null;
-};
-
-const TaskEditor: React.FC = () => {
-  return null;
-};

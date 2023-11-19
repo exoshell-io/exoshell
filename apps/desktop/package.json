@@ -11,7 +11,17 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@mantine/code-highlight": "7.2.2",
+    "@mantine/core": "7.2.2",
+    "@mantine/dates": "7.2.2",
+    "@mantine/dropzone": "7.2.2",
+    "@mantine/form": "7.2.2",
+    "@mantine/hooks": "7.2.2",
+    "@mantine/notifications": "7.2.2",
+    "@mantine/nprogress": "7.2.2",
+    "@mantine/spotlight": "7.2.2",
     "@tauri-apps/api": "1.5.1",
+    "dayjs": "1.11.10",
     "next": "14.0.3",
     "react": "18.2.0",
     "react-dom": "18.2.0"
@@ -22,6 +32,9 @@
     "@types/react-dom": "18.2.15",
     "eslint": "8.54.0",
     "eslint-config-next": "14.0.3",
+    "postcss": "8.4.31",
+    "postcss-preset-mantine": "1.11.0",
+    "postcss-simple-vars": "7.0.1",
     "typescript": "5.2.2"
   }
 }
