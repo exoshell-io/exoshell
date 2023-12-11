@@ -24,7 +24,7 @@
     "@tauri-apps/cli": "1.5.6",
     "@typescript-eslint/eslint-plugin": "6.13.2",
     "@typescript-eslint/parser": "6.13.2",
-    "bun-types": "1.0.15",
+    "bun-types": "1.0.16",
     "eslint": "8.54.0",
     "husky": "8.0.3",
     "lint-staged": "15.2.0",
