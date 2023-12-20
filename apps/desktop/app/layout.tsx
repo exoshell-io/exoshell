@@ -1,11 +1,10 @@
 import '@mantine/core/styles.css';
-import { ColorSchemeScript, MantineProvider } from '@mantine/core';
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+import { ColorSchemeScript, MantineProvider } from '@mantine/core';
+import { App } from './_ui/App';
+import { ReactQueryProvider } from './_ui/ReactQueryProvider';
+
+export default function RootLayout() {
   return (
     <html lang='en'>
       <head>
@@ -15,7 +14,11 @@ export default function RootLayout({
         <ColorSchemeScript />
       </head>
       <body>
-        <MantineProvider>{children}</MantineProvider>
+        <ReactQueryProvider>
+          <MantineProvider>
+            <App />
+          </MantineProvider>
+        </ReactQueryProvider>
       </body>
     </html>
   );

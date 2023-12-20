@@ -7,7 +7,7 @@ use surrealdb::{
 
 #[derive(Debug)]
 pub struct Database {
-  db: Surreal<Db>,
+  pub db: Surreal<Db>,
 }
 
 impl Database {
@@ -17,3 +17,7 @@ impl Database {
     Ok(Self { db })
   }
 }
+
+mod prelude;
+
+pub mod script;

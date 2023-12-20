@@ -1,4 +1,5 @@
 'use client';
+
 import { Container, NavLink } from '@mantine/core';
 import { useMemo } from 'react';
 

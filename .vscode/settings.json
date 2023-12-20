@@ -2,7 +2,15 @@
   "[css][graphql][html][javascript][javascriptreact][json][jsonc][markdown][mdx][scss][typescript][typescriptreact][yaml]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "cSpell.words": ["exoterm", "tauri"],
+  "cSpell.words": [
+    "exoterm",
+    "nprogress",
+    "tanstack",
+    "tauri",
+    "taurpc",
+    "thiserror",
+    "zustand"
+  ],
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
   },
