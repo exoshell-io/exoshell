@@ -2,6 +2,7 @@
 
 import { Accordion, Group, AppShell, NavLink } from '@mantine/core';
 import { Editor } from './Editor';
+import { useCallback } from 'react';
 
 export const App: React.FC = () => {
   return (
@@ -57,9 +58,13 @@ export const NavBar: React.FC = () => {
 };
 
 export const ScriptList: React.FC = () => {
+  const onClick = useCallback((e: MouseEvent) => {
+    e.preventDefault();
+    console.log(e.currentTarget);
+  }, []);
   return (
     <>
-      <NavLink label='Youtube DL' href='/script/youtube-dl' />
+      <NavLink label='Youtube DL' onClick={(e) => {}} />
       <NavLink label='Video x2' />
     </>
   );

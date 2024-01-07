@@ -5,11 +5,13 @@ use tauri::Manager;
 use tracing::debug;
 
 mod db;
+mod engine;
 mod ipc;
 mod prelude;
 
 fn main() {
   tracing_subscriber::fmt::init();
+
   tauri::Builder::default()
     .setup(|app| {
       #[cfg(debug_assertions)] // only include this code on debug builds

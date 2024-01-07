@@ -1,17 +1,11 @@
 'use client';
 
-import { listScripts } from '@/_backend';
 import { useStore } from '@/_ui/store';
-import { Box, Button, Code, ScrollArea, Stack } from '@mantine/core';
-import { useQuery } from '@tanstack/react-query';
+import { Box, ScrollArea, Stack } from '@mantine/core';
 
 export const Editor: React.FC = () => {
   const editorLayout = useStore((state) => state.editorLayout);
-
-  const scripts = useQuery({
-    queryKey: ['scripts'],
-    queryFn: listScripts,
-  });
+  const tabs = useStore((state) => state.tabs);
 
   return (
     <>
@@ -31,12 +25,7 @@ export const Editor: React.FC = () => {
             >
               <Box h='40px' style={{ border: 'solid 5px green' }}></Box>
               <ScrollArea style={{ border: 'solid 5px yellow' }}>
-                <Box h='100dvh'>
-                  <Button onClick={scripts.refetch}>Refresh</Button>
-                  {scripts.data?.map((script) => (
-                    <Code key={script.id}>{script.name}</Code>
-                  ))}
-                </Box>
+                <Box h='100dvh'></Box>
               </ScrollArea>
             </Stack>
           );

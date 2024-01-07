@@ -20,4 +20,19 @@ impl Database {
 
 mod prelude;
 
+pub mod run;
 pub mod script;
+
+#[cfg(test)]
+mod tests {
+  use super::*;
+  use surrealdb::engine::local::Mem;
+
+  impl Database {
+    pub async fn new_test_db() -> Result<Self> {
+      let db = Surreal::new::<Mem>(()).await?;
+      db.use_ns("exoterm").use_db("exoterm").await?;
+      Ok(Self { db })
+    }
+  }
+}

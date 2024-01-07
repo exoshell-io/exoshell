@@ -1,40 +1,49 @@
+use self::prelude::*;
+
 mod prelude;
 mod script;
 
-use crate::prelude::*;
-use std::path::PathBuf;
-use tauri::{
-  plugin::{Builder, TauriPlugin},
-  Manager, Runtime,
-};
-use tokio::sync::OnceCell;
+use tauri::plugin::{Builder, TauriPlugin};
 
-use crate::db::Database;
-
-#[derive(Debug, Default)]
+#[derive(Debug)]
 pub struct IpcState {
-  filepath: PathBuf,
-  db: OnceCell<Database>,
+  ng: Engine,
 }
 
 impl IpcState {
-  pub fn new(filepath: impl Into<PathBuf> + std::fmt::Debug) -> Self {
-    Self {
-      filepath: filepath.into(),
-      ..Default::default()
-    }
-  }
-
-  pub async fn get_database(&self) -> Result<&Database> {
-    self
-      .db
-      .get_or_try_init(|| Database::new(&self.filepath))
-      .await
+  pub async fn new(filepath: impl AsRef<Path>) -> Result<Self> {
+    Ok(Self {
+      ng: Engine::new(filepath).await?,
+    })
   }
 }
 
+const PLUGIN_NAME: &str = "ipc";
+
 pub fn init<R: Runtime>() -> TauriPlugin<R> {
-  Builder::new("ipc")
+  // let specta_builder = {
+  //   let specta_builder = tauri_specta::ts::builder().commands(tauri_specta::collect_commands![
+  //     script::list_scripts,
+  //     script::upsert_script,
+  //     script::delete_script,
+  //     script::run_script,
+  //     script::kill_script,
+  //   ]);
+
+  //   #[cfg(debug_assertions)]
+  //   let specta_builder = specta_builder.path("../src/bindings.ts");
+
+  //   specta_builder.into_plugin_utils(PLUGIN_NAME)
+  // };
+  Builder::new(PLUGIN_NAME)
+    // .invoke_handler(specta_builder.invoke_handler)
+    .invoke_handler(tauri::generate_handler![
+      script::list_scripts,
+      script::upsert_script,
+      script::delete_script,
+      script::run_script,
+      script::kill_script,
+    ])
     .setup(|app_handle| {
       app_handle.manage(IpcState::new(
         app_handle
@@ -45,7 +54,6 @@ pub fn init<R: Runtime>() -> TauriPlugin<R> {
       ));
       Ok(())
     })
-    .invoke_handler(tauri::generate_handler![script::list_scripts])
     .build()
 }
 

@@ -5,8 +5,8 @@ import { create } from 'zustand';
 export interface Store {
   lastFocusedEditorColum?: number;
   editorLayout?: EditorLayout;
-  tabs?: string[];
-  newEmptyTab: () => string;
+  tabs?: EditorTab[];
+  newEmptyTab: () => EditorTab;
 }
 
 export const useStore = create<Store>()((set, get) => ({
@@ -24,13 +24,18 @@ export const useStore = create<Store>()((set, get) => ({
   },
   newEmptyTab() {
     const id = Math.random().toString(36).substr(2, 9);
-    set((state) => ({ tabs: [...(state.tabs ?? []), id] }));
-    return id;
+    const tab = {
+      id,
+    } satisfies EditorTab;
+    set((state) => ({
+      tabs: [...(state.tabs ?? []), tab],
+    }));
+    return tab;
   },
 }));
 
 export interface EditorTab {
-  column: number;
+  id: string;
 }
 
 export interface EditorLayout {
