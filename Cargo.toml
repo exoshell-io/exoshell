@@ -7,13 +7,13 @@ edition = "2021"
 version = "0.0.0"
 
 [workspace.dependencies]
-anyhow = "1.0.78"
-thiserror = "1.0.53"
+anyhow = "1.0.79"
+thiserror = "1.0.56"
 
 serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
 serde_with = { version = "3.4.0" }
-ts-rs = { version = "7.0.0", features = [] }
+ts-rs = { version = "7.1.0", features = [] }
 taurpc = "0.2.3"
 
 specta = { version = "2.0.0-rc.7" }
@@ -28,7 +28,7 @@ tracing-subscriber = { version = "0.3.18", features = [
   "tracing",
 ] }
 
-surrealdb = { version = "1.0.2", default-features = false, features = [
+surrealdb = { version = "1.1.0", default-features = false, features = [
   "kv-rocksdb",
   "kv-mem",
 ] }
