@@ -17,3 +17,17 @@ impl Engine {
 
 mod prelude;
 mod run;
+
+#[cfg(test)]
+mod tests {
+  use super::*;
+
+  impl Engine {
+    pub async fn new_test_engine() -> Result<Self> {
+      Ok(Self {
+        db: Arc::new(Database::new_test_db().await?),
+        children: Arc::new(RwLock::new(HashMap::new())),
+      })
+    }
+  }
+}

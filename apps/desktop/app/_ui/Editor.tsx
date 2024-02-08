@@ -1,7 +1,8 @@
 'use client';
 
-import { useStore } from '@/_ui/store';
+import { useStore } from '@/_store';
 import { Box, ScrollArea, Stack } from '@mantine/core';
+import { Runner } from './Runner';
 
 export const Editor: React.FC = () => {
   const editorLayout = useStore((state) => state.editorLayout);
@@ -25,7 +26,9 @@ export const Editor: React.FC = () => {
             >
               <Box h='40px' style={{ border: 'solid 5px green' }}></Box>
               <ScrollArea style={{ border: 'solid 5px yellow' }}>
-                <Box h='100dvh'></Box>
+                <Box h='100dvh'>
+                  <Runner />
+                </Box>
               </ScrollArea>
             </Stack>
           );

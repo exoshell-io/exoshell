@@ -8,6 +8,7 @@ edition.workspace = true
 
 [build-dependencies]
 tauri-build = { version = "1.5.1", features = [] }
+specta = { workspace = true }
 
 [dependencies]
 anyhow = { workspace = true }
@@ -28,6 +29,7 @@ macro_model = { path = "../../../libs/macro-model" }
 tokio-util = { workspace = true }
 chrono = { workspace = true }
 derive_builder = { workspace = true }
+futures = { workspace = true }
 
 [features]
 # this feature is used for production builds or when `devPath` points to the filesystem and the built-in dev server is disabled.

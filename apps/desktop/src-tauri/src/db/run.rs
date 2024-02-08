@@ -1,20 +1,11 @@
 use super::prelude::*;
 
 #[macro_model::model]
-pub struct ScriptRun {
-  pub id: surrealdb::sql::Thing,
-  pub script: Script,
-  pub spawned_at: DateTime<Utc>,
-  pub finished_at: Option<DateTime<Utc>>,
-  pub exit_code: Option<i32>,
-  pub log: Vec<ScriptRunLog>,
-}
-
-#[macro_model::model]
 #[derive(derive_builder::Builder)]
-pub struct UpsertScriptRun {
+pub struct ScriptRun {
   #[builder(default)]
-  pub id: Option<String>,
+  #[specta(type = Option<super::ThingsDef>)]
+  pub id: Option<surrealdb::sql::Thing>,
   pub script: Script,
   #[builder(default)]
   pub spawned_at: DateTime<Utc>,
@@ -38,11 +29,11 @@ impl Database {
     Ok(script_runs)
   }
 
-  pub async fn upsert_script_run(&self, script_run: &UpsertScriptRun) -> Result<ScriptRun> {
+  pub async fn upsert_script_run(&self, script_run: &ScriptRun) -> Result<ScriptRun> {
     if let Some(ref id) = script_run.id {
       let script_run: Option<ScriptRun> = self
         .db
-        .update(("script_run", id))
+        .update(("script_run", id.id.clone()))
         .content(script_run)
         .await?;
       return Ok(script_run.unwrap());
@@ -81,9 +72,9 @@ mod tests {
     assert!(db.list_script_runs().await.unwrap().len() == 0);
     let script_run = db
       .upsert_script_run(
-        &UpsertScriptRunBuilder::default()
+        &ScriptRunBuilder::default()
           .script(Script {
-            id: surrealdb::sql::Thing::from(("script", "test")),
+            id: Some(surrealdb::sql::Thing::from(("script", "test"))),
             args: vec![],
             command: "echo".to_string(),
             env: HashMap::new(),
@@ -95,7 +86,7 @@ mod tests {
       .await?;
     assert!(db.list_script_runs().await.unwrap().len() == 1);
     db.append_script_run_log(
-      &script_run.id.id,
+      &script_run.id.as_ref().unwrap().id.clone(),
       &ScriptRunLog::Stdout {
         txt: "test".to_string(),
         ts: Utc::now(),
@@ -103,7 +94,7 @@ mod tests {
     )
     .await?;
     db.append_script_run_log(
-      &script_run.id.id,
+      &script_run.id.as_ref().unwrap().id.clone(),
       &ScriptRunLog::Stderr {
         txt: "test_err".to_string(),
         ts: Utc::now(),
@@ -114,7 +105,7 @@ mod tests {
     assert_eq!(script_runs.len(), 1);
     assert_eq!(script_runs[0].log.len(), 2);
     println!("{:?}", script_runs);
-    db.delete_script_run(script_run.id.id).await?;
+    db.delete_script_run(script_run.id.unwrap().id).await?;
     assert!(db.list_script_runs().await.unwrap().len() == 0);
     Ok(())
   }

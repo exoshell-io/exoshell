@@ -1,14 +1,8 @@
 use super::prelude::*;
+use crate::db::run::ScriptRunBuilder;
 
 impl super::Engine {
-  pub async fn run_script(&self, id: &str, tx: mpsc::Sender<StdIoEvent>) -> Result<String> {
-    let script: Script = self
-      .db
-      .db
-      .select(("script", id))
-      .await?
-      .ok_or_else(|| anyhow!("Script not found: {id}"))?;
-
+  pub async fn run_script(&self, script: Script) -> Result<ScriptRun> {
     let mut child = Command::new(&script.command)
       .args(&script.args)
       .spawn()
@@ -17,21 +11,17 @@ impl super::Engine {
     let script_run = self
       .db
       .upsert_script_run(
-        &UpsertScriptRunBuilder::default()
+        &ScriptRunBuilder::default()
           .script(script)
           .spawned_at(Utc::now())
           .build()?,
       )
       .await?;
 
-    let id = format!(
-      "{}",
-      std::time::SystemTime::now()
-        .duration_since(std::time::UNIX_EPOCH)?
-        .as_nanos(),
-    );
+    let id = &script_run.id.as_ref().unwrap().id;
 
     {
+      let id = id.clone();
       let stdout = child.stdout.take().unwrap();
       let stderr = child.stderr.take().unwrap();
 
@@ -51,14 +41,14 @@ impl super::Engine {
               if res == 0 {
                 break;
               }
-              tx.send(StdIoEvent::Stdout(buf_stdout.clone())).await.unwrap();
-              let txt = std::str::from_utf8(&buf_stdout).unwrap().to_string();
+              let script_run_log = ScriptRunLog::Stdout {
+                txt: std::str::from_utf8(&buf_stdout).unwrap().to_string(),
+                ts: Utc::now(),
+              };
+              // tx.send(StdIoEvent::Stdout(buf_stdout.clone())).await.unwrap();
               db.append_script_run_log(
-                &script_run.id.id,
-                &ScriptRunLog::Stdout {
-                  txt,
-                  ts: Utc::now(),
-                },
+                &id.clone(),
+                &script_run_log,
               )
               .await?;
               buf_stdout.clear();
@@ -68,21 +58,20 @@ impl super::Engine {
               if res == 0 {
                 break;
               }
-              tx.send(StdIoEvent::Stderr(buf_stderr.clone())).await.unwrap();
-              let txt = std::str::from_utf8(&buf_stderr).unwrap().to_string();
+              let script_run_log = ScriptRunLog::Stderr {
+                txt: std::str::from_utf8(&buf_stderr).unwrap().to_string(),
+                ts: Utc::now(),
+              };
+              // tx.send(StdIoEvent::Stderr(buf_stderr.clone())).await.unwrap();
               db.append_script_run_log(
-                &script_run.id.id,
-                &ScriptRunLog::Stderr {
-                  txt,
-                  ts: Utc::now(),
-                },
+                &id.clone(),
+                &script_run_log,
               )
               .await?;
               buf_stderr.clear();
             }
           }
         }
-
         Ok::<(), anyhow::Error>(())
       });
     }
@@ -91,9 +80,9 @@ impl super::Engine {
       .children
       .write()
       .await
-      .insert(id.clone(), Arc::new(RwLock::new(child)));
+      .insert(id.clone().to_string(), Arc::new(RwLock::new(child)));
 
-    Ok(id)
+    Ok(script_run)
   }
 
   pub async fn kill_script(&self, id: &str) -> Result<()> {
@@ -107,8 +96,14 @@ impl super::Engine {
   }
 }
 
-#[derive(Debug, Serialize)]
-pub enum StdIoEvent {
-  Stdout(Vec<u8>),
-  Stderr(Vec<u8>),
+#[cfg(test)]
+mod tests {
+  use super::*;
+
+  #[tokio::test]
+  async fn test_run_script() -> Result<()> {
+    let engine = Engine::new_test_engine().await?;
+
+    Ok(())
+  }
 }

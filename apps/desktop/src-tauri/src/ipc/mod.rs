@@ -1,6 +1,7 @@
+mod prelude;
 use self::prelude::*;
 
-mod prelude;
+mod run;
 mod script;
 
 use tauri::plugin::{Builder, TauriPlugin};
@@ -11,38 +12,49 @@ pub struct IpcState {
 }
 
 impl IpcState {
-  pub async fn new(filepath: impl AsRef<Path>) -> Result<Self> {
-    Ok(Self {
-      ng: Engine::new(filepath).await?,
-    })
+  pub async fn new<R: Runtime>(
+    filepath: impl AsRef<Path>,
+    app_handle: tauri::AppHandle<R>,
+  ) -> Result<Self> {
+    let ng = Engine::new(filepath.as_ref()).await?;
+    {
+      let db = ng.db.clone();
+      tokio::spawn(async move {
+        let mut stream = db.db.select("script_run").live().await?;
+        while let Some(result) = stream.next().await {
+          handle_script_run(result, &app_handle).await?;
+        }
+        Result::<()>::Ok(())
+      });
+    }
+    Ok(Self { ng })
   }
+}
+
+async fn handle_script_run<R: Runtime>(
+  result: surrealdb::Result<surrealdb::Notification<ScriptRun>>,
+  app_handle: &tauri::AppHandle<R>,
+) -> Result<()> {
+  let notification = result?;
+  info!("{:?}", notification);
+  app_handle.emit_all("plugin:ipc|script_run", notification.data)?;
+  Ok(())
 }
 
 const PLUGIN_NAME: &str = "ipc";
 
 pub fn init<R: Runtime>() -> TauriPlugin<R> {
-  // let specta_builder = {
-  //   let specta_builder = tauri_specta::ts::builder().commands(tauri_specta::collect_commands![
-  //     script::list_scripts,
-  //     script::upsert_script,
-  //     script::delete_script,
-  //     script::run_script,
-  //     script::kill_script,
-  //   ]);
-
-  //   #[cfg(debug_assertions)]
-  //   let specta_builder = specta_builder.path("../src/bindings.ts");
-
-  //   specta_builder.into_plugin_utils(PLUGIN_NAME)
-  // };
   Builder::new(PLUGIN_NAME)
-    // .invoke_handler(specta_builder.invoke_handler)
     .invoke_handler(tauri::generate_handler![
       script::list_scripts,
       script::upsert_script,
       script::delete_script,
-      script::run_script,
+      script::get_script,
       script::kill_script,
+      run::run_script,
+      run::list_script_runs,
+      run::upsert_script_run,
+      run::delete_script_run,
     ])
     .setup(|app_handle| {
       app_handle.manage(IpcState::new(
@@ -51,6 +63,7 @@ pub fn init<R: Runtime>() -> TauriPlugin<R> {
           .app_data_dir()
           .unwrap()
           .join("state.db"),
+        app_handle.app_handle(),
       ));
       Ok(())
     })

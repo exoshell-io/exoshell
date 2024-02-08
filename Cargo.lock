@@ -119,6 +119,7 @@ dependencies = [
  "anyhow",
  "chrono",
  "derive_builder",
+ "futures",
  "macro_model",
  "serde",
  "serde_json",
@@ -4297,6 +4298,8 @@ version = "2.0.0-rc.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "18938fc0c7c0e8b7c8f4702e8cb53c218d4442f5b7420dd8b3d9640ca9a46712"
 dependencies = [
+ "chrono",
+ "ctor 0.2.6",
  "once_cell",
  "paste",
  "serde",

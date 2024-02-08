@@ -1,8 +1,10 @@
 'use client';
 
-import { Accordion, Group, AppShell, NavLink } from '@mantine/core';
+import { Accordion, AppShell, Button, Group, NavLink } from '@mantine/core';
 import { Editor } from './Editor';
-import { useCallback } from 'react';
+import { ScriptList } from './ScriptList';
+import { addScript, addScriptRunLog } from '@/_store';
+import { ScriptRunList } from './ScriptRunList';
 
 export const App: React.FC = () => {
   return (
@@ -12,7 +14,9 @@ export const App: React.FC = () => {
       aside={{ breakpoint: 0, width: 200 }}
       footer={{ height: 60 }}
     >
-      <AppShell.Header></AppShell.Header>
+      <AppShell.Header>
+        <Header />
+      </AppShell.Header>
 
       <AppShell.Navbar>
         <NavBar />
@@ -32,7 +36,22 @@ export const App: React.FC = () => {
 export const Header: React.FC = () => {
   return (
     <>
-      <Group></Group>
+      <Group>
+        <Button
+          onClick={() => {
+            addScript();
+          }}
+        >
+          C
+        </Button>
+        <Button
+          onClick={() => {
+            addScriptRunLog();
+          }}
+        >
+          A
+        </Button>
+      </Group>
     </>
   );
 };
@@ -50,26 +69,11 @@ export const NavBar: React.FC = () => {
         </Accordion.Item>
         <Accordion.Item value='Running'>
           <Accordion.Control>Running</Accordion.Control>
-          <Accordion.Panel>Running</Accordion.Panel>
+          <Accordion.Panel>
+            <ScriptRunList />
+          </Accordion.Panel>
         </Accordion.Item>
       </Accordion>
     </>
   );
-};
-
-export const ScriptList: React.FC = () => {
-  const onClick = useCallback((e: MouseEvent) => {
-    e.preventDefault();
-    console.log(e.currentTarget);
-  }, []);
-  return (
-    <>
-      <NavLink label='Youtube DL' onClick={(e) => {}} />
-      <NavLink label='Video x2' />
-    </>
-  );
-};
-
-export const Running: React.FC = () => {
-  return <>Running</>;
 };

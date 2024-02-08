@@ -18,6 +18,12 @@ impl Database {
   }
 }
 
+#[macro_model::model]
+pub struct ThingsDef {
+  pub tb: String,
+  pub id: String,
+}
+
 mod prelude;
 
 pub mod run;
@@ -34,5 +40,11 @@ mod tests {
       db.use_ns("exoterm").use_db("exoterm").await?;
       Ok(Self { db })
     }
+  }
+
+  #[test]
+  fn export_types() -> Result<()> {
+    specta::export::ts("../app/_types/index.ts")?;
+    Ok(())
   }
 }

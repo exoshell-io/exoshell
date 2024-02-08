@@ -1,5 +1,4 @@
 import { TextInput } from '@mantine/core';
-import classes from './ScriptEditor.module.css';
 import { useForm } from '@mantine/form';
 
 export interface ScriptEditorProps {}
