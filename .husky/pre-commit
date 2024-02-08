@@ -1,4 +1,2 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-
+# shellcheck shell=sh
 exec bun lint-staged --concurrent false
