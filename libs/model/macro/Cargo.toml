@@ -10,3 +10,5 @@ proc-macro = true
 syn = "2.0.48"
 quote = "1.0.35"
 proc-macro2 = "1.0.76"
+darling = "0.20.8"
+heck.workspace = true

@@ -1,0 +1,16 @@
+[package]
+name = "model"
+edition.workspace = true
+version.workspace = true
+
+[dependencies]
+macro_model.path = "./macro"
+serde.workspace = true
+serde_json.workspace = true
+derive_builder.workspace = true
+surrealdb.workspace = true
+chrono.workspace = true
+anyhow.workspace = true
+
+[dev-dependencies]
+tokio.workspace = true
