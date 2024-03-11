@@ -1,13 +1,14 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": ["scripts/**"],
+  "globalDependencies": ["bun.lockb", "tsconfig.json", "scripts/**"],
   "pipeline": {
     "build:": {
       "dependsOn": ["^build:"],
+      "dotEnv": [".env.local", ".env"],
       "outputs": ["dist/**"]
     },
     "clean": { "cache": false },
-    "lint": {},
+    "lint:": {},
     "test": {}
   }
 }
