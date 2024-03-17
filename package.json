@@ -10,7 +10,7 @@
     "clean": "turbo run clean",
     "format": "prettier -w . ; sort-package-json",
     "format:check": "prettier --check . && sort-package-json --check",
-    "lint": "turbo run lint",
+    "lint": "turbo run lint:",
     "prepare": "husky install",
     "test": "turbo run test",
     "update": "bun x npm-check-updates -ui -ws --root"
