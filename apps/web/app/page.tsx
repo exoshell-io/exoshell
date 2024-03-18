@@ -21,7 +21,7 @@ import {
   Tooltip,
   TypographyStylesProvider,
 } from '@mantine/core';
-import { isEmail, useForm } from '@mantine/form';
+import { isEmail, isNotEmpty, useForm } from '@mantine/form';
 import { MdInfoOutline } from 'react-icons/md';
 import Markdown from 'react-markdown';
 
@@ -232,6 +232,10 @@ const Contact: React.FC = () => {
     initialValues: {
       email: '',
       message: '',
+    },
+    validate: {
+      email: isEmail('Please enter a valid email'),
+      message: isNotEmpty('Please enter a message'),
     },
   });
   return (
