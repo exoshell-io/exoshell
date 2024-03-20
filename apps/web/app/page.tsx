@@ -38,7 +38,7 @@ const FAQ: { question: string; answer: string }[] = [
     answer: `
 You can start to schedule scripts, which we call bots. For example, you can:
 - Scrap products from a website
-- Scran a website
+- Scan a website
 - Send emails to a mailing list`,
   },
   {
@@ -56,7 +56,7 @@ You can start to schedule scripts, which we call bots. For example, you can:
   {
     question:
       'What is the difference between running a script locally and remotely?',
-    answer: `Running a script locally means the execution of the script will happen on your computer. Executeing a script remotely means you trigger the execution of it on a remote environmenet, such as a cloud provider, or one of your devices, such as an Android phone.`,
+    answer: `Running a script locally means the execution of the script will happen on your computer. Executing a script remotely means you trigger the execution of it on a remote environment, such as a cloud provider, or one of your devices, such as an Android phone.`,
   },
   {
     question: 'Is it free?',
