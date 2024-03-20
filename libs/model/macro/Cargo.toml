@@ -7,8 +7,8 @@ version.workspace = true
 proc-macro = true
 
 [dependencies]
-syn = "2.0.48"
-quote = "1.0.35"
-proc-macro2 = "1.0.76"
-darling = "0.20.8"
+syn.workspace = true
+quote.workspace = true
+proc-macro2.workspace = true
+darling.workspace = true
 heck.workspace = true
