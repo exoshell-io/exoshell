@@ -13,7 +13,10 @@ import {
   Skeleton,
   Stack,
   Table,
+  TableTbody,
+  TableTd,
   TableTh,
+  TableThead,
   TableTr,
   Text,
   TextInput,
@@ -155,43 +158,33 @@ const Pricing: React.FC = () => {
   return (
     <Container py={60}>
       <p className='title text-center'>Pricing</p>
-      <Table mt={60}>
-        <TableTr>
-          <TableTh></TableTh>
-          <TableTh>
-            <Text fw='bold'>Free forever</Text>
-          </TableTh>
-          <TableTh>
-            <Text fw='bold'>Pro plan: 10$/month</Text>
-          </TableTh>
-        </TableTr>
-        {PRICING.map((feature) => (
-          <TableTr key={feature.title}>
-            <TableTh>
-              <Group>
-                <Text fw='bold'>{feature.title}</Text>
-                {feature.tooltip && (
-                  <Tooltip
-                    label={feature.tooltip}
-                    events={{ hover: true, touch: true, focus: false }}
-                  >
-                    <ActionIcon
-                      variant='light'
-                      radius={25}
-                      color='blue'
-                      size={20}
-                    >
-                      <MdInfoOutline />
-                    </ActionIcon>
-                  </Tooltip>
-                )}
-              </Group>
-            </TableTh>
-            <td>{feature.freePlan}</td>
-            <td>{feature.proPlan}</td>
-          </TableTr>
-        ))}
-      </Table>
+      <Table
+        mt={60}
+        highlightOnHover
+        data={{
+          head: [
+            null,
+            null,
+            <b key={'free'}>Free forever</b>,
+            <b key={'pro'}>Pro plan: 10$/month</b>,
+          ],
+          body: PRICING.map((feature) => [
+            <b key={feature.title}>{feature.title}</b>,
+            feature.tooltip && (
+              <Tooltip
+                label={feature.tooltip}
+                events={{ hover: true, touch: true, focus: false }}
+              >
+                <ActionIcon variant='light' radius={25} color='blue' size={20}>
+                  <MdInfoOutline />
+                </ActionIcon>
+              </Tooltip>
+            ),
+            feature.freePlan,
+            feature.proPlan,
+          ]),
+        }}
+      />
     </Container>
   );
 };
