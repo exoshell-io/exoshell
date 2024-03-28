@@ -1,6 +1,7 @@
 {
   "name": "@exoshell/web",
   "private": true,
+  "type": "module",
   "scripts": {
     "build": "turbo run build:",
     "build:": "NODE_ENV=production next build",
