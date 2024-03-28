@@ -6,16 +6,21 @@ import {
   Burger,
   ColorSchemeScript,
   Container,
-  Group,
   MantineProvider,
-  Text,
   createTheme,
 } from '@mantine/core';
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
-import { FaTerminal } from 'react-icons/fa';
+import { Signika, Noto_Sans } from 'next/font/google';
+import { Logo } from '@/_ui/Logo';
 
-const inter = Inter({ subsets: ['latin'] });
+const logoFont = Signika({
+  // weight: ['400', '700'],
+  display: 'swap',
+  variable: '--font-logo',
+  subsets: ['latin'],
+});
+
+const font = Noto_Sans({ subsets: ['latin'], display: 'swap' });
 
 export const metadata: Metadata = {
   title: {
@@ -37,7 +42,7 @@ export default function RootLayout({
       <head>
         <ColorSchemeScript />
       </head>
-      <body className={inter.className}>
+      <body className={`${font.className} ${logoFont.variable}`}>
         <MantineProvider theme={theme}>
           <Box
             component='header'
@@ -59,14 +64,3 @@ export default function RootLayout({
     </html>
   );
 }
-
-const Logo: React.FC = () => {
-  return (
-    <Group gap='sm'>
-      <FaTerminal size={28} />
-      <Text size='xl' fw='bold'>
-        ExoShell
-      </Text>
-    </Group>
-  );
-};

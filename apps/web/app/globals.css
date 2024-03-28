@@ -5,12 +5,12 @@
   .text-balance {
     text-wrap: balance;
   }
+}
 
-  .title {
-    @apply text-5xl font-bold;
-  }
+.title {
+  @apply text-5xl font-bold;
+}
 
-  .subtitle {
-    @apply text-2xl font-semibold;
-  }
+.subtitle {
+  @apply text-2xl font-semibold;
 }
