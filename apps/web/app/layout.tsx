@@ -1,6 +1,7 @@
 import '@mantine/core/styles.css';
 import './globals.css';
 
+import { Logo } from '@/_ui/Logo';
 import {
   Box,
   Burger,
@@ -10,8 +11,8 @@ import {
   createTheme,
 } from '@mantine/core';
 import type { Metadata } from 'next';
-import { Signika, Noto_Sans } from 'next/font/google';
-import { Logo } from '@/_ui/Logo';
+import { Noto_Sans, Signika } from 'next/font/google';
+import classes from './layout.module.css';
 
 const logoFont = Signika({
   // weight: ['400', '700'],
@@ -44,20 +45,13 @@ export default function RootLayout({
       </head>
       <body className={`${font.className} ${logoFont.variable}`}>
         <MantineProvider theme={theme}>
-          <Box
-            component='header'
-            px='md'
-            h={64}
-            className='flex items-center justify-between border-b'
-          >
+          <Box component='header' h={70} px={32} className={classes.header}>
             <Logo />
             <Burger hiddenFrom='sm' size='sm' />
           </Box>
           <Box component='main'>{children}</Box>
-          <Box component='footer' py={30} className='border-t'>
-            <Container>
-              <Logo />
-            </Container>
+          <Box component='footer' h={70} px={32} className={classes.footer}>
+            <Logo />
           </Box>
         </MantineProvider>
       </body>

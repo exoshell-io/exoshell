@@ -13,12 +13,8 @@ import {
   Skeleton,
   Stack,
   Table,
-  TableTbody,
-  TableTd,
-  TableTh,
-  TableThead,
-  TableTr,
   Text,
+  Title as MantineTitle,
   TextInput,
   Textarea,
   Tooltip,
@@ -122,10 +118,7 @@ const Hero: React.FC = () => {
   return (
     <Box h={600} ta='center' py={60}>
       <Container>
-        <p className='title'>Use your devices like never before</p>
-        <p className='subtitle' style={{ marginTop: 30 }}>
-          Create bots and run them everywhere
-        </p>
+        <Title>ExoShell is another terminal</Title>
         <Skeleton height={300} width='100%' mx='auto' mt={60} />
       </Container>
     </Box>
@@ -135,7 +128,7 @@ const Hero: React.FC = () => {
 const Faq: React.FC = () => {
   return (
     <Container py={60}>
-      <p className='title text-center'>FAQ</p>
+      <Title>FAQ</Title>
       <Accordion multiple={true} chevronPosition='left' mt={60}>
         {FAQ.map((e) => (
           <AccordionItem key={e.question} value={e.question}>
@@ -157,7 +150,7 @@ const Faq: React.FC = () => {
 const Pricing: React.FC = () => {
   return (
     <Container py={60}>
-      <p className='title text-center'>Pricing</p>
+      <Title>Pricing</Title>
       <Table
         mt={60}
         highlightOnHover
@@ -201,9 +194,9 @@ const Newsletter: React.FC = () => {
   return (
     <Box ta='center' py={60}>
       <Container>
-        <p className='title'>Subscribe to the waitlist</p>
+        <Title>Subscribe to the waitlist</Title>
         <form onSubmit={form.onSubmit((values) => console.log(values))}>
-          <Group maw={500} mx='auto' mt={50} justify='stretch' align='stretch'>
+          <Group mx='auto' maw={600} mt={50} justify='stretch' align='stretch'>
             <TextInput
               placeholder='Email'
               style={{ flexGrow: 1 }}
@@ -233,7 +226,7 @@ const Contact: React.FC = () => {
   });
   return (
     <Container py={60}>
-      <p className='title text-center'>Contact</p>
+      <Title>Contact</Title>
       <Text ta='center' fw={500} mt={24}>
         Have questions? Want to help? Send us a message!
       </Text>
@@ -259,5 +252,13 @@ const Contact: React.FC = () => {
         </form>
       </Box>
     </Container>
+  );
+};
+
+const Title: React.FC<React.PropsWithChildren> = ({ children }) => {
+  return (
+    <MantineTitle ta='center' size={42}>
+      {children}
+    </MantineTitle>
   );
 };
