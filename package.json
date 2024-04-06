@@ -2,7 +2,8 @@
   "private": true,
   "type": "module",
   "workspaces": [
-    "apps/*"
+    "apps/*",
+    "libs/*"
   ],
   "scripts": {
     "build": "turbo run build:",
@@ -42,6 +43,7 @@
   },
   "devDependencies": {
     "@next/bundle-analyzer": "14.1.4",
+    "@tanstack/eslint-plugin-query": "5.28.11",
     "@tanstack/react-query-devtools": "5.28.10",
     "@types/node": "20.12.2",
     "@types/react": "18.2.73",

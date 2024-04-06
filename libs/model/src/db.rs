@@ -18,6 +18,10 @@ impl Database {
       .await?;
     Ok(Self { db })
   }
+
+  pub async fn memory() -> Result<Self> {
+    Database::new("memory", None, None).await
+  }
 }
 
 #[cfg(test)]
@@ -27,7 +31,7 @@ mod tests {
 
   #[tokio::test]
   async fn test_database() -> Result<()> {
-    let db = Database::new("memory", None, None).await?;
+    let db = Database::memory().await?;
 
     let scripts = db.list_script().await?;
     assert_eq!(scripts.len(), 0);

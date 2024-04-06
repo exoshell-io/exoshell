@@ -1,8 +1,11 @@
 use super::*;
 
 #[macro_model::model]
+#[derive(TS)]
+#[ts(export)]
 pub struct Script {
   #[builder(default, setter(custom))]
+  #[ts(type = r#"{tb:string;id:string} | null"#)]
   pub id: super::Id,
   #[builder(setter(into))]
   pub name: String,

@@ -58,6 +58,9 @@
     ".eslintrc.cjs",
     "apps/*/src/**/*",
     "apps/*/scripts/**/*",
+    "libs/*/src/**/*",
+    "libs/*/index.ts",
+    "libs/*/types/**/*",
     "scripts/**/*"
   ]
 }

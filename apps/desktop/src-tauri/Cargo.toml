@@ -1,0 +1,42 @@
+[package]
+name = "app"
+default-run = "app"
+version.workspace = true
+edition.workspace = true
+
+[features]
+# this feature is used for production builds or when `devPath` points to the filesystem and the built-in dev server is disabled.
+# If you use cargo directly instead of tauri's cli you can use this feature flag to switch between tauri's `dev` and `build` modes.
+# DO NOT REMOVE!!
+custom-protocol = ["tauri/custom-protocol"]
+
+[build-dependencies]
+tauri-build = { version = "1.5.1", features = [] }
+
+[dependencies]
+tauri = { version = "1.6.1", features = [ "window-start-dragging", "process-command-api"] }
+
+# Helpers
+anyhow.workspace = true
+thiserror.workspace = true
+chrono.workspace = true
+derive_builder.workspace = true
+
+# Serialization
+serde.workspace = true
+serde_json.workspace = true
+serde_with.workspace = true
+ts-rs.workspace = true
+
+# Tracing
+tracing.workspace = true
+tracing-subscriber.workspace = true
+
+# Database
+model = { path = "../../../libs/model" }
+surrealdb.workspace = true
+
+# Async
+tokio.workspace = true
+tokio-util.workspace = true
+futures.workspace = true

@@ -1,0 +1,21 @@
+{
+  "name": "@exoterm/desktop",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "turbo run build:",
+    "build:": "tauri build",
+    "build:web": "next build",
+    "clean": "rm -rf -- out/",
+    "dev": "RUST_BACKTRACE=1 RUST_LOG=debug tauri dev",
+    "dev:web": "next dev -p 3333",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@exoshell/model": "workspace:*"
+  },
+  "devDependencies": {
+    "@tauri-apps/api": "1.5.3",
+    "@tauri-apps/cli": "1.5.11"
+  }
+}

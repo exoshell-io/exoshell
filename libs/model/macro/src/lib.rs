@@ -8,9 +8,7 @@ use proc_macro::TokenStream;
 ///
 /// # Example
 ///
-/// ```rust
-/// use crate::prelude::*;
-///
+/// ```rust,ignore
 /// /// Example disabling the builder
 /// #[macro_model::model(no_builder)]
 /// pub struct Example {
@@ -23,7 +21,7 @@ use proc_macro::TokenStream;
 ///
 /// # Parameters
 ///
-/// - `no_builder`: If present, derive `derive_builder::Builder`.
+/// - `no_builder`: If present, does not derive `derive_builder::Builder`.
 #[proc_macro_attribute]
 pub fn model(args: TokenStream, item: TokenStream) -> TokenStream {
   // Parse macro arguments

@@ -1,8 +1,11 @@
 use super::*;
 
 #[macro_model::model]
+#[derive(TS)]
+#[ts(export)]
 pub struct ScriptRun {
   #[builder(default, setter(custom))]
+  #[ts(type = r#"{tb:string;id:string} | null"#)]
   pub id: super::Id,
   pub script: Script,
   #[builder(default)]
@@ -16,6 +19,8 @@ pub struct ScriptRun {
 }
 
 #[macro_model::model]
+#[derive(TS)]
+#[ts(export)]
 pub enum ScriptRunLog {
   Stdout { txt: String, ts: DateTime<Utc> },
   Stderr { txt: String, ts: DateTime<Utc> },

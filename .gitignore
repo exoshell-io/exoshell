@@ -190,3 +190,6 @@ dist
 .next/
 next-env.d.ts
 .vercel/
+
+# Generated Models
+/libs/model/types/

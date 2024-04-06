@@ -1,0 +1,8 @@
+{
+  "name": "@exoshell/model",
+  "private": true,
+  "main": "index.ts",
+  "files": [
+    "types/"
+  ]
+}
