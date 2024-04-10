@@ -9,6 +9,18 @@ on:
       - desktop/v*
   pull_request:
   workflow_dispatch:
+    inputs:
+      environment:
+        description: Environment to deploy
+        default: staging
+        type: choice
+        options:
+          - staging
+          - production
+      should-deploy:
+        description: Deploy
+        type: boolean
+        default: false
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
@@ -28,6 +40,11 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v4
+      - name: Compute variables
+        uses: actions/github-script@v6
+        id: variables
+        with:
+          script: (await import('${{ github.workspace }}/.github/scripts/compute-variables.mjs')).default(context, core)
       - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
