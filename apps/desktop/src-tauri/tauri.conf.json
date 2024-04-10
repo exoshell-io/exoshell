@@ -32,7 +32,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "dev.exoshell.exoshell",
+      "identifier": "io.exoshell.exoshell",
       "longDescription": "",
       "macOS": {
         "entitlements": null,
