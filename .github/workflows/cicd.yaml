@@ -118,7 +118,7 @@ jobs:
         with:
           projectPath: ./apps/desktop
           # includeUpdaterJson: true
-          tauriScript: bun tauri build
+          tauriScript: bun tauri
           args: ${{ matrix.settings.args }}
           tagName: tauri-v${{ steps.version.outputs.version }}
           releaseName: 'Tauri v${{ steps.version.outputs.version }}'
