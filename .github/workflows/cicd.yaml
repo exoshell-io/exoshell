@@ -106,7 +106,7 @@ jobs:
       - name: Rust cache
         uses: swatinem/rust-cache@v2
         with:
-          workspaces: '${{ github.workspace }}apps/desktop/src-tauri -> target'
+          workspaces: '${{ github.workspace }}/apps/desktop/src-tauri -> target'
 
       - name: Compute package version
         id: version
@@ -120,8 +120,8 @@ jobs:
           # includeUpdaterJson: true
           tauriScript: bun tauri
           args: ${{ matrix.settings.args }}
-          tagName: tauri-v${{ steps.version.outputs.version }}
-          releaseName: 'Tauri v${{ steps.version.outputs.version }}'
+          tagName: exoshell-v${{ steps.version.outputs.version }}
+          releaseName: 'Exoshell v${{ steps.version.outputs.version }}'
           releaseBody: ''
           # releaseDraft: true
           # prerelease: false
