@@ -7,12 +7,14 @@ import {
   Burger,
   ColorSchemeScript,
   Container,
+  Group,
   MantineProvider,
+  Stack,
   createTheme,
 } from '@mantine/core';
 import type { Metadata } from 'next';
 import { Noto_Sans, Signika } from 'next/font/google';
-import classes from './layout.module.css';
+import { Brand } from './_ui/Brand';
 
 const logoFont = Signika({
   // weight: ['400', '700'],
@@ -43,15 +45,37 @@ export default function RootLayout({
       <head>
         <ColorSchemeScript />
       </head>
-      <body className={`${font.className} ${logoFont.variable}`}>
+      <body className={`${font.className} ${logoFont.variable} text-zinc-900`}>
         <MantineProvider theme={theme}>
-          <Box component='header' h={70} px={32} className={classes.header}>
-            <Logo />
-            <Burger hiddenFrom='sm' size='sm' />
+          <Box component='header'>
+            <Container
+              size='xl'
+              h={70}
+              px={16}
+              className='flex items-center justify-between'
+            >
+              <Brand />
+              <Burger hiddenFrom='md' size='sm' />
+            </Container>
           </Box>
           <Box component='main'>{children}</Box>
-          <Box component='footer' h={70} px={32} className={classes.footer}>
-            <Logo />
+          <Box
+            component='footer'
+            className='border-t border-solid border-gray-200'
+          >
+            <Container
+              size='xl'
+              h={70}
+              px={16}
+              className='flex items-center justify-between '
+            >
+              <Group>
+                <Stack>
+                  <Logo />
+                  <span className='text-xs'>@ {new Date().getFullYear()}</span>
+                </Stack>
+              </Group>
+            </Container>
           </Box>
         </MantineProvider>
       </body>

@@ -116,9 +116,11 @@ export default function Page() {
 
 const Hero: React.FC = () => {
   return (
-    <Box h={600} ta='center' py={60}>
-      <Container>
-        <Title>ExoShell is another terminal</Title>
+    <Box h={600} ta='center' pt={30} pb={60}>
+      <Container size='md'>
+        <h1 className='mx-auto max-w-screen-sm text-3xl font-extrabold lg:text-5xl'>
+          Use your computers like never before
+        </h1>
         <Skeleton height={300} width='100%' mx='auto' mt={60} />
       </Container>
     </Box>
@@ -127,58 +129,70 @@ const Hero: React.FC = () => {
 
 const Faq: React.FC = () => {
   return (
-    <Container py={60}>
-      <Title>FAQ</Title>
-      <Accordion multiple={true} chevronPosition='left' mt={60}>
-        {FAQ.map((e) => (
-          <AccordionItem key={e.question} value={e.question}>
-            <AccordionControl>
-              <Text fw='bold'>{e.question}</Text>
-            </AccordionControl>
-            <AccordionPanel>
-              <TypographyStylesProvider>
-                <Markdown>{e.answer}</Markdown>
-              </TypographyStylesProvider>
-            </AccordionPanel>
-          </AccordionItem>
-        ))}
-      </Accordion>
-    </Container>
+    <Box
+      bg='#fafafa'
+      className='border-0 border-t border-solid border-gray-200'
+    >
+      <Container pt={8} pb={100} size='md'>
+        <h2 className='text-center text-5xl font-bold'>FAQs</h2>
+        <Accordion multiple={true} chevronPosition='left' mt={36}>
+          {FAQ.map((e) => (
+            <AccordionItem key={e.question} value={e.question}>
+              <AccordionControl>
+                <Text fw='bold'>{e.question}</Text>
+              </AccordionControl>
+              <AccordionPanel>
+                <TypographyStylesProvider>
+                  <Markdown>{e.answer}</Markdown>
+                </TypographyStylesProvider>
+              </AccordionPanel>
+            </AccordionItem>
+          ))}
+        </Accordion>
+      </Container>
+    </Box>
   );
 };
 
 const Pricing: React.FC = () => {
   return (
-    <Container py={60}>
-      <Title>Pricing</Title>
-      <Table
-        mt={60}
-        highlightOnHover
-        data={{
-          head: [
-            null,
-            null,
-            <b key={'free'}>Free forever</b>,
-            <b key={'pro'}>Pro plan: 10$/month</b>,
-          ],
-          body: PRICING.map((feature) => [
-            <b key={feature.title}>{feature.title}</b>,
-            feature.tooltip && (
-              <Tooltip
-                label={feature.tooltip}
-                events={{ hover: true, touch: true, focus: false }}
-              >
-                <ActionIcon variant='light' radius={25} color='blue' size={20}>
-                  <MdInfoOutline />
-                </ActionIcon>
-              </Tooltip>
-            ),
-            feature.freePlan,
-            feature.proPlan,
-          ]),
-        }}
-      />
-    </Container>
+    <Box className='border-0 border-t border-solid border-gray-200'>
+      <Container pt={8} pb={100}>
+        <h2 className='text-center text-5xl'>Pricing</h2>
+        <Table
+          mt={60}
+          highlightOnHover
+          data={{
+            head: [
+              null,
+              null,
+              <b key={'free'}>Free forever</b>,
+              <b key={'pro'}>Pro plan: 10$/month</b>,
+            ],
+            body: PRICING.map((feature) => [
+              <b key={feature.title}>{feature.title}</b>,
+              feature.tooltip && (
+                <Tooltip
+                  label={feature.tooltip}
+                  events={{ hover: true, touch: true, focus: false }}
+                >
+                  <ActionIcon
+                    variant='light'
+                    radius={25}
+                    color='blue'
+                    size={20}
+                  >
+                    <MdInfoOutline />
+                  </ActionIcon>
+                </Tooltip>
+              ),
+              feature.freePlan,
+              feature.proPlan,
+            ]),
+          }}
+        />
+      </Container>
+    </Box>
   );
 };
 
@@ -192,7 +206,12 @@ const Newsletter: React.FC = () => {
     },
   });
   return (
-    <Box ta='center' py={60}>
+    <Box
+      ta='center'
+      pt={100}
+      className='border-0 border-t border-solid border-gray-200'
+      bg='#fafafa'
+    >
       <Container>
         <Title>Subscribe to the waitlist</Title>
         <form onSubmit={form.onSubmit((values) => console.log(values))}>
@@ -225,33 +244,35 @@ const Contact: React.FC = () => {
     },
   });
   return (
-    <Container py={60}>
-      <Title>Contact</Title>
-      <Text ta='center' fw={500} mt={24}>
-        Have questions? Want to help? Send us a message!
-      </Text>
-      <Box mt={50} maw={600} mx='auto'>
-        <form onSubmit={form.onSubmit((values) => console.log(values))}>
-          <Stack>
-            <TextInput
-              placeholder='Email'
-              type='email'
-              {...form.getInputProps('email')}
-            />
-            <Textarea
-              placeholder='Message'
-              autosize
-              minRows={5}
-              resize='vertical'
-              {...form.getInputProps('message')}
-            />
-            <Button type='submit' color='black'>
-              Send
-            </Button>
-          </Stack>
-        </form>
-      </Box>
-    </Container>
+    <Box bg='#fafafa'>
+      <Container pt={100} pb={100}>
+        <Title>Contact</Title>
+        <Text ta='center' fw={500} mt={24}>
+          Have questions? Want to help? Send us a message!
+        </Text>
+        <Box mt={50} maw={600} mx='auto'>
+          <form onSubmit={form.onSubmit((values) => console.log(values))}>
+            <Stack>
+              <TextInput
+                placeholder='Email'
+                type='email'
+                {...form.getInputProps('email')}
+              />
+              <Textarea
+                placeholder='Message'
+                autosize
+                minRows={5}
+                resize='vertical'
+                {...form.getInputProps('message')}
+              />
+              <Button type='submit' color='black'>
+                Send
+              </Button>
+            </Stack>
+          </form>
+        </Box>
+      </Container>
+    </Box>
   );
 };
 
