@@ -21,7 +21,7 @@ export const FormRun: React.FC = () => {
     initialValues: {
       name: '',
       command: '',
-      env: [],
+      env: [] as { k: string; v: string }[],
       workingDir: null,
     },
   });
@@ -64,9 +64,7 @@ export const FormRun: React.FC = () => {
                     Environment variables
                   </Text>
                   <ActionIcon
-                    onClick={() =>
-                      form.insertListItem('env', { key: '', value: '' })
-                    }
+                    onClick={() => form.insertListItem('env', { k: '', v: '' })}
                     variant='subtle'
                     color='black'
                   >
@@ -90,11 +88,11 @@ export const FormRun: React.FC = () => {
                         </Center>
                         <TextInput
                           placeholder='Key'
-                          {...form.getInputProps(`env.${index}.key`)}
+                          {...form.getInputProps(`env.${index}.k`)}
                         />
                         <TextInput
                           placeholder='Value'
-                          {...form.getInputProps(`env.${index}.value`)}
+                          {...form.getInputProps(`env.${index}.v`)}
                         />
                         <ActionIcon
                           onClick={() => form.removeListItem('env', index)}
