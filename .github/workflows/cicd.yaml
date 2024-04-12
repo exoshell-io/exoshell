@@ -1,26 +1,32 @@
 name: CI/CD
 
 on:
-  push:
-    branches:
-      - main
-    tags:
-      - v*
-      - desktop/v*
   pull_request:
   workflow_dispatch:
     inputs:
-      environment:
-        description: Environment to deploy
-        default: staging
-        type: choice
-        options:
-          - staging
-          - production
-      should-deploy:
-        description: Deploy
+      # environment:
+      #   description: Environment to deploy
+      #   required: true
+      #   default: staging
+      #   type: choice
+      #   options:
+      #     - staging
+      #     - production
+      should-ci:
+        description: CI y/n ?
         type: boolean
+        required: true
+        default: true
+      should-cd:
+        description: CD y/n ?
+        type: boolean
+        required: true
         default: false
+      version:
+        description: Package version
+        type: string
+        required: true
+        default: 'v0.0.0-alpha.1'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
@@ -33,7 +39,7 @@ jobs:
     strategy:
       fail-fast: false
     runs-on: ubuntu-22.04
-    if: github.event_name == 'pull_request'
+    if: ${{ github.event.inputs.should_ci } && (github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch')
     timeout-minutes: 30
     permissions:
       contents: read
@@ -57,20 +63,20 @@ jobs:
     strategy:
       fail-fast: false
       # Missing architectures: Linux [ARMv7, ARMv8]
-      # - platform: 'macos-latest'
-      #   args: '--target aarch64-apple-darwin'
-      # - platform: 'macos-latest'
-      #   args: '--target x86_64-apple-darwin'
-      # - platform: 'macos-latest'
-      #   args: '--target universal-apple-darwin'
-      # - platform: 'windows-latest'
-      #   args: ''
       matrix:
         settings:
           - platform: 'ubuntu-22.04'
             args: ''
+          - platform: 'windows-latest'
+            args: ''
+          - platform: 'macos-latest'
+            args: '--target aarch64-apple-darwin'
+          - platform: 'macos-latest'
+            args: '--target x86_64-apple-darwin'
+          - platform: 'macos-latest'
+            args: '--target universal-apple-darwin'
     runs-on: ${{ matrix.settings.platform}}
-    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v') || startsWith(github.ref, 'refs/tags/desktop/v')
+    if: ${{ github.event.inputs.should_cd } == true && github.event_name == 'workflow_dispatch'
     timeout-minutes: 30
     permissions:
       contents: write
@@ -110,18 +116,18 @@ jobs:
 
       - name: Compute package version
         id: version
-        run: echo "::set-output name=version::${GITHUB_REF#refs/tags/v}"
+        run: echo "version=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
 
       - uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           projectPath: ./apps/desktop
-          # includeUpdaterJson: true
           tauriScript: bun tauri
           args: ${{ matrix.settings.args }}
-          tagName: exoshell-v${{ steps.version.outputs.version }}
+          tagName: v${{ steps.version.outputs.version }}
           releaseName: 'Exoshell v${{ steps.version.outputs.version }}'
           releaseBody: ''
+          # includeUpdaterJson: true
           # releaseDraft: true
           # prerelease: false
