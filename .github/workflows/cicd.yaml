@@ -37,7 +37,7 @@ permissions: {}
 jobs:
   ci:
     runs-on: ubuntu-22.04
-    if: (inputs.should_ci && github.event_name == 'workflow_dispatch') || github.event_name == 'pull_request'
+    if: (inputs.should-ci && github.event_name == 'workflow_dispatch') || github.event_name == 'pull_request'
     timeout-minutes: 30
     permissions:
       contents: read
@@ -58,6 +58,11 @@ jobs:
           bun run ci
 
   cd:
+    runs-on: ${{ matrix.settings.platform}}
+    if: inputs.should-cd && github.event_name == 'workflow_dispatch'
+    timeout-minutes: 30
+    permissions:
+      contents: write
     strategy:
       # TODO should be true, false while we iterate
       fail-fast: false
@@ -74,11 +79,6 @@ jobs:
             args: '--target x86_64-apple-darwin'
           - platform: 'macos-latest'
             args: '--target universal-apple-darwin'
-    runs-on: ${{ matrix.settings.platform}}
-    if: inputs.should_ci && github.event_name == 'workflow_dispatch'
-    timeout-minutes: 30
-    permissions:
-      contents: write
     steps:
       - uses: actions/checkout@v4
 
