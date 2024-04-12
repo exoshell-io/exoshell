@@ -16,12 +16,12 @@ on:
         description: CI y/n ?
         type: boolean
         required: true
-        default: 'true'
+        default: true
       should-cd:
         description: CD y/n ?
         type: boolean
         required: true
-        default: 'false'
+        default: false
       version:
         description: Package version
         type: string
@@ -36,8 +36,6 @@ permissions: {}
 
 jobs:
   ci:
-    strategy:
-      fail-fast: true
     runs-on: ubuntu-22.04
     if: (${{ github.event.inputs.should_ci == 'true' }} && github.event_name == 'workflow_dispatch') || github.event_name == 'pull_request'
     timeout-minutes: 30
