@@ -37,7 +37,7 @@ permissions: {}
 jobs:
   ci:
     runs-on: ubuntu-22.04
-    if: (${{ github.event.inputs.should_ci == 'true' }} && github.event_name == 'workflow_dispatch') || github.event_name == 'pull_request'
+    if: (inputs.should_ci && github.event_name == 'workflow_dispatch') || github.event_name == 'pull_request'
     timeout-minutes: 30
     permissions:
       contents: read
@@ -75,7 +75,7 @@ jobs:
           - platform: 'macos-latest'
             args: '--target universal-apple-darwin'
     runs-on: ${{ matrix.settings.platform}}
-    if: ${{ github.event.inputs.should_ci == 'true' }} && github.event_name == 'workflow_dispatch'
+    if: inputs.should_ci && github.event_name == 'workflow_dispatch'
     timeout-minutes: 30
     permissions:
       contents: write
