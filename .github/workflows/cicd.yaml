@@ -115,10 +115,6 @@ jobs:
         with:
           workspaces: '${{ github.workspace }}/apps/desktop/src-tauri -> target'
 
-      - name: Compute package version
-        id: version
-        run: echo "version=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
-
       - uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -126,8 +122,8 @@ jobs:
           projectPath: ./apps/desktop
           tauriScript: bun tauri
           args: ${{ matrix.settings.args }}
-          tagName: v${{ steps.version.outputs.version }}
-          releaseName: 'Exoshell v${{ steps.version.outputs.version }}'
+          tagName: v${{ github.event.inputs.version }}
+          releaseName: 'Exoshell v${{ github.event.inputs.version }}'
           releaseBody: ''
           # includeUpdaterJson: true
           # releaseDraft: true
