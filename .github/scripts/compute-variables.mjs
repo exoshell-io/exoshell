@@ -35,20 +35,6 @@ export default async function (context, core) {
         context.payload?.pull_request?.body?.includes('[should-deploy]')
       }`,
     ],
-    [
-      'key-gcp-service-account-credentials',
-      `GCP_SERVICE_ACCOUNT_CREDENTIALS_${environment.toUpperCase()}`,
-    ],
-    [
-      'key-pulumi-access-token',
-      `PULUMI_ACCESS_TOKEN_${environment.toUpperCase()}`,
-    ],
-    ['key-postgres-url', `POSTGRES_URL_${environment.toUpperCase()}`],
-    ['key-kubeconfig', `KUBECONFIG_${environment.toUpperCase()}`],
-    ['key-scrape-proxy-url', `SCRAPE_PROXY_URL_${environment.toUpperCase()}`],
-    ['key-scrape-proxy-auth', `SCRAPE_PROXY_AUTH_${environment.toUpperCase()}`],
-    ['key-otlp-endpoint', `OTLP_ENDPOINT_${environment.toUpperCase()}`],
-    ['key-otlp-bearer', `OTLP_BEARER_${environment.toUpperCase()}`],
   ]);
 
   await core.summary.write();
