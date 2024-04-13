@@ -14,7 +14,7 @@ on:
   workflow_dispatch:
     inputs:
       component:
-        description: Component to build
+        description: Components to build
         type: choice
         default: all
         required: true
@@ -36,17 +36,17 @@ on:
           - macos
           - windows
       always-ci:
-        description: CI y/n ?
+        description: Force CI step y/n ?
         type: boolean
         required: true
         default: true
       always-cd:
-        description: CD y/n ?
+        description: Force CD step y/n ?
         type: boolean
         required: true
         default: false
       dry-run-cd:
-        description: Dry-run CD y/n ?
+        description: Dry-run CD step y/n ?
         type: boolean
         required: true
         default: false
