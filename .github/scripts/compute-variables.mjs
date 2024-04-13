@@ -59,7 +59,7 @@ export default async function (context, core) {
 
   const tag_version = context.ref.startsWith('refs/tags/v')
     ? context.ref.substring('refs/tags/v'.length)
-    : null;
+    : '';
 
   const version = _version
     ? _version[1]
