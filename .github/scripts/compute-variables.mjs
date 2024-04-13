@@ -67,82 +67,57 @@ export default async function (context, core) {
       ? workflowDispatchEvent.inputs['version']
       : tag_version;
 
-  // Get build_desktop from PR body
-  const _build_desktop = context.payload?.pull_request?.body?.match(
-    /\[build_desktop=([a-z]+)]/,
+  // Get target_builds from PR body
+  const _target_builds = context.payload?.pull_request?.body?.match(
+    /\[target_builds=([a-z]+)]/,
   );
 
-  const build_desktop = _build_desktop
-    ? _build_desktop[1]
+  const target_builds = _target_builds
+    ? _target_builds[1]
     : /** @type {string} */ (
-        workflowDispatchEvent?.inputs?.['build_desktop'] ?? 'true'
+        workflowDispatchEvent?.inputs?.['target_builds'] ?? 'all'
       );
 
-  // Get build_cli from PR body
-  const _build_cli = context.payload?.pull_request?.body?.match(
-    /\[build_cli=([a-z]+)]/,
+  // Get target_platforms from PR body
+  const _target_platforms = context.payload?.pull_request?.body?.match(
+    /\[target_platforms=([a-z]+)]/,
   );
 
-  const build_cli = _build_cli
-    ? _build_cli[1]
+  const target_platforms = _target_platforms
+    ? _target_platforms[1]
     : /** @type {string} */ (
-        workflowDispatchEvent?.inputs?.['build_cli'] ?? 'true'
+        workflowDispatchEvent?.inputs?.['target_platforms'] ?? 'all'
       );
 
-  // Get build_mobile from PR body
-  const _build_mobile = context.payload?.pull_request?.body?.match(
-    /\[build_mobile=([a-z]+)]/,
-  );
+  // Define platform settings
+  const platforms = {
+    linux: { platform: 'ubuntu-22.04', args: '' },
+    macos: [
+      { platform: 'macos-latest', args: '--target aarch64-apple-darwin' },
+      { platform: 'macos-latest', args: '--target x86_64-apple-darwin' },
+    ],
+    windows: { platform: 'windows-latest', args: '' },
+  };
 
-  const build_mobile = _build_mobile
-    ? _build_mobile[1]
-    : /** @type {string} */ (
-        workflowDispatchEvent?.inputs?.['build_mobile'] ?? 'true'
-      );
+  let matrix = [];
+  if (target_platforms === 'all') {
+    matrix = [
+      ...Object.values(platforms.linux),
+      ...platforms.macos,
+      ...Object.values(platforms.windows),
+    ];
+  } else {
+    const platformsRequested = target_platforms.split(',');
+    platformsRequested.forEach((platformKey) => {
+      if (platformKey === 'macos') {
+        matrix = matrix.concat(platforms[platformKey]);
+      } else {
+        matrix.push(platforms[platformKey]);
+      }
+    });
+  }
 
-  // Get build_web from PR body
-  const _build_web = context.payload?.pull_request?.body?.match(
-    /\[build_web=([a-z]+)]/,
-  );
-
-  const build_web = _build_web
-    ? _build_web[1]
-    : /** @type {string} */ (
-        workflowDispatchEvent?.inputs?.['build_web'] ?? 'true'
-      );
-
-  // Get target_linux from PR body
-  const _target_linux = context.payload?.pull_request?.body?.match(
-    /\[target_linux=([a-z]+)]/,
-  );
-
-  const target_linux = _target_linux
-    ? _target_linux[1]
-    : /** @type {string} */ (
-        workflowDispatchEvent?.inputs?.['target_linux'] ?? 'true'
-      );
-
-  // Get target_macos from PR body
-  const _target_macos = context.payload?.pull_request?.body?.match(
-    /\[target_macos=([a-z]+)]/,
-  );
-
-  const target_macos = _target_macos
-    ? _target_macos[1]
-    : /** @type {string} */ (
-        workflowDispatchEvent?.inputs?.['target_macos'] ?? 'true'
-      );
-
-  // Get target_windows from PR body
-  const _target_windows = context.payload?.pull_request?.body?.match(
-    /\[target_windows=([a-z]+)]/,
-  );
-
-  const target_windows = _target_windows
-    ? _target_windows[1]
-    : /** @type {string} */ (
-        workflowDispatchEvent?.inputs?.['target_windows'] ?? 'true'
-      );
+  const target_platforms_matrix = JSON.stringify({ settings: matrix });
 
   core.summary.addHeading('Computed variables', 2);
 
@@ -152,13 +127,9 @@ export default async function (context, core) {
     ['always-cd', always_cd],
     ['dry-run-cd', dry_run_cd],
     ['version', version],
-    ['build-desktop', build_desktop],
-    ['build-cli', build_cli],
-    ['build-mobile', build_mobile],
-    ['build-web', build_web],
-    ['target-linux', target_linux],
-    ['target-macos', target_macos],
-    ['target-windows', target_windows],
+    ['target-builds', target_builds],
+    ['target-platforms', target_platforms],
+    ['target-platforms-matrix', target_platforms_matrix],
   ]);
 
   await core.summary.write();
