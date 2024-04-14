@@ -125,7 +125,8 @@ jobs:
     strategy:
       # TODO should be true, false while we iterate
       fail-fast: false
-      matrix: ${{fromJson(needs.setup.outputs.target-platforms-matrix).settings}}
+      matrix:
+        settings: ${{fromJson(needs.setup.outputs.target-platforms-matrix)}}
     needs:
       - setup
       - ci
