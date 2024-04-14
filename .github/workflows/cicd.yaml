@@ -133,6 +133,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+
+      - uses: oven-sh/setup-bun@v1
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.settings.platform == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
+
+      - name: Install
+        run: |
+          bun install --frozen-lockfile
+
       - name: Install dependencies (Linux only)
         if: matrix.settings.platform == 'ubuntu-22.04'
         # libwebkit2gtk-4.0-dev == needed for Tauriv1
@@ -152,20 +166,6 @@ jobs:
           cargo clean
           cargo update
           rustup update
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version-file: .nvmrc
-
-      - uses: oven-sh/setup-bun@v1
-
-      - uses: dtolnay/rust-toolchain@stable
-        with:
-          targets: ${{ matrix.settings.platform == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
-
-      - name: Install
-        run: |
-          bun install --frozen-lockfile
 
       - name: Rust cache
         uses: swatinem/rust-cache@v2
