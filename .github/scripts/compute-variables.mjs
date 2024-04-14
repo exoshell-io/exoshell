@@ -58,7 +58,7 @@ export default async function (context, core) {
     context.payload?.pull_request?.body?.match(/\[version=([a-z]+)]/);
 
   const tag_version = context.ref.startsWith('refs/tags/v')
-    ? context.ref.substring('refs/tags/'.length)
+    ? context.ref.substring('refs/tags/v'.length)
     : '';
 
   const version = _version
