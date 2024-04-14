@@ -75,7 +75,7 @@ export default async function (context, core) {
   const release_type = _release_type
     ? _release_type[1]
     : /** @type {string} */ (
-        workflowDispatchEvent?.inputs?.['release-type'] ?? 'all'
+        workflowDispatchEvent?.inputs?.['release-type'] ?? 'stable'
       );
 
   // Get target-builds from PR body
