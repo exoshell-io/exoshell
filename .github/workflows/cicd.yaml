@@ -147,8 +147,8 @@ jobs:
         run: |
           brew install llvm@14
           export PATH="/opt/homebrew/opt/llvm@14/bin:$PATH"
-          export LDFLAGS="-L/opt/homebrew/opt/llvm@16/lib"
-          export CPPFLAGS="-I/opt/homebrew/opt/llvm@16/include"
+          export LDFLAGS="-L/opt/homebrew/opt/llvm@14/lib"
+          export CPPFLAGS="-I/opt/homebrew/opt/llvm@14/include"
           cargo clean
           cargo update
           rustup update
