@@ -1,8 +1,8 @@
 {
   "$schema": "../../../node_modules/@tauri-apps/cli/schema.json",
   "package": {
-    "productName": "ExoShell",
-    "version": "0.0.0"
+    "productName": "exoshell",
+    "version": "0.0.1"
   },
   "build": {
     "beforeBuildCommand": "bun run build:web",
