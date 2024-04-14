@@ -38,7 +38,7 @@ on:
         required: true
         default: false
       version:
-        description: Package version (relevant if you trigger this job by workflow_dispatch, example -> v0.0.1-alpha.1)
+        description: Package version (relevant if you trigger this job by workflow_dispatch, example -> 1.0.0)
         type: string
       release-type:
         description: Type of release
