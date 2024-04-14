@@ -127,11 +127,8 @@ jobs:
   desktop-cd:
     runs-on: ${{ matrix.settings.platform}}
     if: >-
-      needs.setup.outputs.always-cd == 'true' ||
-      (github.event_name == 'push' && 
-      (startsWith(github.ref, 'refs/tags/v') || 
-      startsWith(github.ref, 'refs/tags/desktop/v')) &&
-      (needs.setup.outputs.target-builds == 'all' || needs.setup.outputs.target-builds == 'desktop'))
+      needs.setup.outputs.always-cd == 'true' &&
+      (needs.setup.outputs.target-builds == 'all' || needs.setup.outputs.target-builds == 'desktop')
     timeout-minutes: 60
     permissions:
       contents: write
