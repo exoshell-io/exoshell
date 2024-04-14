@@ -145,8 +145,8 @@ jobs:
       - name: Install dependencies (MacOs only)
         if: matrix.settings.platform == 'macos-latest'
         run: |
-          brew install llvm@16
-          export PATH="/opt/homebrew/opt/llvm@16/bin:$PATH"
+          brew install llvm@14
+          export PATH="/opt/homebrew/opt/llvm@14/bin:$PATH"
           export LDFLAGS="-L/opt/homebrew/opt/llvm@16/lib"
           export CPPFLAGS="-I/opt/homebrew/opt/llvm@16/include"
           cargo clean
