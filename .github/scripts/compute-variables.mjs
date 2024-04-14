@@ -67,6 +67,17 @@ export default async function (context, core) {
       ? workflowDispatchEvent.inputs['version']
       : tag_version;
 
+  // Get release-type from PR body
+  const _release_type = context.payload?.pull_request?.body?.match(
+    /\[release-type=([a-z]+)]/,
+  );
+
+  const release_type = _release_type
+    ? _release_type[1]
+    : /** @type {string} */ (
+        workflowDispatchEvent?.inputs?.['release-type'] ?? 'all'
+      );
+
   // Get target-builds from PR body
   const _target_builds = context.payload?.pull_request?.body?.match(
     /\[target-builds=([a-z]+)]/,
@@ -131,6 +142,7 @@ export default async function (context, core) {
     ['always-cd', always_cd],
     ['dry-run-cd', dry_run_cd],
     ['version', version],
+    ['release-type', release_type],
     ['target-builds', target_builds],
     ['target-platforms', target_platforms],
     ['target-platforms-matrix', target_platforms_matrix],

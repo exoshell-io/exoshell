@@ -40,6 +40,15 @@ on:
       version:
         description: Package version (relevant if you trigger this job by workflow_dispatch, example -> v0.0.1-alpha.1)
         type: string
+      release-type:
+        description: Type of release
+        type: choice
+        required: true
+        default: stable
+        options:
+          - stable
+          - draft
+          - prerelease
       target-builds:
         description: Target builds
         type: choice
@@ -81,6 +90,7 @@ jobs:
       always-cd: ${{ steps.set_vars.outputs.always-cd }}
       dry-run-cd: ${{ steps.set_vars.outputs.dry-run-cd }}
       version: ${{ steps.set_vars.outputs.version }}
+      release-type: ${{ steps.set_vars.outputs.release-type }}
       target-builds: ${{ steps.set_vars.outputs.target-builds }}
       target-platforms: ${{ steps.set_vars.outputs.target-platforms }}
       target-platforms-matrix: ${{ steps.set_vars.outputs.target-platforms-matrix }}
@@ -155,18 +165,6 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y libwebkit2gtk-4.0-dev libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
 
-        # This is a fix for known 'librocksdb-sys' issue in M1 MacOs
-      # - name: Install dependencies (MacOs only)
-      #   if: matrix.settings.platform == 'macos-latest'
-      #   run: |
-      #     brew install llvm@14
-      #     export PATH="/opt/homebrew/opt/llvm@14/bin:$PATH"
-      #     export LDFLAGS="-L/opt/homebrew/opt/llvm@14/lib"
-      #     export CPPFLAGS="-I/opt/homebrew/opt/llvm@14/include"
-      #     cargo clean
-      #     cargo update
-      #     rustup update
-
       - name: Rust cache
         uses: swatinem/rust-cache@v2
         with:
@@ -184,9 +182,9 @@ jobs:
           releaseName: 'ExoShell ${{ needs.setup.outputs.version }}'
           appName: 'ExoShell'
           appVersion: ${{ needs.setup.outputs.version }}
+          releaseDraft: ${{ matrix.settings.release-type == 'draft' && true || false }}
+          prerelease: ${{ matrix.settings.release-type == 'prerelease' && true || false }}
           # releaseBody: ''
-          # releaseDraft:
-          # prerelease:
           # releaseId:
           # distPath:
           # iconPath:
@@ -196,5 +194,3 @@ jobs:
           # includeUpdaterJson: true
           # updaterJsonPreferNsis:
           # updaterJsonKeepUniversal:
-          # releaseDraft: true
-          # prerelease: false
