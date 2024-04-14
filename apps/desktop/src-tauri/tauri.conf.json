@@ -2,7 +2,7 @@
   "$schema": "../../../node_modules/@tauri-apps/cli/schema.json",
   "package": {
     "productName": "exoshell",
-    "version": "0.0.1"
+    "version": "0.0.1-alpha.1"
   },
   "build": {
     "beforeBuildCommand": "bun run build:web",
