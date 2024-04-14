@@ -101,18 +101,22 @@ export default async function (context, core) {
 
   let matrix = [];
   if (target_platforms === 'all') {
-    matrix = [
-      ...Object.values(platforms.linux),
-      ...platforms.macos,
-      ...Object.values(platforms.windows),
-    ];
+    // Include all platforms if 'all' is specified
+    matrix = [platforms.linux, ...platforms.macos, platforms.windows];
   } else {
+    // Only include specified platforms
     const platformsRequested = target_platforms.split(',');
     platformsRequested.forEach((platformKey) => {
-      if (platformKey === 'macos') {
-        matrix = matrix.concat(platforms[platformKey]);
-      } else {
-        matrix.push(platforms[platformKey]);
+      switch (platformKey) {
+        case 'linux':
+          matrix.push(platforms.linux);
+          break;
+        case 'macos':
+          matrix = matrix.concat(platforms.macos);
+          break;
+        case 'windows':
+          matrix.push(platforms.windows);
+          break;
       }
     });
   }
