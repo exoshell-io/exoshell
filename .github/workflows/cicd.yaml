@@ -1,15 +1,15 @@
 name: CI/CD
 
 on:
-  push:
-    # branches:
-    #   - main
-    tags:
-      - v*
-      # - desktop/v*
-      # - cli/v*
-      # - mobile/v*
-      # - web/v*
+  # push:
+  # branches:
+  # - main
+  # tags:
+  #   - v*
+  # - desktop/v*
+  # - cli/v*
+  # - mobile/v*
+  # - web/v*
   pull_request:
   workflow_dispatch:
     inputs:
@@ -38,8 +38,10 @@ on:
         required: true
         default: false
       version:
-        description: Package version (relevant if you trigger this job by workflow_dispatch, example -> 1.0.0)
+        description: Package version (relevant for workflow_dispatch. Tag must exist. Example value -> '1.0.0' for 'v1.0.0' tag)
         type: string
+        required: true
+        default: ''
       release-type:
         description: Type of release
         type: choice

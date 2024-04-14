@@ -57,15 +57,9 @@ export default async function (context, core) {
   const _version =
     context.payload?.pull_request?.body?.match(/\[version=([a-z]+)]/);
 
-  const tag_version = context.ref.startsWith('refs/tags/v')
-    ? context.ref.substring('refs/tags/v'.length)
-    : '';
-
   const version = _version
     ? _version[1]
-    : workflowDispatchEvent?.inputs?.['version']
-      ? workflowDispatchEvent.inputs['version']
-      : tag_version;
+    : /** @type {string} */ (workflowDispatchEvent?.inputs?.['version'] ?? '');
 
   // Get release-type from PR body
   const _release_type = context.payload?.pull_request?.body?.match(
