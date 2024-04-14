@@ -114,7 +114,8 @@ jobs:
 
       - name: Log matrix
         run: |
-          echo "Matrix JSON: ${{ needs.setup.outputs.target_platforms_matrix }}"
+          echo "Platform JSON: ${{ needs.setup.outputs.target-platforms }}"
+          echo "Matrix JSON: ${{ needs.setup.outputs.target-platforms-matrix }}"
 
   desktop-cd:
     runs-on: ${{ matrix.settings.platform}}
