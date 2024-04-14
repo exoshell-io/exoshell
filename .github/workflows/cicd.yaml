@@ -133,12 +133,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Compute variables
-        uses: actions/github-script@v7
-        id: variables
-        with:
-          script: (await import('${{ github.workspace }}/.github/scripts/compute-variables.mjs')).default(context, core)
-
       - name: Install dependencies (Linux only)
         if: matrix.settings.platform == 'ubuntu-22.04'
         # libwebkit2gtk-4.0-dev == needed for Tauriv1
