@@ -20,37 +20,37 @@ export default async function (context, core) {
         workflowDispatchEvent?.inputs?.['environment'] ?? 'dev'
       );
 
-  // Get always_ci from PR body
+  // Get always-ci from PR body
   const _always_ci = context.payload?.pull_request?.body?.match(
-    /\[always_ci=([a-z]+)]/,
+    /\[always-ci=([a-z]+)]/,
   );
 
   const always_ci = _always_ci
     ? _always_ci[1]
     : /** @type {string} */ (
-        workflowDispatchEvent?.inputs?.['always_ci'] ?? 'true'
+        workflowDispatchEvent?.inputs?.['always-ci'] ?? 'true'
       );
 
-  // Get always_cd from PR body
+  // Get always-cd from PR body
   const _always_cd = context.payload?.pull_request?.body?.match(
-    /\[always_cd=([a-z]+)]/,
+    /\[always-cd=([a-z]+)]/,
   );
 
   const always_cd = _always_cd
     ? _always_cd[1]
     : /** @type {string} */ (
-        workflowDispatchEvent?.inputs?.['always_cd'] ?? 'false'
+        workflowDispatchEvent?.inputs?.['always-cd'] ?? 'false'
       );
 
-  // Get dry_run_cd from PR body
+  // Get dry-run-cd from PR body
   const _dry_run_cd = context.payload?.pull_request?.body?.match(
-    /\[dry_run_cd=([a-z]+)]/,
+    /\[dry-run-cd=([a-z]+)]/,
   );
 
   const dry_run_cd = _dry_run_cd
     ? _dry_run_cd[1]
     : /** @type {string} */ (
-        workflowDispatchEvent?.inputs?.['dry_run_cd'] ?? 'false'
+        workflowDispatchEvent?.inputs?.['dry-run-cd'] ?? 'false'
       );
 
   // Get version from PR body
@@ -67,26 +67,26 @@ export default async function (context, core) {
       ? workflowDispatchEvent.inputs['version']
       : tag_version;
 
-  // Get target_builds from PR body
+  // Get target-builds from PR body
   const _target_builds = context.payload?.pull_request?.body?.match(
-    /\[target_builds=([a-z]+)]/,
+    /\[target-builds=([a-z]+)]/,
   );
 
   const target_builds = _target_builds
     ? _target_builds[1]
     : /** @type {string} */ (
-        workflowDispatchEvent?.inputs?.['target_builds'] ?? 'all'
+        workflowDispatchEvent?.inputs?.['target-builds'] ?? 'all'
       );
 
-  // Get target_platforms from PR body
+  // Get target-platforms from PR body
   const _target_platforms = context.payload?.pull_request?.body?.match(
-    /\[target_platforms=([a-z]+)]/,
+    /\[target-platforms=([a-z]+)]/,
   );
 
   const target_platforms = _target_platforms
     ? _target_platforms[1]
     : /** @type {string} */ (
-        workflowDispatchEvent?.inputs?.['target_platforms'] ?? 'all'
+        workflowDispatchEvent?.inputs?.['target-platforms'] ?? 'all'
       );
 
   // Define platform settings

@@ -40,7 +40,7 @@ on:
       version:
         description: Package version (relevant if you trigger this job by workflow_dispatch)
         type: string
-      target_builds:
+      target-builds:
         description: Target builds
         type: choice
         required: true
@@ -52,7 +52,7 @@ on:
           - mobile
           - web
       # Missing architectures: Linux [ARMv7, ARMv8], MacOs [Universal]
-      target_platforms:
+      target-platforms:
         description: Target platforms (relevant for desktop)
         type: choice
         required: true
@@ -125,8 +125,7 @@ jobs:
     strategy:
       # TODO should be true, false while we iterate
       fail-fast: false
-      matrix:
-        settings: ${{fromJson(needs.setup.outputs.target-platforms-matrix).settings}}
+      matrix: ${{fromJson(needs.setup.outputs.target-platforms-matrix)}}
     needs:
       - setup
       - ci
