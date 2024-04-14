@@ -112,6 +112,10 @@ jobs:
           bun install --frozen-lockfile
           bun run ci
 
+      - name: Log matrix
+        run: |
+          echo "Matrix JSON: ${{ needs.setup.outputs.target_platforms_matrix }}"
+
   desktop-cd:
     runs-on: ${{ matrix.settings.platform}}
     if: >-
