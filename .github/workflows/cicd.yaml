@@ -83,6 +83,7 @@ jobs:
       version: ${{ steps.set_vars.outputs.version }}
       target-builds: ${{ steps.set_vars.outputs.target_builds }}
       target-platforms: ${{ steps.set_vars.outputs.target_platforms }}
+      target-platforms-matrix: ${{ steps.set_vars.outputs.target_platforms-matrix }}
     steps:
       - uses: actions/checkout@v4
 
