@@ -178,7 +178,7 @@ jobs:
           projectPath: ./apps/desktop
           tauriScript: bun tauri
           args: ${{ matrix.settings.args }}
-          tagName: exoshell-v${{ needs.setup.outputs.version }}
+          tagName: v${{ needs.setup.outputs.version }}
           releaseName: 'ExoShell v${{ needs.setup.outputs.version }}'
           appVersion: ${{ needs.setup.outputs.version }}
           releaseDraft: ${{ matrix.settings.release-type == 'draft' && true || false }}
