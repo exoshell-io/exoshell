@@ -181,7 +181,7 @@ jobs:
           tauriScript: bun tauri
           args: ${{ matrix.settings.args }}
           tagName: ${{ needs.setup.outputs.version }}
-          releaseName: 'ExoShell v${{ needs.setup.outputs.version }}'
+          releaseName: 'ExoShell ${{ needs.setup.outputs.version }}'
           appName: 'ExoShell'
           appVersion: ${{ needs.setup.outputs.version }}
           # releaseBody: ''
