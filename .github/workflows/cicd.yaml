@@ -156,16 +156,16 @@ jobs:
           sudo apt-get install -y libwebkit2gtk-4.0-dev libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
 
         # This is a fix for known 'librocksdb-sys' issue in M1 MacOs
-      - name: Install dependencies (MacOs only)
-        if: matrix.settings.platform == 'macos-latest'
-        run: |
-          brew install llvm@14
-          export PATH="/opt/homebrew/opt/llvm@14/bin:$PATH"
-          export LDFLAGS="-L/opt/homebrew/opt/llvm@14/lib"
-          export CPPFLAGS="-I/opt/homebrew/opt/llvm@14/include"
-          cargo clean
-          cargo update
-          rustup update
+      # - name: Install dependencies (MacOs only)
+      #   if: matrix.settings.platform == 'macos-latest'
+      #   run: |
+      #     brew install llvm@14
+      #     export PATH="/opt/homebrew/opt/llvm@14/bin:$PATH"
+      #     export LDFLAGS="-L/opt/homebrew/opt/llvm@14/lib"
+      #     export CPPFLAGS="-I/opt/homebrew/opt/llvm@14/include"
+      #     cargo clean
+      #     cargo update
+      #     rustup update
 
       - name: Rust cache
         uses: swatinem/rust-cache@v2
