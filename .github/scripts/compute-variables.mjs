@@ -28,7 +28,7 @@ export default async function (context, core) {
   const always_ci = _always_ci
     ? _always_ci[1]
     : /** @type {string} */ (
-        workflowDispatchEvent?.inputs?.['always-ci'] ?? true
+        workflowDispatchEvent?.inputs?.['always-ci'] ?? 'true'
       );
 
   // Get always-cd from PR body
@@ -39,7 +39,7 @@ export default async function (context, core) {
   const always_cd = _always_cd
     ? _always_cd[1]
     : /** @type {string} */ (
-        workflowDispatchEvent?.inputs?.['always-cd'] ?? false
+        workflowDispatchEvent?.inputs?.['always-cd'] ?? 'false'
       );
 
   // Get dry-run-cd from PR body
@@ -50,7 +50,7 @@ export default async function (context, core) {
   const dry_run_cd = _dry_run_cd
     ? _dry_run_cd[1]
     : /** @type {string} */ (
-        workflowDispatchEvent?.inputs?.['dry-run-cd'] ?? false
+        workflowDispatchEvent?.inputs?.['dry-run-cd'] ?? 'false'
       );
 
   // Get version from PR body
