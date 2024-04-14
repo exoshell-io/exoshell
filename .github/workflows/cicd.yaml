@@ -81,9 +81,9 @@ jobs:
       always-cd: ${{ steps.set_vars.outputs.always-cd }}
       dry-run-cd: ${{ steps.set_vars.outputs.dry-run-cd }}
       version: ${{ steps.set_vars.outputs.version }}
-      target-builds: ${{ steps.set_vars.outputs.target_builds }}
-      target-platforms: ${{ steps.set_vars.outputs.target_platforms }}
-      target-platforms-matrix: ${{ steps.set_vars.outputs.target_platforms_matrix }}
+      target-builds: ${{ steps.set_vars.outputs.target-builds }}
+      target-platforms: ${{ steps.set_vars.outputs.target-platforms }}
+      target-platforms-matrix: ${{ steps.set_vars.outputs.target-platforms-matrix }}
     steps:
       - uses: actions/checkout@v4
 
@@ -111,11 +111,6 @@ jobs:
         run: |
           bun install --frozen-lockfile
           bun run ci
-
-      - name: Log matrix
-        run: |
-          echo "Platform JSON: ${{ needs.setup.outputs.target-platforms }}"
-          echo "Matrix JSON: ${{ needs.setup.outputs.target-platforms-matrix }}"
 
   desktop-cd:
     runs-on: ${{ matrix.settings.platform}}
