@@ -3,6 +3,7 @@
 import { AppShell } from '@mantine/core';
 import { FormRun } from './FormRun';
 import { NavBar } from './NavBar';
+import { Main } from './Main';
 
 export const App: React.FC = () => {
   return (
@@ -20,7 +21,7 @@ export const App: React.FC = () => {
         <NavBar />
       </AppShell.Navbar>
 
-      <AppShell.Main>
+      <AppShell.Main h='100dvh' mah='100dvh'>
         <Main />
       </AppShell.Main>
 
@@ -33,8 +34,4 @@ export const App: React.FC = () => {
 
 export const Header: React.FC = () => {
   return <></>;
-};
-
-export const Main: React.FC = () => {
-  return <FormRun />;
 };
