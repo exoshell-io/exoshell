@@ -1,82 +1,82 @@
 'use client';
 
-import {
-  Box,
-  Collapse,
-  Group,
-  ScrollArea,
-  Text,
-  ThemeIcon,
-  UnstyledButton,
-  rem,
-} from '@mantine/core';
-import { useState } from 'react';
-import { type IconType } from 'react-icons';
+import { Dashboard, Workflow, useStore } from '@/_state';
+import { Box, NavLink, ScrollArea } from '@mantine/core';
+import { useMemo } from 'react';
 import { LuWorkflow as IconWorkflow } from 'react-icons/lu';
 import { MdDashboard as IconDashboard } from 'react-icons/md';
-import { TbChevronRight as IconChevronRight } from 'react-icons/tb';
+import { IoMdAdd as IconAdd } from 'react-icons/io';
 
 export const NavBar: React.FC = () => {
+  // Workflows
+  const workflows = useStore((store) => store.workflows);
+  const workflowsLinks = useMemo(() => {
+    return Object.values<Workflow>(workflows).map((workflow) => ({
+      label: workflow.name,
+      link: `workflow://${workflow.id}`,
+    }));
+  }, [workflows]);
+
+  // Dashboards
+  const dashboards = useStore((store) => store.dashboards);
+  const dashboardsLinks = useMemo(() => {
+    return Object.values<Dashboard>(dashboards).map((dashboard) => ({
+      label: dashboard.name,
+      link: `dashboard://${dashboard.id}`,
+    }));
+  }, [dashboards]);
+
+  // Handlers
+  const openTab = useStore((store) => store.openTab);
+  const createWorkflow = useStore((store) => store.createWorkflow);
+  const createDashboard = useStore((store) => store.createDashboard);
+
   return (
-    <Box component='nav' p='md' pb={0}>
+    <Box component='nav'>
       <ScrollArea>
-        <Box>
-          <LinksGroup Icon={IconWorkflow} label='Workflows' />
-          <LinksGroup Icon={IconDashboard} label='Dashboards' />
-        </Box>
+        <NavLink label='Workflows' leftSection={<IconWorkflow />}>
+          {useMemo(
+            () =>
+              workflowsLinks.map((workflow) => (
+                <NavLink
+                  key={workflow.label}
+                  label={workflow.label}
+                  onClick={() => {
+                    console.log('workflow.link', workflow.link);
+                    openTab(workflow.link);
+                  }}
+                />
+              )),
+            [openTab, workflowsLinks],
+          )}
+          <NavLink
+            label='New'
+            leftSection={<IconAdd />}
+            onClick={() => createWorkflow(true)}
+          />
+        </NavLink>
+        <NavLink label='Dashboards' leftSection={<IconDashboard />}>
+          {useMemo(
+            () =>
+              dashboardsLinks.map((dashboard) => (
+                <NavLink
+                  key={dashboard.label}
+                  label={dashboard.label}
+                  onClick={() => {
+                    console.log('dashboard.link', dashboard.link);
+                    openTab(dashboard.link);
+                  }}
+                />
+              )),
+            [dashboardsLinks, openTab],
+          )}
+          <NavLink
+            label='New'
+            leftSection={<IconAdd />}
+            onClick={() => createDashboard(true)}
+          />
+        </NavLink>
       </ScrollArea>
     </Box>
-  );
-};
-
-interface LinksGroupProps {
-  Icon: IconType;
-  label: string;
-  links?: { label: string; link: string }[];
-}
-
-const LinksGroup: React.FC<LinksGroupProps> = ({ Icon, label, links }) => {
-  const hasLinks = Array.isArray(links);
-  const [opened, setOpened] = useState(false);
-  const items = (hasLinks ? links : []).map((link) => (
-    <Text
-      component='a'
-      // className={classes.link}
-      href={link.link}
-      key={link.label}
-      onClick={(event) => event.preventDefault()}
-    >
-      {link.label}
-    </Text>
-  ));
-
-  return (
-    <>
-      <UnstyledButton
-        onClick={() => setOpened((o) => !o)}
-        // className={classes.control}
-      >
-        <Group justify='space-between' gap={0}>
-          <Box style={{ display: 'flex', alignItems: 'center' }}>
-            <ThemeIcon variant='light' size={30}>
-              <Icon style={{ width: rem(18), height: rem(18) }} />
-            </ThemeIcon>
-            <Box ml='md'>{label}</Box>
-          </Box>
-          {hasLinks && (
-            <IconChevronRight
-              // className={classes.chevron}
-              stroke='1.5'
-              style={{
-                width: rem(16),
-                height: rem(16),
-                transform: opened ? 'rotate(-90deg)' : 'none',
-              }}
-            />
-          )}
-        </Group>
-      </UnstyledButton>
-      {hasLinks ? <Collapse in={opened}>{items}</Collapse> : null}
-    </>
   );
 };
