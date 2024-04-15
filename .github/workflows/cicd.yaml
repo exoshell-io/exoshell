@@ -1,15 +1,13 @@
 name: CI/CD
 
 on:
-  # push:
-  # branches:
-  # - main
-  # tags:
-  #   - v*
-  # - desktop/v*
-  # - cli/v*
-  # - mobile/v*
-  # - web/v*
+  push:
+    tags:
+      - v*
+      - desktop/v*
+    # - cli/v*
+    # - mobile/v*
+    # - web/v*
   pull_request:
   workflow_dispatch:
     inputs:
@@ -38,7 +36,7 @@ on:
         required: true
         default: false
       version:
-        description: Package version (relevant for workflow_dispatch. Tag must exist. Example value -> '1.0.0' for 'v1.0.0' tag)
+        description: Package version (relevant for workflow_dispatch. Tag and release must exist. Example value -> '1.0.0' for 'v1.0.0' tag and 'ExoShell v1.0.0' release)
         type: string
         required: true
         default: ''
@@ -127,8 +125,11 @@ jobs:
   desktop-cd:
     runs-on: ${{ matrix.settings.platform}}
     if: >-
-      needs.setup.outputs.always-cd == 'true' &&
-      (needs.setup.outputs.target-builds == 'all' || needs.setup.outputs.target-builds == 'desktop')
+      needs.setup.outputs.always-cd == 'true' ||
+      (github.event_name == 'push' && 
+      (startsWith(github.ref, 'refs/tags/v') || 
+      startsWith(github.ref, 'refs/tags/desktop/v')) &&
+      (needs.setup.outputs.target-builds == 'all' || needs.setup.outputs.target-builds == 'desktop'))
     timeout-minutes: 60
     permissions:
       contents: write

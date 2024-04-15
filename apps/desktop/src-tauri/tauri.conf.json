@@ -1,8 +1,7 @@
 {
   "$schema": "../../../node_modules/@tauri-apps/cli/schema.json",
   "package": {
-    "productName": "exoshell",
-    "version": "0.0.2"
+    "productName": "exoshell"
   },
   "build": {
     "beforeBuildCommand": "bun run build:web",
@@ -44,7 +43,10 @@
       },
       "resources": [],
       "shortDescription": "",
-      "targets": "all",
+      // Currently missing:
+      // "rpm" because it's not available in our Tauri version yet
+      // "msi" because it doesn't support semver
+      "targets": ["deb", "appimage", "nsis", "app", "dmg", "updater"],
       "windows": {
         "certificateThumbprint": null,
         "digestAlgorithm": "sha256",

@@ -9,8 +9,8 @@ resolver = "2"
 
 [workspace.package]
 edition = "2021"
-name = "exoshell"
-version = "0.0.2"
+# name = "exoshell"
+version = "0.0.1-alpha.0"
 
 [workspace.dependencies]
 # Helpers
