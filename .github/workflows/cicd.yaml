@@ -52,6 +52,7 @@ on:
           - desktop
           - cli
           - mobile
+          - web
       # Missing architectures: Linux [ARMv7, ARMv8], MacOs [Universal]
       # Missing packages: "rpm" because it's not available in our Tauri version yet. "msi" because it doesn't support semver
       platforms:
