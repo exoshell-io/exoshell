@@ -38,11 +38,11 @@ export default async function (context, core) {
       repo: context.repo.repo,
       tag_sha: process.env.GITHUB_SHA,
     });
+    const _tag_version = context.ref.startsWith('refs/tags/v')
+      ? context.ref.substring('refs/tags/v'.length)
+      : context.ref.substring('refs/tags/desktop/v'.length);
     updateConfigFromText(
-      '[version=' +
-        context.ref.replace('refs/tags/', '') +
-        ']' +
-        _tag_data.message,
+      '[version=' + _tag_version + ']' + _tag_data.message,
       config,
     );
   } else if (context.eventName === 'workflow_dispatch') {
