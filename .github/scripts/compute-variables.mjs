@@ -120,7 +120,7 @@ function updateConfigFromText(text, config) {
   config.forEach((item) => {
     const regex = new RegExp(`\\[${item[0]}=([^\\]]+)\\]`, 'i');
     const match = text.match(regex);
-    if (match) {
+    if (match && match[1]) {
       item[1] = match[1];
     }
   });
