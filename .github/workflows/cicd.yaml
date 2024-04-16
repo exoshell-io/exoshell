@@ -32,7 +32,7 @@ on:
       #   type: boolean
       #   default: false
       version:
-        description: Package semver version (relevant for workflow_dispatch. Tag and release must exist. Example value -> '1.0.0' for 'v1.0.0' tag and 'ExoShell v1.0.0' release)
+        description: Package semver version (relevant for workflow_dispatch. Github tag and release must exist. Example value -> '1.0.0' for 'v1.0.0' tag and 'ExoShell v1.0.0' release)
         type: string
         default: ''
       release-type:

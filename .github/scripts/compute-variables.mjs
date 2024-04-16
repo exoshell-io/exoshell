@@ -32,11 +32,8 @@ export default async function (context, core) {
   if (context.eventName === 'pull_request') {
     const _pr_body = context.payload.pull_request.body || '';
     updateConfigFromText(_pr_body, config);
-  } else if (
-    context.eventName === 'push' &&
-    context.ref.startsWith('refs/tags/')
-  ) {
-    const _commit_sha = context.payload.after;
+  } else if (context.eventName === 'push') {
+    const _commit_sha = process.env.GITHUB_SHA;
     const _commit_data =
       (await octokit.rest.git.getCommit({
         owner: context.repo.owner,
