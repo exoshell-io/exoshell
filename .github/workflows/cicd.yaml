@@ -11,39 +11,33 @@ on:
   pull_request:
   workflow_dispatch:
     inputs:
-      environment:
-        description: Environment to deploy
-        type: choice
-        required: true
-        default: dev
-        options:
-          - dev
-          - staging
-          - prod
-      always-ci:
-        description: Force CI step y/n ?
+      # environment:
+      #   description: Environment to deploy
+      #   type: choice
+      #   default: prod
+      #   options:
+      #     - dev
+      #     - staging
+      #     - prod
+      skip-ci:
+        description: Skip CI step y/n ?
         type: boolean
-        required: true
-        default: true
+        default: false
       always-cd:
         description: Force CD step y/n ?
         type: boolean
-        required: true
         default: false
-      dry-run-cd:
-        description: Dry-run CD step y/n ?
-        type: boolean
-        required: true
-        default: false
+      # dry-run-cd:
+      #   description: Dry-run CD step y/n ?
+      #   type: boolean
+      #   default: false
       version:
-        description: Package version (relevant for workflow_dispatch. Tag and release must exist. Example value -> '1.0.0' for 'v1.0.0' tag and 'ExoShell v1.0.0' release)
+        description: Package semver version (relevant for workflow_dispatch. Tag and release must exist. Example value -> '1.0.0' for 'v1.0.0' tag and 'ExoShell v1.0.0' release)
         type: string
-        required: true
         default: ''
       release-type:
         description: Type of release
         type: choice
-        required: true
         default: stable
         options:
           - stable
@@ -52,7 +46,6 @@ on:
       target-builds:
         description: Target builds
         type: choice
-        required: true
         default: all
         options:
           - all
@@ -64,7 +57,6 @@ on:
       target-platforms:
         description: Target platforms (relevant for desktop)
         type: choice
-        required: true
         default: all
         options:
           - all
@@ -85,14 +77,10 @@ jobs:
     permissions:
       contents: read
     outputs:
-      environment: ${{ steps.set_vars.outputs.environment }}
-      always-ci: ${{ steps.set_vars.outputs.always-ci }}
-      always-cd: ${{ steps.set_vars.outputs.always-cd }}
-      dry-run-cd: ${{ steps.set_vars.outputs.dry-run-cd }}
+      # environment: ${{ steps.set_vars.outputs.environment }}
+      # dry-run-cd: ${{ steps.set_vars.outputs.dry-run-cd }}
       version: ${{ steps.set_vars.outputs.version }}
       release-type: ${{ steps.set_vars.outputs.release-type }}
-      target-builds: ${{ steps.set_vars.outputs.target-builds }}
-      target-platforms: ${{ steps.set_vars.outputs.target-platforms }}
       target-platforms-matrix: ${{ steps.set_vars.outputs.target-platforms-matrix }}
     steps:
       - uses: actions/checkout@v4
@@ -105,9 +93,7 @@ jobs:
 
   ci:
     runs-on: ubuntu-22.04
-    if: >-
-      needs.setup.outputs.always-ci == 'true' || 
-      github.event_name == 'pull_request'
+    if: needs.setup.outputs.should-ci == 'true'
     timeout-minutes: 5
     permissions:
       contents: read
@@ -124,12 +110,7 @@ jobs:
 
   desktop-cd:
     runs-on: ${{ matrix.settings.platform}}
-    if: >-
-      needs.setup.outputs.always-cd == 'true' ||
-      (github.event_name == 'push' && 
-      (startsWith(github.ref, 'refs/tags/v') || 
-      startsWith(github.ref, 'refs/tags/desktop/v')) &&
-      (needs.setup.outputs.target-builds == 'all' || needs.setup.outputs.target-builds == 'desktop'))
+    if: needs.setup.outputs.should-desktop-cd == 'true'
     timeout-minutes: 60
     permissions:
       contents: write
