@@ -33,24 +33,18 @@ export default async function (context, core) {
     const _pr_body = context.payload.pull_request.body || '';
     updateConfigFromText(_pr_body, config);
   } else if (context.eventName === 'push') {
-    const _commit_sha = process.env.GITHUB_SHA;
-    const _commit_data =
-      (await octokit.rest.git.getCommit({
-        owner: context.repo.owner,
-        repo: context.repo.repo,
-        commit_sha: _commit_sha,
-      })) || '';
-    updateConfigFromText(_commit_data.data.message, config);
-    // Override version config value from the tag
-    const _tag_ref = context.ref;
-    let tag_version = _tag_ref.startsWith('refs/tags/v')
-      ? _tag_ref.substring('refs/tags/v'.length)
-      : _tag_ref.substring('refs/tags/desktop/v'.length);
-    // Find the version in config and update it
-    const _version_index = config.findIndex((item) => item[0] === 'version');
-    if (_version_index !== -1) {
-      config[_version_index][1] = tag_version;
-    }
+    const { data: _tag_data } = await octokit.rest.git.getTag({
+      owner: context.repo.owner,
+      repo: context.repo.repo,
+      tag_sha: process.env.GITHUB_SHA,
+    });
+    updateConfigFromText(
+      '[version=' +
+        context.ref.replace('refs/tags/', '') +
+        ']' +
+        _tag_data.message,
+      config,
+    );
   } else if (context.eventName === 'workflow_dispatch') {
     config = config.map(([key, _]) => [key, core.getInput(key) || _]);
   }
