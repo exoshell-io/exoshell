@@ -30,18 +30,19 @@ export default async function (context, core) {
   // If triggered by pull_request, overrides default config with pull_request body config (if exists)
   // If triggered by workflow_dispatch, overrides default config with workflow_dispatch input config (if exists)
   if (context.eventName === 'pull_request') {
-    const _pr_body = context.payload.pull_request.body;
+    const _pr_body = context.payload.pull_request.body || '';
     updateConfigFromText(_pr_body, config);
   } else if (
     context.eventName === 'push' &&
     context.ref.startsWith('refs/tags/')
   ) {
     const _commit_sha = context.payload.after;
-    const _commit_data = await octokit.rest.git.getCommit({
-      owner: context.repo.owner,
-      repo: context.repo.repo,
-      commit_sha: _commit_sha,
-    });
+    const _commit_data =
+      (await octokit.rest.git.getCommit({
+        owner: context.repo.owner,
+        repo: context.repo.repo,
+        commit_sha: _commit_sha,
+      })) || '';
     updateConfigFromText(_commit_data.data.message, config);
     // Override version config value from the tag
     const _tag_ref = context.ref;
