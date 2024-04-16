@@ -128,9 +128,9 @@ jobs:
       # TODO should be true, false while we iterate
       fail-fast: false
       matrix: ${{fromJson(needs.setup.outputs.target-platforms-matrix)}}
-    needs:
-      - setup
-      - ci
+    # needs:
+    #   - setup
+    #   - ci
     steps:
       - uses: actions/checkout@v4
 
