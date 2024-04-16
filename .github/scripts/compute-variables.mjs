@@ -119,8 +119,8 @@ export default async function (context, core) {
 function updateConfigFromText(text, config) {
   config.forEach((item) => {
     const regex = new RegExp(`\\[${item[0]}=([^\\]]+)\\]`, 'i');
-    const match = text.match(regex);
-    if (match && match[1]) {
+    if (text.match(regex)) {
+      const match = text.match(regex);
       item[1] = match[1];
     }
   });
