@@ -43,7 +43,7 @@ on:
           - stable
           - draft
           - prerelease
-      target-builds:
+      builds:
         description: Target builds
         type: choice
         default: all
@@ -55,7 +55,7 @@ on:
           - web
       # Missing architectures: Linux [ARMv7, ARMv8], MacOs [Universal]
       # Missing packages: "rpm" because it's not available in our Tauri version yet. "msi" because it doesn't support semver
-      target-platforms:
+      platforms:
         description: Target platforms (relevant for desktop)
         type: choice
         default: all
@@ -84,7 +84,7 @@ jobs:
       release-type: ${{ steps.set_vars.outputs.release-type }}
       should-ci: ${{ steps.set_vars.outputs.should-ci }}
       should-desktop-cd: ${{ steps.set_vars.outputs.should-desktop-cd }}
-      target-platforms-matrix: ${{ steps.set_vars.outputs.target-platforms-matrix }}
+      platforms-matrix: ${{ steps.set_vars.outputs.platforms-matrix }}
     steps:
       - uses: actions/checkout@v4
 
@@ -128,7 +128,7 @@ jobs:
     strategy:
       # TODO should be true, false while we iterate
       fail-fast: false
-      matrix: ${{fromJson(needs.setup.outputs.target-platforms-matrix)}}
+      matrix: ${{fromJson(needs.setup.outputs.platforms-matrix)}}
     needs:
       - setup
       - ci

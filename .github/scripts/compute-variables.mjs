@@ -18,12 +18,12 @@ export default async function (context, core) {
     // ['dry-run-cd', 'false'],     // ['true', 'false']
     ['version', ''], // ['<semver>']
     ['release-type', 'stable'], // ['stable', 'draft', 'prerelease']
-    ['target-builds', 'all'], // ['all', 'desktop', 'cli', 'mobile', 'web']
-    ['target-platforms', 'all'], // ['all', 'linux', 'macos', 'windows']
+    ['builds', 'all'], // ['all', 'desktop', 'cli', 'mobile', 'web']
+    ['platforms', 'all'], // ['all', 'linux', 'macos', 'windows']
     // Generated and injected at runtime:
     // ['should-ci']
     // ['should-desktop-cd']
-    // ['target-platforms-matrix']
+    // ['platforms-matrix']
   ];
 
   // If triggered by tag push, overrides default config with last commit body config (if exists)
@@ -55,8 +55,8 @@ export default async function (context, core) {
     config = config.map(([key, _]) => [key, core.getInput(key) || _]);
   }
 
-  // Define 'target-platforms-matrix'
-  const platforms = {
+  // Define 'platforms-matrix'
+  const platforms_list = {
     linux: { platform: 'ubuntu-22.04', args: '' },
     macos: [
       { platform: 'macos-latest', args: '--target aarch64-apple-darwin' },
@@ -64,27 +64,27 @@ export default async function (context, core) {
     ],
     windows: { platform: 'windows-latest', args: '' },
   };
-  const target_platforms = config.find(
-    (item) => item[0] === 'target-platforms',
-  )[1];
+  const platforms = config.find((item) => item[0] === 'platforms')[1];
   let matrix = [];
-  if (target_platforms === 'all') {
-    // Include all platforms if 'all' is specified
-    matrix = [platforms.linux, ...platforms.macos, platforms.windows];
+  if (platforms === 'all') {
+    matrix = [
+      platforms_list.linux,
+      ...platforms_list.macos,
+      platforms_list.windows,
+    ];
   } else {
-    // Only include specified platforms
-    const platforms_requested = target_platforms.split(',');
+    const platforms_requested = platforms.split(',');
     platforms_requested.forEach((platformKey) => {
-      if (platforms[platformKey]) {
-        const platform_to_add = platforms[platformKey];
+      if (platforms_list[platformKey]) {
+        const platform_to_add = platforms_list[platformKey];
         Array.isArray(platform_to_add)
           ? matrix.push(...platform_to_add)
           : matrix.push(platform_to_add);
       }
     });
   }
-  const target_platforms_matrix = JSON.stringify({ settings: matrix });
-  config.push(['target-platforms-matrix', target_platforms_matrix]);
+  const platforms_matrix = JSON.stringify({ settings: matrix });
+  config.push(['platforms-matrix', platforms_matrix]);
 
   // Define 'should-ci' and 'should-desktop-cd'
   const should_ci =
@@ -95,9 +95,7 @@ export default async function (context, core) {
     (config.find((item) => item[0] === 'always-cd')[1] === 'true' ||
       (context.eventName === 'push' &&
         /^refs\/tags\/(v|desktop\/v)/.test(context.ref))) &&
-    ['all', 'desktop'].includes(
-      config.find((item) => item[0] === 'target-builds')[1],
-    )
+    ['all', 'desktop'].includes(config.find((item) => item[0] === 'builds')[1])
       ? 'true'
       : 'false';
   config.push(['should-ci', should_ci]);
