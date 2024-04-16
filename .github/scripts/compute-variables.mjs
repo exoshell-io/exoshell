@@ -5,11 +5,6 @@ import { Octokit } from '@octokit/rest';
  * @param {import('@actions/core')} core
  */
 export default async function (context, core) {
-  // Initialize Octokit with a GitHub token
-  const octokit = new Octokit({
-    auth: process.env.GITHUB_TOKEN,
-  });
-
   // Config default values
   let config = [
     // ['environment', 'prod'],     // ['dev', 'staging', 'prod']
@@ -26,12 +21,35 @@ export default async function (context, core) {
     // ['platforms-matrix']
   ];
 
+  updateConfig(context, core, config);
+
+  runtimeConfig(context, config);
+
+  core.summary.addHeading('Computed variables', 2);
+
+  computeOutputs(core, config);
+
+  await core.summary.write();
+}
+
+/**
+ * @param {import('@actions/github/lib/context.js').Context} context
+ * @param {import('@actions/core')} core
+ * @param {Array<Array<string>>} config
+ */
+async function updateConfig(context, core, config) {
+  // Initialize Octokit with a GitHub token
+  const octokit = new Octokit({
+    auth: process.env.GITHUB_TOKEN,
+  });
+
   // If triggered by tag push, overrides default config with last commit body config (if exists)
   // If triggered by pull_request, overrides default config with pull_request body config (if exists)
   // If triggered by workflow_dispatch, overrides default config with workflow_dispatch input config (if exists)
+  // If multiple ocurrences are found only the first one is kept
   if (context.eventName === 'pull_request') {
     const _pr_body = context.payload.pull_request.body || '';
-    updateConfigFromText(_pr_body, config);
+    overrideConfigFromText(_pr_body, config);
   } else if (context.eventName === 'push') {
     const _tag_name = context.ref.startsWith('refs/tags/v')
       ? context.ref.substring('refs/tags/'.length)
@@ -49,14 +67,20 @@ export default async function (context, core) {
       repo: context.repo.repo,
       tag_sha: _ref_data.data.object.sha,
     });
-    updateConfigFromText(
+    overrideConfigFromText(
       '[version=' + _tag_version + ']' + _tag_data.message,
       config,
     );
   } else if (context.eventName === 'workflow_dispatch') {
     config = config.map(([key, _]) => [key, core.getInput(key) || _]);
   }
+}
 
+/**
+ * @param {import('@actions/github/lib/context.js').Context} context
+ * @param {Array<Array<string>>} config
+ */
+function runtimeConfig(context, config) {
   // Define 'platforms-matrix'
   const platforms_list = {
     linux: { platform: 'ubuntu-22.04', args: '' },
@@ -101,19 +125,13 @@ export default async function (context, core) {
       : 'false';
   config.push(['should-ci', should_ci]);
   config.push(['should-desktop-cd', should_desktop_cd]);
-
-  core.summary.addHeading('Computed variables', 2);
-
-  computeOutputs(core, config);
-
-  await core.summary.write();
 }
 
 /**
  * @param {string} text
  * @param {Array<Array<string>>} config
  */
-function updateConfigFromText(text, config) {
+function overrideConfigFromText(text, config) {
   config.forEach((item) => {
     const regex = new RegExp(`\\[${item[0]}=([^\\]]+)\\]`, 'i');
     if (text.match(regex)) {
