@@ -1,5 +1,4 @@
-import pkg from '@octokit/rest';
-const { octokit_rest } = pkg;
+import { Octokit } from '@octokit/rest';
 
 /**
  * @param {import('@actions/github/lib/context.js').Context} context
@@ -7,7 +6,7 @@ const { octokit_rest } = pkg;
  */
 export default async function (context, core) {
   // Initialize Octokit with a GitHub token
-  const octokit = new octokit_rest({
+  const octokit = new Octokit({
     auth: process.env.GITHUB_TOKEN,
   });
 
