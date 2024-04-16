@@ -82,7 +82,7 @@ jobs:
       version: ${{ steps.set_vars.outputs.version }}
       release-type: ${{ steps.set_vars.outputs.release-type }}
       should-ci: ${{ steps.set_vars.outputs.should-ci }}
-      should-cd: ${{ steps.set_vars.outputs.should-cd }}
+      should-desktop-cd: ${{ steps.set_vars.outputs.should-desktop-cd }}
       target-platforms-matrix: ${{ steps.set_vars.outputs.target-platforms-matrix }}
     steps:
       - uses: actions/checkout@v4
