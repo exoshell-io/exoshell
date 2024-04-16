@@ -9,6 +9,7 @@ on:
     # - mobile/v*
     # - web/v*
   pull_request:
+    types: [opened, synchronize, edited]
   workflow_dispatch:
     inputs:
       # environment:
