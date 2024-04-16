@@ -1,4 +1,5 @@
-import { octokit_rest } from '@octokit/rest';
+import pkg from '@octokit/rest';
+const { octokit_rest } = pkg;
 
 /**
  * @param {import('@actions/github/lib/context.js').Context} context
