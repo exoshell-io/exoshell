@@ -118,11 +118,6 @@ jobs:
           bun install --frozen-lockfile
           bun run ci
 
-      - name: Log should-desktop-cd
-        run: |
-          echo "The value of should-desktop-cd is: ${{ needs.setup.outputs.should-desktop-cd }}"
-          echo "if value is: ${{ needs.setup.outputs.should-desktop-cd == 'true' }}"
-
   desktop-cd:
     runs-on: ${{ matrix.settings.platform}}
     if: needs.setup.outputs.should-desktop-cd == 'true'
