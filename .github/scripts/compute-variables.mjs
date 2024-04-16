@@ -33,14 +33,22 @@ export default async function (context, core) {
     const _pr_body = context.payload.pull_request.body || '';
     updateConfigFromText(_pr_body, config);
   } else if (context.eventName === 'push') {
-    const { data: _tag_data } = await octokit.rest.git.getTag({
-      owner: context.repo.owner,
-      repo: context.repo.repo,
-      tag_sha: process.env.GITHUB_SHA,
-    });
+    const _tag_name = context.ref.startsWith('refs/tags/v')
+      ? context.ref.substring('refs/tags/'.length)
+      : context.ref.substring('refs/tags/desktop/'.length);
     const _tag_version = context.ref.startsWith('refs/tags/v')
       ? context.ref.substring('refs/tags/v'.length)
       : context.ref.substring('refs/tags/desktop/v'.length);
+    const _ref_data = await octokit.rest.git.getRef({
+      owner: context.repo.owner,
+      repo: context.repo.repo,
+      ref: 'tags/' + _tag_name,
+    });
+    const { data: _tag_data } = await octokit.rest.git.getTag({
+      owner: context.repo.owner,
+      repo: context.repo.repo,
+      tag_sha: _ref_data.data.object.sha,
+    });
     updateConfigFromText(
       '[version=' + _tag_version + ']' + _tag_data.message,
       config,
