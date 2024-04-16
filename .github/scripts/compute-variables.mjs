@@ -95,9 +95,9 @@ export default async function (context, core) {
       ? 'false'
       : 'true';
   const should_desktop_cd =
-    config.find((item) => item[0] === 'always-cd')[1] === 'true' ||
-    (context.eventName === 'push' &&
-      /^refs\/tags\/(v|desktop\/v)/.test(context.ref)) ||
+    (config.find((item) => item[0] === 'always-cd')[1] === 'true' ||
+      (context.eventName === 'push' &&
+        /^refs\/tags\/(v|desktop\/v)/.test(context.ref))) &&
     ['all', 'desktop'].includes(
       config.find((item) => item[0] === 'target-builds')[1],
     )

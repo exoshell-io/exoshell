@@ -81,12 +81,14 @@ jobs:
       # dry-run-cd: ${{ steps.set_vars.outputs.dry-run-cd }}
       version: ${{ steps.set_vars.outputs.version }}
       release-type: ${{ steps.set_vars.outputs.release-type }}
+      should-ci: ${{ steps.set_vars.outputs.should-ci }}
+      should-cd: ${{ steps.set_vars.outputs.should-cd }}
       target-platforms-matrix: ${{ steps.set_vars.outputs.target-platforms-matrix }}
     steps:
       - uses: actions/checkout@v4
 
       - name: Set up Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
 
