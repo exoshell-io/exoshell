@@ -1,13 +1,20 @@
 import { Octokit } from '@octokit/rest';
-import fetch from 'node-fetch';
 
 /**
  * @param {import('@actions/github/lib/context.js').Context} context
  * @param {import('@actions/core')} core
  */
 export default async function (context, core) {
-  // Config default values
-  let config = [
+  // Generated and injected at runtime:
+  // ['should-ci']
+  // ['should-desktop-cd']
+  // ['platforms-matrix']
+
+  // Base config default values
+  let base_config = [];
+
+  // Admin config default values
+  let admin_config = [
     // ['environment', 'dev'], // ['dev', 'staging', 'prod']
     ['skip-ci', 'false'], // ['true', 'false']
     ['always-cd', 'false'], // ['true', 'false']
@@ -16,17 +23,18 @@ export default async function (context, core) {
     ['release-type', 'stable'], // ['stable', 'draft', 'prerelease']
     ['builds', 'all'], // ['all', 'desktop', 'cli', 'mobile', 'web']
     ['platforms', 'all'], // ['all', 'linux', 'macos', 'windows']
-    // Generated and injected at runtime:
-    // ['should-ci']
-    // ['should-desktop-cd']
-    // ['platforms-matrix']
   ];
 
-  // Overwrites default config values if user is priviledged
-  checkIfPriviledged(context).then((isAdmin) => {
-    if (isAdmin) updateConfig(context, core, config);
-  });
+  // Only if workflow is triggered from 'push' or 'workflow_dispatch' we allow admin config overwrite
+  let config = [...base_config];
+  if (
+    context.eventName === 'push' ||
+    context.eventName === 'workflow_dispatch'
+  ) {
+    config = [...base_config, ...admin_config];
+  }
 
+  updateConfig(context, core, config);
   runtimeConfig(context, config);
 
   core.summary.addHeading('Computed variables', 2);
@@ -129,22 +137,6 @@ function runtimeConfig(context, config) {
       : 'false';
   config.push(['should-ci', should_ci]);
   config.push(['should-desktop-cd', should_desktop_cd]);
-}
-
-/**
- * @param {import('@actions/github/lib/context.js').Context} context
- */
-async function checkIfPriviledged(context) {
-  const url = `https://api.github.com/repos/${context.repo.owner}/${context.repo.repo.split('/').pop()}/collaborators/${context.actor}/permission`;
-
-  const response = await fetch(url, {
-    headers: {
-      Authorization: `token ${process.env.GITHUB_TOKEN}`,
-      Accept: 'application/vnd.github.v3+json',
-    },
-  });
-  console.log(response);
-  return (await response.json().permission) === 'admin';
 }
 
 /**
