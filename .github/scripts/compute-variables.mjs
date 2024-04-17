@@ -1,4 +1,5 @@
 import { Octokit } from '@octokit/rest';
+const fetch = require('node-fetch');
 
 /**
  * @param {import('@actions/github/lib/context.js').Context} context
@@ -7,10 +8,10 @@ import { Octokit } from '@octokit/rest';
 export default async function (context, core) {
   // Config default values
   let config = [
-    // ['environment', 'prod'],     // ['dev', 'staging', 'prod']
+    // ['environment', 'dev'], // ['dev', 'staging', 'prod']
     ['skip-ci', 'false'], // ['true', 'false']
     ['always-cd', 'false'], // ['true', 'false']
-    // ['dry-run-cd', 'false'],     // ['true', 'false']
+    // ['dry-run-cd', 'false'], // ['true', 'false']
     ['version', ''], // ['<semver>']
     ['release-type', 'stable'], // ['stable', 'draft', 'prerelease']
     ['builds', 'all'], // ['all', 'desktop', 'cli', 'mobile', 'web']
@@ -21,7 +22,10 @@ export default async function (context, core) {
     // ['platforms-matrix']
   ];
 
-  updateConfig(context, core, config);
+  // Overwrites default config values if user is priviledged
+  checkIfPriviledged(context).then((isAdmin) => {
+    if (isAdmin) updateConfig(context, core, config);
+  });
 
   runtimeConfig(context, config);
 
@@ -125,6 +129,22 @@ function runtimeConfig(context, config) {
       : 'false';
   config.push(['should-ci', should_ci]);
   config.push(['should-desktop-cd', should_desktop_cd]);
+}
+
+/**
+ * @param {import('@actions/github/lib/context.js').Context} context
+ */
+async function checkIfPriviledged(context) {
+  const url = `https://api.github.com/repos/${context.owner}/${context.repo.split('/').pop()}/collaborators/${context.actor}/permission`;
+
+  const response = await fetch(url, {
+    headers: {
+      Authorization: `token ${process.env.GITHUB_TOKEN}`,
+      Accept: 'application/vnd.github.v3+json',
+    },
+  });
+
+  return (await response.json().permission) === 'admin';
 }
 
 /**

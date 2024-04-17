@@ -15,7 +15,7 @@ on:
       # environment:
       #   description: Environment to deploy
       #   type: choice
-      #   default: prod
+      #   default: dev
       #   options:
       #     - dev
       #     - staging
