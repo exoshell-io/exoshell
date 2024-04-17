@@ -135,7 +135,7 @@ function runtimeConfig(context, config) {
  * @param {import('@actions/github/lib/context.js').Context} context
  */
 async function checkIfPriviledged(context) {
-  const url = `https://api.github.com/repos/${context.owner}/${context.repo.split('/').pop()}/collaborators/${context.actor}/permission`;
+  const url = `https://api.github.com/repos/${context.owner}/${context.repo.repo.split('/').pop()}/collaborators/${context.actor}/permission`;
 
   const response = await fetch(url, {
     headers: {
