@@ -143,7 +143,7 @@ async function checkIfPriviledged(context) {
       Accept: 'application/vnd.github.v3+json',
     },
   });
-
+  console.log(response);
   return (await response.json().permission) === 'admin';
 }
 
