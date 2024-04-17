@@ -27,20 +27,15 @@ export default async function (context, core) {
 
   // Only if workflow is triggered from 'push' or 'workflow_dispatch' we allow admin config overwrite
   let config = [...base_config];
-  console.log(config);
   if (
     context.eventName === 'push' ||
     context.eventName === 'workflow_dispatch'
   ) {
     config = [...config, ...admin_config];
-    console.log(config);
     updateConfig(context, core, config);
-    console.log(config);
   } else if (context.eventName === 'pull_request') {
     updateConfig(context, core, config);
-    console.log(config);
     config = [...config, ...admin_config];
-    console.log(config);
   }
 
   runtimeConfig(context, config);
@@ -87,13 +82,17 @@ async function updateConfig(context, core, config) {
       repo: context.repo.repo,
       tag_sha: _ref_data.data.object.sha,
     });
+    console.log(config);
+    console.log('[version=' + _tag_version + ']' + _tag_data.message);
     overrideConfigFromText(
       '[version=' + _tag_version + ']' + _tag_data.message,
       config,
     );
+    console.log(config);
   } else if (context.eventName === 'workflow_dispatch') {
     config = config.map(([key, _]) => [key, core.getInput(key) || _]);
   }
+  console.log(config);
 }
 
 /**
