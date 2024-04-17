@@ -1,5 +1,5 @@
 import { Octokit } from '@octokit/rest';
-const fetch = require('node-fetch');
+import fetch from 'node-fetch';
 
 /**
  * @param {import('@actions/github/lib/context.js').Context} context
