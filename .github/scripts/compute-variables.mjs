@@ -31,10 +31,13 @@ export default async function (context, core) {
     context.eventName === 'push' ||
     context.eventName === 'workflow_dispatch'
   ) {
-    config = [...base_config, ...admin_config];
+    config = [...config, ...admin_config];
+    updateConfig(context, core, config);
+  } else if (context.eventName === 'pull_request') {
+    updateConfig(context, core, config);
+    config = [...config, ...admin_config];
   }
 
-  updateConfig(context, core, config);
   runtimeConfig(context, config);
 
   core.summary.addHeading('Computed variables', 2);
