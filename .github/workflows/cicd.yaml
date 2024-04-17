@@ -183,6 +183,6 @@ jobs:
           # bundleIdentifier:
           # includeDebug:
           # includeRelease:
-          # includeUpdaterJson: true
+          includeUpdaterJson: true
           # updaterJsonPreferNsis:
           # updaterJsonKeepUniversal:
