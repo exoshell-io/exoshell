@@ -7,6 +7,7 @@
   "devDependencies": {
     "@actions/core": "1.10.1",
     "@actions/github": "6.0.0",
+    "@node-fetch/node-fetch": "3.3.2",
     "@octokit/rest": "20.1.0"
   }
 }
