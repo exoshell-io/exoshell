@@ -11,7 +11,9 @@ export default async function (context, core) {
   // ['platforms-matrix']
 
   // Base config default values
-  let base_config = [];
+  let base_config = [
+    ['builds', 'all'], // ['all', 'desktop', 'cli', 'mobile', 'web']
+  ];
 
   // Admin config default values
   let admin_config = [
@@ -21,7 +23,6 @@ export default async function (context, core) {
     // ['dry-run-cd', 'false'], // ['true', 'false']
     ['version', ''], // ['<semver>']
     ['release-type', 'stable'], // ['stable', 'draft', 'prerelease']
-    ['builds', 'all'], // ['all', 'desktop', 'cli', 'mobile', 'web']
     ['platforms', 'all'], // ['all', 'linux', 'macos', 'windows']
   ];
 
