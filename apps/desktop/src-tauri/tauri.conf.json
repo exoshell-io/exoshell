@@ -56,7 +56,7 @@
     "updater": {
       "active": true,
       "endpoints": [
-        "https://raw.githubusercontent.com/exoshell-dev/exoshell/main/update-info.json"
+        "https://github.com/exoshell-dev/exoshell/releases/latest/download/latest.json"
       ],
       "dialog": true,
       "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDNBMzlGMkMxMjMyQ0I5Q0MKUldUTXVTd2p3Zkk1T2pKeEg5eVZ2SUJ2eld5REQvd0p6UTBHdjdybzI2T0t6SWxaMkkrdy8zc0MK",
