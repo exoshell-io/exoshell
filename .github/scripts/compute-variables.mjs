@@ -31,12 +31,16 @@ export default async function (context, core) {
     context.eventName === 'push' ||
     context.eventName === 'workflow_dispatch'
   ) {
+    console.log(config);
     config = [...config, ...admin_config];
+    console.log(config);
     updateConfig(context, core, config);
+    console.log(config);
   } else if (context.eventName === 'pull_request') {
     updateConfig(context, core, config);
     config = [...config, ...admin_config];
   }
+  console.log(config);
 
   runtimeConfig(context, config);
 
