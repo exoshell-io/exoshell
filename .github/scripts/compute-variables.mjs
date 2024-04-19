@@ -102,6 +102,7 @@ function runtimeConfig(context, config) {
     macos: [
       { platform: 'macos-latest', args: '--target aarch64-apple-darwin' },
       { platform: 'macos-latest', args: '--target x86_64-apple-darwin' },
+      { platform: 'macos-latest', args: '--target universal-apple-darwin' },
     ],
     windows: { platform: 'windows-latest', args: '' },
   };
