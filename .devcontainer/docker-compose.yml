@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  dev:
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+    command: sleep inf
+    volumes:
+      - ..:/exoshell
