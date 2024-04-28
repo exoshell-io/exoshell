@@ -1,9 +1,1 @@
-services:
-  postgres:
-    image: postgres:15
-    ports:
-      - 127.0.0.1:5432:5432
-    environment:
-      POSTGRES_USER: exoshell
-      POSTGRES_PASSWORD: exoshell
-      POSTGRES_DB: exoshell
+services: {}

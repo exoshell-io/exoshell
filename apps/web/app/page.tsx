@@ -19,10 +19,12 @@ import {
   TypographyStylesProvider,
 } from '@mantine/core';
 import { isEmail, useForm } from '@mantine/form';
+import { notifications } from '@mantine/notifications';
+import { useMemo } from 'react';
+import { FaCheck as IconCheck } from 'react-icons/fa';
 import { MdInfoOutline } from 'react-icons/md';
 import Markdown from 'react-markdown';
-import { registerEmail } from './_db';
-import { useMemo } from 'react';
+import { registerEmail } from './_db/registerEmail';
 
 const FAQ: { question: string; answer: string }[] = [
   {
@@ -206,8 +208,25 @@ const Newsletter: React.FC = () => {
   });
   const onSubmit = useMemo(
     () =>
-      form.onSubmit(async (values) => {
-        registerEmail(values.email);
+      form.onSubmit(async ({ email }) => {
+        const notificationId = notifications.show({
+          title: 'Registering to waitlist',
+          message: email,
+          loading: true,
+          withCloseButton: false,
+          autoClose: false,
+          withBorder: true,
+        });
+        await registerEmail(email);
+        notifications.update({
+          id: notificationId,
+          title: 'Successfully registered to waitlist!',
+          message: email,
+          icon: <IconCheck />,
+          loading: false,
+          color: 'teal',
+          withCloseButton: true,
+        });
       }),
     [form],
   );
