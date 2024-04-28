@@ -1,0 +1,42 @@
+{
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "dev",
+  "workspaceFolder": "/exoshell/",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        // cSpell:disable
+        "bierner.github-markdown-preview",
+        "bradlc.vscode-tailwindcss",
+        "dbaeumer.vscode-eslint",
+        "eamodio.gitlens",
+        "EditorConfig.EditorConfig",
+        "esbenp.prettier-vscode",
+        "formulahendry.auto-rename-tag",
+        "foxundermoon.shell-format",
+        "GitHub.copilot-chat",
+        "GitHub.copilot-labs",
+        "GitHub.copilot",
+        "github.vscode-github-actions",
+        "GitHub.vscode-pull-request-github",
+        "hoovercj.vscode-settings-cycler",
+        "Huuums.vscode-fast-folder-structure",
+        "meganrogge.template-string-converter",
+        "ms-azuretools.vscode-docker",
+        "ms-vsliveshare.vsliveshare",
+        "naumovs.color-highlight",
+        "oven.bun-vscode",
+        "redhat.vscode-yaml",
+        "rust-lang.rust-analyzer",
+        "serayuzgur.crates",
+        "streetsidesoftware.code-spell-checker",
+        "tamasfe.even-better-toml",
+        "timonwong.shellcheck",
+        "vunguyentuan.vscode-css-variables",
+        "vunguyentuan.vscode-postcss",
+        "yatki.vscode-surround"
+        // cSpell:enable
+      ]
+    }
+  }
+}

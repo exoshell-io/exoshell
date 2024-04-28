@@ -1,23 +1,24 @@
 import '@mantine/core/styles.css';
+import '@mantine/notifications/styles.css';
 import './globals.css';
 
 import { Logo } from '@/_ui/Logo';
 import {
+  ActionIcon,
   Box,
-  Burger,
   ColorSchemeScript,
   Container,
   Group,
   MantineProvider,
-  Stack,
   createTheme,
 } from '@mantine/core';
+import { Notifications } from '@mantine/notifications';
 import type { Metadata } from 'next';
 import { Noto_Sans, Signika } from 'next/font/google';
+import { MdNotificationsNone as IconNotification } from 'react-icons/md';
 import { Brand } from './_ui/Brand';
 
 const logoFont = Signika({
-  // weight: ['400', '700'],
   display: 'swap',
   variable: '--font-logo',
   subsets: ['latin'],
@@ -47,6 +48,7 @@ export default function RootLayout({
       </head>
       <body className={`${font.className} ${logoFont.variable} text-zinc-900`}>
         <MantineProvider theme={theme}>
+          <Notifications />
           <Box component='header'>
             <Container
               size='xl'
@@ -55,13 +57,17 @@ export default function RootLayout({
               className='flex items-center justify-between'
             >
               <Brand />
-              <Burger hiddenFrom='md' size='sm' />
+              <Group>
+                <ActionIcon variant='subtle' color='black' radius='xl'>
+                  <IconNotification />
+                </ActionIcon>
+              </Group>
             </Container>
           </Box>
           <Box component='main'>{children}</Box>
           <Box
             component='footer'
-            className='border-t border-solid border-gray-200'
+            className='border-t border-solid border-gray-200 py-2'
           >
             <Container
               size='xl'
@@ -69,11 +75,11 @@ export default function RootLayout({
               px={16}
               className='flex items-center justify-between '
             >
-              <Group>
-                <Stack>
+              <Group align='end'>
+                <>
                   <Logo />
                   <span className='text-xs'>@ {new Date().getFullYear()}</span>
-                </Stack>
+                </>
               </Group>
             </Container>
           </Box>
