@@ -10,19 +10,19 @@ import {
   Button,
   Container,
   Group,
+  Title as MantineTitle,
   Skeleton,
-  Stack,
   Table,
   Text,
-  Title as MantineTitle,
   TextInput,
-  Textarea,
   Tooltip,
   TypographyStylesProvider,
 } from '@mantine/core';
-import { isEmail, isNotEmpty, useForm } from '@mantine/form';
+import { isEmail, useForm } from '@mantine/form';
 import { MdInfoOutline } from 'react-icons/md';
 import Markdown from 'react-markdown';
+import { registerEmail } from './_db';
+import { useMemo } from 'react';
 
 const FAQ: { question: string; answer: string }[] = [
   {
@@ -109,7 +109,6 @@ export default function Page() {
       <Faq />
       <Pricing />
       <Newsletter />
-      <Contact />
     </>
   );
 }
@@ -205,16 +204,23 @@ const Newsletter: React.FC = () => {
       email: isEmail('Please enter a valid email'),
     },
   });
+  const onSubmit = useMemo(
+    () =>
+      form.onSubmit(async (values) => {
+        registerEmail(values.email);
+      }),
+    [form],
+  );
   return (
     <Box
       ta='center'
-      pt={100}
+      py={100}
       className='border-0 border-t border-solid border-gray-200'
       bg='#fafafa'
     >
       <Container>
         <Title>Subscribe to the waitlist</Title>
-        <form onSubmit={form.onSubmit((values) => console.log(values))}>
+        <form onSubmit={onSubmit}>
           <Group mx='auto' maw={600} mt={50} justify='stretch' align='stretch'>
             <TextInput
               placeholder='Email'
@@ -227,50 +233,6 @@ const Newsletter: React.FC = () => {
             </Button>
           </Group>
         </form>
-      </Container>
-    </Box>
-  );
-};
-
-const Contact: React.FC = () => {
-  const form = useForm({
-    initialValues: {
-      email: '',
-      message: '',
-    },
-    validate: {
-      email: isEmail('Please enter a valid email'),
-      message: isNotEmpty('Please enter a message'),
-    },
-  });
-  return (
-    <Box bg='#fafafa'>
-      <Container pt={100} pb={100}>
-        <Title>Contact</Title>
-        <Text ta='center' fw={500} mt={24}>
-          Have questions? Want to help? Send us a message!
-        </Text>
-        <Box mt={50} maw={600} mx='auto'>
-          <form onSubmit={form.onSubmit((values) => console.log(values))}>
-            <Stack>
-              <TextInput
-                placeholder='Email'
-                type='email'
-                {...form.getInputProps('email')}
-              />
-              <Textarea
-                placeholder='Message'
-                autosize
-                minRows={5}
-                resize='vertical'
-                {...form.getInputProps('message')}
-              />
-              <Button type='submit' color='black'>
-                Send
-              </Button>
-            </Stack>
-          </form>
-        </Box>
       </Container>
     </Box>
   );

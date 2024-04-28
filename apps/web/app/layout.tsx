@@ -61,7 +61,7 @@ export default function RootLayout({
           <Box component='main'>{children}</Box>
           <Box
             component='footer'
-            className='border-t border-solid border-gray-200'
+            className='border-t border-solid border-gray-200 py-2'
           >
             <Container
               size='xl'
@@ -69,11 +69,11 @@ export default function RootLayout({
               px={16}
               className='flex items-center justify-between '
             >
-              <Group>
-                <Stack>
+              <Group align='end'>
+                <>
                   <Logo />
                   <span className='text-xs'>@ {new Date().getFullYear()}</span>
-                </Stack>
+                </>
               </Group>
             </Container>
           </Box>

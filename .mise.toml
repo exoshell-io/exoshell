@@ -1,3 +1,11 @@
 [tools]
 bun = '1'
 rust = '1'
+
+[env]
+POSTGRES_URL = 'postgres://exoshell:exoshell@127.0.0.1/exoshell'
+# '_'.file = '.env.local'
+
+[settings]
+status.show_env = true
+status.show_tools = true
