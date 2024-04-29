@@ -8,9 +8,30 @@ https://exoshell.io
 
 ### Dev usage
 
+#### Init
+
 - create `.env.local` from `.env.local.template`
 - `mise up`
 - `bun <action>`
+
+#### Update
+
+- update version in `Cargo.toml`
+- `cargo update`
+
+### CI/CD
+
+CI:
+
+- trigger on:
+  - all `pull_request` creation/updates
+  - all `tag` creation (tag must start with `v`)
+  - all `workflow_dispatch`
+
+CD:
+
+- trigger on:
+  - all `tag` creation (tag must start with `v`)
 
 ## Limitations
 
