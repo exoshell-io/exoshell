@@ -148,16 +148,14 @@ function runtimeConfig(context, config) {
 
   // Define 'universal-version' and 'is-prerelease'
   const version = config.find((item) => item[0] === 'version')[1];
-
-  let is_prerelease = false;
+  let is_prerelease = 'false';
   let universal_version = version;
   const semver_regex = /^(\d+)\.(\d+)\.(\d+)(?:-(alpha|beta|rc)\.(\d+))?$/;
   const match = version.match(semver_regex);
   if (match) {
     const [, major, minor, patch, prerelease_type, prerelease_version] = match;
-
     if (prerelease_type) {
-      is_prerelease = true;
+      is_prerelease = 'true';
       const prerelease_types = { alpha: 0, beta: 1, rc: 2 };
       const prerelease_type_code =
         prerelease_types[prerelease_type.toLowerCase()];
