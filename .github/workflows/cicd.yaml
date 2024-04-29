@@ -33,17 +33,13 @@ on:
       #   type: boolean
       #   default: false
       version:
-        description: Package semver version (relevant for workflow_dispatch. Github tag and release must exist. Example value -> '1.0.0' for 'v1.0.0' tag and 'ExoShell v1.0.0' release)
+        description: Package semver version, relevant for workflow_dispatch (Github tag and release must exist currently because of CI permissions).
         type: string
         default: ''
-      release-type:
-        description: Type of release
-        type: choice
-        default: stable
-        options:
-          - stable
-          - draft
-          - prerelease
+      # is-draft-release:
+      #   description: Release as Draft y/n ? (no tag)
+      #   type: boolean
+      #   default: false
       builds:
         description: Target builds
         type: choice
@@ -80,7 +76,9 @@ jobs:
       # environment: ${{ steps.set_vars.outputs.environment }}
       # dry-run-cd: ${{ steps.set_vars.outputs.dry-run-cd }}
       version: ${{ steps.set_vars.outputs.version }}
-      release-type: ${{ steps.set_vars.outputs.release-type }}
+      universal-version: ${{ steps.set_vars.outputs.universal-version }}
+      # is-draft-release: ${{ steps.set_vars.outputs.is-draft-release }}
+      is-prerelease: ${{ steps.set_vars.outputs.is-prerelease }}
       should-ci: ${{ steps.set_vars.outputs.should-ci }}
       should-desktop-cd: ${{ steps.set_vars.outputs.should-desktop-cd }}
       platforms-matrix: ${{ steps.set_vars.outputs.platforms-matrix }}
@@ -173,9 +171,9 @@ jobs:
           args: ${{ matrix.settings.args }}
           tagName: v${{ needs.setup.outputs.version }}
           releaseName: 'ExoShell v${{ needs.setup.outputs.version }}'
-          appVersion: ${{ needs.setup.outputs.version }}
-          releaseDraft: ${{ matrix.settings.release-type == 'draft' && true || false }}
-          prerelease: ${{ matrix.settings.release-type == 'prerelease' && true || false }}
+          appVersion: ${{ needs.setup.outputs.universal-version }}
+          # releaseDraft: ${{ matrix.settings.is-draft-release == 'true' && true || false }}
+          prerelease: ${{ matrix.settings.is-prerelease == 'true' && true || false }}
           # releaseBody: ''
           # releaseId:
           # distPath:

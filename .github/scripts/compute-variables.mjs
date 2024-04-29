@@ -9,6 +9,8 @@ export default async function (context, core) {
   // ['should-ci']
   // ['should-desktop-cd']
   // ['platforms-matrix']
+  // ['universal-version']
+  // ['is-prerelease']
 
   // Base config default values
   let base_config = [];
@@ -20,7 +22,7 @@ export default async function (context, core) {
     ['always-cd', 'false'], // ['true', 'false']
     // ['dry-run-cd', 'false'], // ['true', 'false']
     ['version', ''], // ['<semver>']
-    ['release-type', 'stable'], // ['stable', 'draft', 'prerelease']
+    // ['is-draft-release', 'false'], // ['true', 'false']
     ['builds', 'all'], // ['all', 'desktop', 'cli', 'mobile', 'web']
     ['platforms', 'all'], // ['all', 'linux', 'macos', 'windows']
   ];
@@ -128,19 +130,46 @@ function runtimeConfig(context, config) {
   const platforms_matrix = JSON.stringify({ settings: matrix });
   config.push(['platforms-matrix', platforms_matrix]);
 
-  // Define 'should-ci' and 'should-desktop-cd'
+  // Define 'should-ci'
   const should_ci =
     config.find((item) => item[0] === 'skip-ci')[1] === 'true'
       ? 'false'
       : 'true';
+  config.push(['should-ci', should_ci]);
+
+  // Define 'should-desktop-cd'
   const should_desktop_cd =
     (config.find((item) => item[0] === 'always-cd')[1] === 'true' ||
       context.eventName === 'push') &&
     ['all', 'desktop'].includes(config.find((item) => item[0] === 'builds')[1])
       ? 'true'
       : 'false';
-  config.push(['should-ci', should_ci]);
   config.push(['should-desktop-cd', should_desktop_cd]);
+
+  // Define 'universal-version' and 'is-prerelease'
+  const version = config.find((item) => item[0] === 'version')[1];
+
+  let is_prerelease = false;
+  let universal_version = version;
+  const semver_regex = /^(\d+)\.(\d+)\.(\d+)(?:-(alpha|beta|rc)\.(\d+))?$/;
+  const match = version.match(semver_regex);
+  if (match) {
+    const [, major, minor, patch, prerelease_type, prerelease_version] = match;
+
+    if (prerelease_type) {
+      is_prerelease = true;
+      const prerelease_types = { alpha: 0, beta: 1, rc: 2 };
+      const prerelease_type_code =
+        prerelease_types[prerelease_type.toLowerCase()];
+      const encoded_patch =
+        patch * 2048 +
+        prerelease_type_code * 32 +
+        parseInt(prerelease_version, 10);
+      universal_version = `${major}.${minor}.${encoded_patch}`;
+    }
+  }
+  config.push(['universal-version', universal_version]);
+  config.push(['is-prerelease', is_prerelease]);
 }
 
 /**
