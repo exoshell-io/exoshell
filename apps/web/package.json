@@ -8,6 +8,8 @@
     "clean": "rm -rf -- .next/ next-env.d.ts",
     "dev": "next dev",
     "lint": "turbo run lint:",
-    "lint:": "next lint --max-warnings=0"
+    "lint:": "next lint --max-warnings=0",
+    "pg:migrate": "drizzle-kit generate:pg",
+    "pg:push": "drizzle-kit push:pg"
   }
 }
