@@ -14,7 +14,7 @@ custom-protocol = ["tauri/custom-protocol"]
 tauri-build = { version = "1.5.1", features = [] }
 
 [dependencies]
-tauri = { version = "1.6.1", features = [ "window-start-dragging", "process-command-api"] }
+tauri = { version = "1.6.1", features = [ "updater", "window-start-dragging", "process-command-api"] }
 
 # Helpers
 anyhow.workspace = true

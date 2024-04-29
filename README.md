@@ -2,27 +2,35 @@
 
 ## Info
 
-TODO
+https://exoshell.io
 
-## Guides
+## How-Tos
 
-### CI/CD
+### Dev usage
+
+- create `.env.local` from `.env.local.template`
+- `mise up`
+- `bun <action>`
 
 ## Limitations
 
 ### MacOs
 
 - Missing architectures:
-  - MacOs:
-    - Universal
+  - Universal
 - Minimum System Version: 12.0
+
+### Linux
 
 - Missing architectures:
 
-  - Linux
-    - ARMv7
-    - ARMv8
+  - ARMv7
+  - ARMv8
 
 - Missing packages:
   - "rpm" because it's not available in our Tauri version yet
+
+### Windows
+
+- Missing packages:
   - "msi" because it doesn't support semver
