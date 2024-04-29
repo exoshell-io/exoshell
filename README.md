@@ -4,6 +4,14 @@
 
 https://exoshell.io
 
+## Limitations
+
+|         | Versions    | Architectures             | Packages                  |
+| ------- | ----------- | ------------------------- | ------------------------- |
+| Windows | Windows>=8  | [x64]                     | ✅[nsis (exe)] ❌[msi]    |
+| MacOs   | MacOs>=12.0 | [aarch64, x64, universal] | ✅[app, dmg]              |
+| Linux   | /           | [amd64]                   | ✅[deb, appimage] ❌[rpm] |
+
 ## How-Tos
 
 ### Dev usage
@@ -32,26 +40,3 @@ CD:
 
 - trigger on:
   - all `tag` creation (tag must start with `v`)
-
-## Limitations
-
-### MacOs
-
-- Missing architectures:
-  - Universal
-- Minimum System Version: 12.0
-
-### Linux
-
-- Missing architectures:
-
-  - ARMv7
-  - ARMv8
-
-- Missing packages:
-  - "rpm" because it's not available in our Tauri version yet
-
-### Windows
-
-- Missing packages:
-  - "msi" because it doesn't support semver
