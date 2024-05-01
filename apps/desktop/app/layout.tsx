@@ -1,4 +1,5 @@
 import '@mantine/core/styles.css';
+import 'reactflow/dist/style.css';
 import './global.css';
 
 import { ColorSchemeScript, MantineProvider } from '@mantine/core';

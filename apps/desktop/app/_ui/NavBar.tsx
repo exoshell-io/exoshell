@@ -8,6 +8,13 @@ import { MdDashboard as IconDashboard } from 'react-icons/md';
 import { IoMdAdd as IconAdd } from 'react-icons/io';
 
 export const NavBar: React.FC = () => {
+  const activeTabIndex = useStore((store) => store.activeTab);
+  const tabs = useStore((store) => store.tabs);
+  const activeTab = useMemo(
+    () => (activeTabIndex !== undefined ? tabs[activeTabIndex] : null),
+    [activeTabIndex, tabs],
+  );
+
   // Workflows
   const workflows = useStore((store) => store.workflows);
   const workflowsLinks = useMemo(() => {
@@ -45,9 +52,10 @@ export const NavBar: React.FC = () => {
                     console.log('workflow.link', workflow.link);
                     openTab(workflow.link);
                   }}
+                  active={activeTab?.href === workflow.link}
                 />
               )),
-            [openTab, workflowsLinks],
+            [activeTab, openTab, workflowsLinks],
           )}
           <NavLink
             label='New'

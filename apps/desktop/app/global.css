@@ -1,4 +1,2 @@
-.text-user-select-none {
-  -webkit-user-select: none;
-  user-select: none;
-}
+@tailwind components;
+@tailwind utilities;
