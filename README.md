@@ -95,7 +95,7 @@ TODO
 ### Contribute
 
 <details>
-<summary>💡 How to contribute 💡</summary>
+<summary>⬇️ How to contribute </summary>
 
 To contribute, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
 Don't forget to give the project a star! Thanks again!
@@ -139,20 +139,34 @@ bun run tauri build
 > - Run **`bun update`**
 
 <details>
-<summary>💡 Logic for versioning 💡</summary>
+<summary>⬇️ Logic for versioning</summary>
 
-We convert the version for compatibility and uniformity.
+We convert the version into an universal version for packager/installer compatibility and uniformity.
 
-Tag format: `v[0-255].[0-255].[0-255]-[alpha|beta|rc].[0-31]`
-Which gives max range of universal version: `[0-255].[0-255].[0-65535]`
+**Tag** format: `v[0-255].[0-255].[0-255]-[alpha|beta|rc].[0-31]`
+**Version** format: `[0-255].[0-255].[0-255]-[alpha|beta|rc].[0-31]`
+**Universal version** format: `[0-255].[0-255].[0-65535]`
 
-Formula: `encoded_patch = patch * 2048 + prerelease_type_code * 32 + parseInt(prerelease_version, 10);`
+_Formula_:
+
+> `encoded_patch = patch * 2048 + prerelease_type_code * 32 + parseInt(prerelease_version, 10);`
+
+> 💡 alpha = 0; beta = 1; rc = 2;
 
 Examples:
 
-- tag `v0.0.1-alpha.0` => release `ExoShell v0.0.1-alpha.0` => version `0.0.1-alpha.0` => universal version (package version) `0.0.12141`
-- tag `v0.0.1` => release `ExoShell v0.0.1` => version `0.0.1` => universal version (package version) `0.0.2048`
-- tag `v1.5.2-beta.6` => release `ExoShell v1.5.2-beta.6` => version `1.5.2-beta.6` => universal version (package version) `1.5.4134`
+- tag `v0.0.1-alpha.0`
+  - release `ExoShell v0.0.1-alpha.0`
+  - version `0.0.1-alpha.0`
+  - universal version (package version) `0.0.12141`
+- tag `v0.0.1`
+  - release `ExoShell v0.0.1`
+  - version `0.0.1`
+  - universal version (package version) `0.0.2048`
+- tag `v1.5.2-beta.6`
+  - release `ExoShell v1.5.2-beta.6`
+  - version `1.5.2-beta.6`
+  - universal version (package version) `1.5.4134`
 
 </details>
 
