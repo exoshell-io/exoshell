@@ -50,7 +50,7 @@
         <li><a href="#setup">Setup</a></li>
         <li><a href="#test">Test</a></li>
         <li><a href="#build">Build</a></li>
-        <li><a href="#ci/cd">CI/CD</a></li>
+        <li><a href="#ci-cd">CI/CD</a></li>
       </ul>
     </li>
     <li><a href="#roadmap">Roadmap</a></li>
