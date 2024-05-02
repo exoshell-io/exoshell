@@ -53,6 +53,7 @@
         <li><a href="#contribute">Contribute</a></li>
         <li><a href="#requirements">Requirements</a></li>
         <li><a href="#setup">Setup</a></li>
+        <li><a href="#test">Test</a></li>
         <li><a href="#build">Build</a></li>
         <li><a href="#ci/cd">CI/CD</a></li>
       </ul>
@@ -63,6 +64,16 @@
     <li><a href="#contact">Contact</a></li>
   </ol>
 </details>
+
+<div align="center">
+
+| Platform | Versions    | Architectures                                               | Packages                                               | Auto-Update              |
+| -------- | ----------- | ----------------------------------------------------------- | ------------------------------------------------------ | ------------------------ |
+| Windows  | Windows>=8  | <ul><li>✅ x64</ul>                                         | <ul><li>✅ nsis (.exe)</li><li>🕒 msi</ul>             | <ul><li>✅ nsis</ul>     |
+| MacOs    | MacOs>=12.0 | <ul><li>✅ x64</li><li>✅ aarch64</li><li>✅ universal</ul> | <ul><li>✅ app</li><li>✅ dmg</ul>                     | <ul><li>✅ app</ul>      |
+| Linux    | /           | <ul><li>✅ amd64</ul>                                       | <ul><li>✅ deb</li><li>✅ appimage</li><li>🕒 rpm</ul> | <ul><li>✅ appimage</ul> |
+
+</div>
 
 <!-- ABOUT -->
 
@@ -175,7 +186,12 @@ Don't forget to give the project a star! Thanks again!
 
 ```bash
 mise up
-bun <action>
+```
+
+### Test
+
+```bash
+bun run ci
 ```
 
 ### Build
@@ -259,8 +275,8 @@ Distributed under the TODO License. See `LICENSE.txt` for more information.
 
 ## Contact
 
-ctison - [@email](mailto:charles@exoshell.io)
-abguimba - [@email](mailto:abraham@exoshell.io)
+- @ctison - [✉️](mailto:charles@exoshell.io)
+- @abguimba - [✉️](mailto:abraham@exoshell.io)
 
 <!-- LINKS -->
 
