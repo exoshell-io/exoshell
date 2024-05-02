@@ -65,90 +65,25 @@
   </ol>
 </details>
 
-<div align="center">
-
-| Platform | Versions    | Architectures                                               | Packages                                               | Auto-Update              |
-| -------- | ----------- | ----------------------------------------------------------- | ------------------------------------------------------ | ------------------------ |
-| Windows  | Windows>=8  | <ul><li>✅ x64</ul>                                         | <ul><li>✅ nsis (.exe)</li><li>🕒 msi</ul>             | <ul><li>✅ nsis</ul>     |
-| MacOs    | MacOs>=12.0 | <ul><li>✅ x64</li><li>✅ aarch64</li><li>✅ universal</ul> | <ul><li>✅ app</li><li>✅ dmg</ul>                     | <ul><li>✅ app</ul>      |
-| Linux    | /           | <ul><li>✅ amd64</ul>                                       | <ul><li>✅ deb</li><li>✅ appimage</li><li>🕒 rpm</ul> | <ul><li>✅ appimage</ul> |
-
-</div>
-
 <!-- ABOUT -->
 
 ## About
 
-<center>
+<div align="center">
 
 [![ExoShell ScreenShot][exoshell-screenshot]](https://exoshell.io)
 
-</center>
+| Platform | Versions    | Architectures                        | Packages                        | Auto-Update |
+| -------- | ----------- | ------------------------------------ | ------------------------------- | ----------- |
+| Windows  | Windows>=8  | ✅ x64                               | ✅ nsis (.exe)<br>🕒 msi        | ✅ nsis     |
+| MacOs    | MacOs>=12.0 | ✅ x64<br>✅ aarch64<br>✅ universal | ✅ app<br>✅ dmg                | ✅ app      |
+| Linux    | /           | ✅ amd64                             | ✅ deb<br>✅ appimage<br>🕒 rpm | ✅ appimage |
 
-<div style="text-align: center;">
-    <table style="margin-left: auto; margin-right: auto;">
-        <tr>
-            <th style="text-align: center;">Platform</th>
-            <th style="text-align: center;">Versions</th>
-            <th style="text-align: center;">Architectures</th>
-            <th style="text-align: center;">Packages</th>
-            <th style="text-align: center;">Auto-Update</th>
-        </tr>
-        <tr>
-            <td style="text-align: center;">Windows</td>
-            <td style="text-align: center;">Windows&gt;=8</td>
-            <td style="text-align: center;">
-                ✅ x64
-            </td>
-            <td style="text-align: center;">
-                ✅ nsis (.exe)<br>
-                🕒 msi
-            </td>
-            <td style="text-align: center;">
-                ✅ nsis
-            </td>
-        </tr>
-        <tr>
-            <td style="text-align: center;">MacOs</td>
-            <td style="text-align: center;">MacOs&gt;=12.0</td>
-            <td style="text-align: center;">
-                ✅ x64<br>
-                ✅ aarch64<br>
-                ✅ universal
-            </td>
-            <td style="text-align: center;">
-                ✅ app<br>
-                ✅ dmg
-            </td>
-            <td style="text-align: center;">
-                ✅ app
-            </td>
-        </tr>
-        <tr>
-            <td style="text-align: center;">Linux</td>
-            <td style="text-align: center;">/</td>
-            <td style="text-align: center;">
-                ✅ amd64
-            </td>
-            <td style="text-align: center;">
-                ✅ deb<br>
-                ✅ appimage<br>
-                🕒 rpm
-            </td>
-            <td style="text-align: center;">
-                ✅ appimage
-            </td>
-        </tr>
-    </table>
 </div>
-
-TODO
 
 ### Built With
 
 [![Tauri][Tauri-badge]][Tauri-url]
-
-TODO
 
 <!-- USAGE -->
 
