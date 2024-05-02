@@ -35,12 +35,7 @@
 <details>
   <summary>Table of Contents</summary>
   <ol>
-    <li>
-      <a href="#about">About</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
-    </li>
+    <li><a href="#about">About</a></li>
     <li>
       <a href="#usage">Usage</a>
       <ul>
@@ -79,11 +74,11 @@
 | MacOs    | MacOs>=12.0 | ✅ x64<br>✅ aarch64<br>✅ universal | ✅ app<br>✅ dmg                | ✅ app      |
 | Linux    | /           | ✅ amd64                             | ✅ deb<br>✅ appimage<br>🕒 rpm | ✅ appimage |
 
-</div>
-
-### Built With
+**_Built with:_**
 
 [![Tauri][Tauri-badge]][Tauri-url]
+
+</div>
 
 <!-- USAGE -->
 
