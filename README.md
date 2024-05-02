@@ -66,7 +66,7 @@
 
 <div align="center">
 
-[![ExoShell ScreenShot][exoshell-screenshot]](https://exoshell.io)
+[![ExoShell ScreenShot][exoshell-screenshot]][website-url]
 
 | Platform | Versions    | Architectures                        | Packages                        | Auto-Update |
 | -------- | ----------- | ------------------------------------ | ------------------------------- | ----------- |
@@ -100,7 +100,7 @@ TODO
 To contribute, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
 Don't forget to give the project a star! Thanks again!
 
-1. [Fork the Project](https://github.com/exoshell-dev/exoshell/fork)
+1. [Fork the Project][github-fork-url]
 2. Create your Feature Branch (`git checkout -b feature/amazing-feature`)
 3. Commit your Changes (`git commit -m 'Add some amazing-feature'`)
 4. Push to the Branch (`git push origin feature/amazing-feature`)
@@ -110,7 +110,7 @@ Don't forget to give the project a star! Thanks again!
 
 ### Requirements
 
-- [mise](mise.jdx.dev)
+- [mise][mise-url]
 
 ### Setup
 
@@ -172,16 +172,23 @@ Examples:
 
 ### CI/CD
 
-CI:
+**CI:**
 
-- trigger on:
+- steps:
+  - lint
+  - test
+- triggers:
   - all `pull_request` creation/updates
   - all `tag` creation (tag must start with `v`)
   - all `workflow_dispatch`
 
-CD:
+**CD:**
 
-- trigger on:
+- steps:
+  - setup vars
+  - build
+  - release
+- triggers:
   - all `tag` creation (tag must start with `v`)
 
 <!-- ROADMAP -->
@@ -201,7 +208,7 @@ CD:
 - [ ] Add .rpm Linux installer
 - [ ] Add more support for architectures / packages / OS versions of existing platforms
 
-See the [open issues](https://github.com/exoshell-dev/exoshell/issues) for a full list of proposed features (and known issues).
+See the [open issues][github-issues-url] for a full list of proposed features (and known issues).
 
 <!-- ACKNOWLEDGMENTS -->
 
@@ -224,6 +231,10 @@ Distributed under the TODO License. See `LICENSE.txt` for more information.
 
 <!-- LINKS -->
 
+[website-url]: https://exoshell.io
+[mise-url]: ttps://mise.jdx.dev/
+[github-fork-url]: https://github.com/exoshell-dev/exoshell/fork
+[github-issues-url]: https://github.com/exoshell-dev/exoshell/issues
 [contributors-shield]: https://img.shields.io/github/contributors/exoshell-dev/exoshell.svg?style=for-the-badge
 [contributors-url]: https://github.com/exoshell-dev/exoshell/graphs/contributors
 [forks-shield]: https://img.shields.io/github/forks/exoshell-dev/exoshell.svg?style=for-the-badge
