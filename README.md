@@ -139,8 +139,6 @@ TODO
 
 TODO
 
-<p align="right">(<a href="#exoshell">back to top</a>)</p>
-
 <!-- USAGE -->
 
 ## Usage
@@ -148,8 +146,6 @@ TODO
 ### Installation
 
 TODO
-
-<p align="right">(<a href="#exoshell">back to top</a>)</p>
 
 <!-- DEVELOPMENT -->
 
@@ -228,8 +224,6 @@ CD:
 - trigger on:
   - all `tag` creation (tag must start with `v`)
 
-<p align="right">(<a href="#exoshell">back to top</a>)</p>
-
 <!-- ROADMAP -->
 
 ## Roadmap
@@ -249,15 +243,11 @@ CD:
 
 See the [open issues](https://github.com/exoshell-dev/exoshell/issues) for a full list of proposed features (and known issues).
 
-<p align="right">(<a href="#exoshell">back to top</a>)</p>
-
 <!-- ACKNOWLEDGMENTS -->
 
 ## Acknowledgments
 
 TODO
-
-<p align="right">(<a href="#exoshell">back to top</a>)</p>
 
 <!-- LICENSE -->
 
@@ -265,16 +255,12 @@ TODO
 
 Distributed under the TODO License. See `LICENSE.txt` for more information.
 
-<p align="right">(<a href="#exoshell">back to top</a>)</p>
-
 <!-- CONTACT -->
 
 ## Contact
 
 ctison - [@email](mailto:charles@exoshell.io)
 abguimba - [@email](mailto:abraham@exoshell.io)
-
-<p align="right">(<a href="#exoshell">back to top</a>)</p>
 
 <!-- LINKS -->
 
