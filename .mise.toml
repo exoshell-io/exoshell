@@ -1,6 +1,6 @@
 [tools]
 bun = '1'
-rust = '1'
+rust = '1.78'
 
 [env]
 '_'.file = '.env.local'

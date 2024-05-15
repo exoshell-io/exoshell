@@ -10,6 +10,6 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@types/chrome": "0.0.266"
+    "@types/chrome": "0.0.268"
   }
 }

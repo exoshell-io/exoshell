@@ -16,7 +16,7 @@
     "@exoshell/model": "workspace:*"
   },
   "devDependencies": {
-    "@tauri-apps/api": "1.5.3",
-    "@tauri-apps/cli": "1.5.11"
+    "@tauri-apps/api": "1.5.5",
+    "@tauri-apps/cli": "1.5.14"
   }
 }
