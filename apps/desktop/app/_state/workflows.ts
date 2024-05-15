@@ -1,12 +1,24 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  DefaultError,
+  UseQueryOptions,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { invoke } from '@tauri-apps/api/tauri';
 import { useSetAtom } from 'jotai';
+import { useCallback } from 'react';
 import { closeTabAtom, openTabAtom, type Workflow } from '.';
 
 const queryKey = ['workflows'];
 type Data = { [key: string]: Workflow };
 
-export const useWorkflows = () => {
+export const useWorkflows = <T = Data>(
+  options?: Omit<
+    UseQueryOptions<Data, DefaultError, T>,
+    'queryKey' | 'queryFn'
+  >,
+) => {
   return useQuery({
     queryKey: queryKey,
     queryFn: async () => {
@@ -16,6 +28,13 @@ export const useWorkflows = () => {
         return acc;
       }, {} as Data);
     },
+    ...options,
+  });
+};
+
+export const useWorkflow = (id: string) => {
+  return useWorkflows({
+    select: useCallback((workflows: Data) => workflows[id], [id]),
   });
 };
 

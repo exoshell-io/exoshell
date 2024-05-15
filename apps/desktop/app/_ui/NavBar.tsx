@@ -1,21 +1,21 @@
 import {
   activeTabAtom,
-  useDashboards,
   openTabAtom,
-  useScripts,
-  useWorkflows,
-  useUpsertScript,
+  useDashboards,
   useDeleteScript,
-  useUpsertWorkflow,
+  useScripts,
   useUpsertDashboard,
+  useUpsertScript,
+  useUpsertWorkflow,
+  useWorkflows,
 } from '@/_state';
 import { Box, NavLink, ScrollArea } from '@mantine/core';
 import { useAtomValue, useSetAtom } from 'jotai';
+import { useContextMenu } from 'mantine-contextmenu';
 import { useMemo } from 'react';
 import { LuWorkflow as IconWorkflow } from 'react-icons/lu';
 import { MdDashboard as IconDashboard } from 'react-icons/md';
-import { IconTerminal, IconRefresh, IconAdd, IconTrash } from './icons';
-import { useContextMenu } from 'mantine-contextmenu';
+import { IconAdd, IconRefresh, IconTerminal, IconTrash } from './icons';
 
 export const NavBar: React.FC = () => {
   const activeTab = useAtomValue(activeTabAtom);

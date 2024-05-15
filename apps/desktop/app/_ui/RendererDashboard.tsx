@@ -2,7 +2,7 @@
 
 import {
   Dashboard,
-  useDashboards,
+  useDashboard,
   useDeleteDashboard,
   useUpsertDashboard,
 } from '@/_state';
@@ -11,11 +11,7 @@ import { isNotEmpty, useForm } from '@mantine/form';
 import { useEffect, useMemo, useState } from 'react';
 
 export const RendererDashboard: React.FC<{ id: string }> = ({ id }) => {
-  const dashboards = useDashboards();
-  const dashboard = useMemo(
-    () => (dashboards.isSuccess ? dashboards.data[id] : null),
-    [dashboards, id],
-  );
+  const dashboard = useDashboard(id);
   const updateDashboard = useUpsertDashboard();
   const deleteDashboard = useDeleteDashboard();
 
@@ -41,8 +37,8 @@ export const RendererDashboard: React.FC<{ id: string }> = ({ id }) => {
   }, [updateDashboard.isSuccess]);
 
   useEffect(() => {
-    if (initialized || dashboard === null) return;
-    form.setValues(dashboard);
+    if (initialized || dashboard.data === undefined) return;
+    form.setValues(dashboard.data);
     form.resetDirty();
     setInitialized(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps

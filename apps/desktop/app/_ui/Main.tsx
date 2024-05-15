@@ -1,16 +1,16 @@
 import {
   activeTabIndexAtom,
   closeTabAtom,
-  useDashboards,
-  useScripts,
   setActiveTabAtom,
   tabsAtom,
+  useDashboards,
+  useScripts,
   useWorkflows,
 } from '@/_state';
-import { ActionIcon, Group, ScrollArea, Tabs } from '@mantine/core';
+import { ActionIcon, Group, Tabs } from '@mantine/core';
 import { useAtomValue, useSetAtom } from 'jotai';
-import { RendererTerminal } from './RendererTerminal';
 import { RendererDashboard } from './RendererDashboard';
+import { RendererTerminal } from './RendererTerminal';
 import { RendererWorkflow } from './RendererWorkflow';
 import { IconClose, IconDashboard, IconTerminal, IconWorkflow } from './icons';
 

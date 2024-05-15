@@ -2,8 +2,8 @@ import {
   useDeleteScript,
   useDeleteScriptRun,
   useRunScript,
-  useScriptRuns,
-  useScripts,
+  useScript,
+  useScriptRunsByScript,
   useUpsertScript,
   type ScriptRun,
 } from '@/_state';
@@ -26,16 +26,12 @@ import {
   TextInput,
 } from '@mantine/core';
 import { isNotEmpty, useForm } from '@mantine/form';
+import { useQueryClient } from '@tanstack/react-query';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { IconPlay, IconRefresh, IconSave, IconTrash } from './icons';
-import { useQueryClient } from '@tanstack/react-query';
 
 export const RendererTerminal: React.FC<{ id: string }> = ({ id }) => {
-  const scripts = useScripts();
-  const script = useMemo(
-    () => (scripts.isSuccess ? scripts.data[id] : null),
-    [scripts, id],
-  );
+  const script = useScript(id);
 
   const form = useForm<Script>({
     validate: {
@@ -46,8 +42,8 @@ export const RendererTerminal: React.FC<{ id: string }> = ({ id }) => {
   const [initialized, setInitialized] = useState(false);
 
   useEffect(() => {
-    if (initialized || script === null) return;
-    form.setValues(script);
+    if (initialized || script.data === undefined) return;
+    form.setValues(script.data);
     form.resetDirty();
     setInitialized(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -130,11 +126,7 @@ export const RendererTerminal: React.FC<{ id: string }> = ({ id }) => {
 };
 
 const RendererScriptRuns: React.FC<{ scriptId: string }> = ({ scriptId }) => {
-  const _scriptRuns = useScriptRuns();
-  const scriptRuns = useMemo(
-    () => (_scriptRuns.isSuccess ? _scriptRuns.data[scriptId] : {}),
-    [_scriptRuns, scriptId],
-  );
+  const scriptRuns = useScriptRunsByScript(scriptId);
 
   return (
     <>
@@ -143,10 +135,9 @@ const RendererScriptRuns: React.FC<{ scriptId: string }> = ({ scriptId }) => {
         orientation='vertical'
         m='sm'
         className='rounded-md border border-solid border-gray-200'
-        defaultValue={Object.values(scriptRuns ?? {})[0]?.id!.id.String}
       >
         <TabsList>
-          {Object.values(scriptRuns ?? {}).map((scriptRun) => {
+          {Object.values(scriptRuns.data ?? {}).map((scriptRun) => {
             const scriptRunId = scriptRun.id!.id.String;
             return (
               <TabsTab key={scriptRunId} value={scriptRunId}>
@@ -155,7 +146,7 @@ const RendererScriptRuns: React.FC<{ scriptId: string }> = ({ scriptId }) => {
             );
           })}
         </TabsList>
-        {Object.values(scriptRuns ?? {}).map((scriptRun) => {
+        {Object.values(scriptRuns.data ?? {}).map((scriptRun) => {
           const scriptRunId = scriptRun.id!.id.String;
           return (
             <TabsPanel key={scriptRunId} value={scriptRunId} p='sm'>
@@ -199,10 +190,11 @@ const RendererScriptRun: React.FC<{ scriptRun: ScriptRun }> = ({
     [scriptRun],
   );
 
+  const queryClient = useQueryClient();
   const deleteScriptRun = useDeleteScriptRun();
   const scriptId = useMemo(() => scriptRun.script.id!.id.String, [scriptRun]);
-  const queryClient = useQueryClient();
   const id = useMemo(() => scriptRun.id!.id.String, [scriptRun]);
+
   return (
     <>
       <Group>

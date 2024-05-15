@@ -1,10 +1,11 @@
+import '@mantine/code-highlight/styles.css';
 import '@mantine/core/styles.css';
 import '@mantine/notifications/styles.css';
-import '@mantine/code-highlight/styles.css';
-import 'mantine-contextmenu/styles.css';
 import 'allotment/dist/style.css';
-import 'reactflow/dist/style.css';
 import 'jotai-devtools/styles.css';
+import 'mantine-contextmenu/styles.css';
+import 'reactflow/dist/style.css';
+
 import './global.css';
 
 import { JotaiProvider, ReactQueryProvider } from '@/_providers';

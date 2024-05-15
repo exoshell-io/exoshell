@@ -1,8 +1,15 @@
 'use client';
 
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  DefaultError,
+  UseQueryOptions,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { invoke } from '@tauri-apps/api/tauri';
 import { useSetAtom } from 'jotai';
+import { useCallback } from 'react';
 import type { Script, ScriptRun } from '.';
 import { closeTabAtom, openTabAtom } from '.';
 
@@ -16,8 +23,18 @@ type Data = {
   scriptRuns: { [key: string]: { [key: string]: ScriptRun } };
 };
 
-export const useScripts = () => {
-  return useQuery<Data['scripts']>({
+export const useScripts = <T = Data['scripts']>(
+  options?: Omit<
+    UseQueryOptions<
+      Data['scripts'],
+      DefaultError,
+      T,
+      (typeof queryKeys)['scripts']
+    >,
+    'queryKey' | 'queryFn'
+  >,
+) => {
+  return useQuery({
     queryKey: queryKeys.scripts,
     queryFn: async () => {
       const scripts = await invoke<Script[]>('plugin:ipc|list_scripts');
@@ -29,6 +46,13 @@ export const useScripts = () => {
         {} as Data['scripts'],
       );
     },
+    ...options,
+  });
+};
+
+export const useScript = (id: string) => {
+  return useScripts({
+    select: useCallback((scripts: Data['scripts']) => scripts[id], [id]),
   });
 };
 
@@ -103,8 +127,13 @@ export const useRunScript = () => {
   });
 };
 
-export const useScriptRuns = () => {
-  return useQuery<Data['scriptRuns']>({
+export const useScriptRuns = <T = Data['scriptRuns']>(
+  options?: Omit<
+    UseQueryOptions<Data['scriptRuns'], DefaultError, T>,
+    'queryKey' | 'queryFn'
+  >,
+) => {
+  return useQuery({
     queryKey: queryKeys.scriptRuns,
     queryFn: async () => {
       const scriptRuns = await invoke<ScriptRun[]>(
@@ -122,6 +151,16 @@ export const useScriptRuns = () => {
         {} as Data['scriptRuns'],
       );
     },
+    ...options,
+  });
+};
+
+export const useScriptRunsByScript = (scriptId: string) => {
+  return useScriptRuns({
+    select: useCallback(
+      (scriptRuns: Data['scriptRuns']) => scriptRuns[scriptId],
+      [scriptId],
+    ),
   });
 };
 

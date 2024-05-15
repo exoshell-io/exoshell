@@ -1,14 +1,26 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  DefaultError,
+  UseQueryOptions,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { invoke } from '@tauri-apps/api/tauri';
-import { closeTabAtom, openTabAtom, type Dashboard } from '.';
 import { useSetAtom } from 'jotai';
+import { useCallback } from 'react';
+import { closeTabAtom, openTabAtom, type Dashboard } from '.';
 
-const queryKey = ['dashboards'];
+const queryKey = ['dashboards'] as const;
 type Data = { [key: string]: Dashboard };
 
-export const useDashboards = () => {
+export const useDashboards = <T = Data>(
+  options?: Omit<
+    UseQueryOptions<Data, DefaultError, T>,
+    'queryKey' | 'queryFn'
+  >,
+) => {
   return useQuery({
-    queryKey: queryKey,
+    queryKey,
     queryFn: async () => {
       const dashboards = await invoke<Dashboard[]>(
         'plugin:ipc|list_dashboards',
@@ -18,6 +30,13 @@ export const useDashboards = () => {
         return acc;
       }, {} as Data);
     },
+    ...options,
+  });
+};
+
+export const useDashboard = (id: string) => {
+  return useDashboards({
+    select: useCallback((dashboards: Data) => dashboards[id], [id]),
   });
 };
 

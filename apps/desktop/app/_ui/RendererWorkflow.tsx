@@ -1,7 +1,7 @@
 import {
   useDeleteWorkflow,
   useUpsertWorkflow,
-  useWorkflows,
+  useWorkflow,
   type Workflow,
 } from '@/_state';
 import {
@@ -13,6 +13,7 @@ import {
   Tooltip,
 } from '@mantine/core';
 import { isNotEmpty, useForm } from '@mantine/form';
+import { Allotment } from 'allotment';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import ReactFlow, {
   Background,
@@ -30,14 +31,9 @@ import ReactFlow, {
 } from 'reactflow';
 import { ReactFlowDevtools } from './ReactFlowDevtools';
 import { IconAdd, IconTrash } from './icons';
-import { Allotment } from 'allotment';
 
 export const RendererWorkflow: React.FC<{ id: string }> = ({ id }) => {
-  const workflows = useWorkflows();
-  const workflow = useMemo(
-    () => (workflows.isSuccess ? workflows.data[id] : null),
-    [workflows, id],
-  );
+  const workflow = useWorkflow(id);
   const upsertWorkflow = useUpsertWorkflow();
 
   const form = useForm<Workflow>({
@@ -49,8 +45,8 @@ export const RendererWorkflow: React.FC<{ id: string }> = ({ id }) => {
   const [initialized, setInitialized] = useState(false);
 
   useEffect(() => {
-    if (initialized || workflow === null) return;
-    form.setValues(workflow);
+    if (initialized || workflow.data === undefined) return;
+    form.setValues(workflow.data);
     form.resetDirty();
     setInitialized(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
