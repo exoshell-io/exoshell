@@ -1,3 +1,5 @@
+'use client';
+
 import { Panel, useStore } from 'reactflow';
 
 export const ReactFlowDevtools: React.FC = () => {

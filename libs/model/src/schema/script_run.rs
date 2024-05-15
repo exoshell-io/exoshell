@@ -5,7 +5,7 @@ use super::*;
 #[ts(export)]
 pub struct ScriptRun {
   #[builder(default, setter(custom))]
-  #[ts(type = r#"{tb:string;id:string} | null"#)]
+  #[ts(type = r#"{tb:string;id:{String:string}} | null"#)]
   pub id: super::Id,
   pub script: Script,
   #[builder(default)]

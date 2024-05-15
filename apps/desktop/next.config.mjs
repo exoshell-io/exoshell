@@ -5,4 +5,8 @@ export default {
   experimental: {
     typedRoutes: true,
   },
+  transpilePackages: ['jotai-devtools'],
+  // experimental: {
+  //   swcPlugins: [['@swc-jotai/debug-label', {}]],
+  // },
 };

@@ -1,40 +1,69 @@
 'use client';
 
-import { AppShell } from '@mantine/core';
-import { FormRun } from './FormRun';
-import { NavBar } from './NavBar';
+import {
+  ActionIcon,
+  AppShell,
+  AppShellFooter,
+  AppShellHeader,
+  AppShellMain,
+  Box,
+  Group,
+  ScrollArea,
+  Tooltip,
+} from '@mantine/core';
+import { useToggle } from '@mantine/hooks';
+import { Allotment } from 'allotment';
 import { Main } from './Main';
-import { PanelGroup, Panel, PanelResizeHandle } from 'react-resizable-panels';
+import { NavBar } from './NavBar';
+import { IconLeftPanelClosed, IconLeftPanelOpen } from './icons';
 
 export const App: React.FC = () => {
   return (
-    <AppShell header={{ height: 32 }} footer={{ height: 20 }}>
-      <AppShell.Header data-tauri-drag-region>
-        <Header />
-      </AppShell.Header>
+    <Box>
+      <AppShell header={{ height: 32 }} footer={{ height: 20 }}>
+        <AppShellHeader data-tauri-drag-region>
+          <Header />
+        </AppShellHeader>
 
-      <AppShell.Main h='100dvh' mah='100dvh'>
-        <PanelGroup direction='horizontal' autoSaveId='main'>
-          <Panel
-            minSize={10}
-            maxSize={30}
-            defaultSize={10}
-            className='select-none'
-          >
-            <NavBar />
-          </Panel>
-          <PanelResizeHandle className='w-px bg-gray-200' />
-          <Panel>
-            <Main />
-          </Panel>
-        </PanelGroup>
-      </AppShell.Main>
+        <AppShellMain h='100dvh' mah='100dvh'>
+          <Allotment>
+            <Allotment.Pane
+              minSize={172}
+              preferredSize={172}
+              className='select-none'
+              snap
+            >
+              <ScrollArea h='100%'>
+                <NavBar />
+              </ScrollArea>
+            </Allotment.Pane>
+            <Allotment.Pane>
+              <Main />
+            </Allotment.Pane>
+          </Allotment>
+        </AppShellMain>
 
-      <AppShell.Footer></AppShell.Footer>
-    </AppShell>
+        <AppShellFooter></AppShellFooter>
+      </AppShell>
+    </Box>
   );
 };
 
 export const Header: React.FC = () => {
-  return <></>;
+  const [toggle, toggleToggle] = useToggle();
+  return (
+    <>
+      <Group justify='right' data-tauri-drag-region h='100%' px='xs'>
+        <Tooltip label='TODO'>
+          <ActionIcon
+            variant='subtle'
+            color='gray'
+            onClick={() => toggleToggle()}
+          >
+            {toggle ? <IconLeftPanelOpen /> : <IconLeftPanelClosed />}
+          </ActionIcon>
+        </Tooltip>
+      </Group>
+    </>
+  );
 };

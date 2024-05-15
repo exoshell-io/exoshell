@@ -14,7 +14,10 @@ custom-protocol = ["tauri/custom-protocol"]
 tauri-build = { version = "1.5.1", features = [] }
 
 [dependencies]
-tauri = { version = "1.6.1", features = [ "window-start-dragging", "process-command-api"] }
+tauri = { version = "1.6.1", features = [
+  "window-start-dragging",
+  "process-command-api",
+] }
 
 # Helpers
 anyhow.workspace = true
@@ -26,6 +29,7 @@ derive_builder.workspace = true
 serde.workspace = true
 serde_json.workspace = true
 serde_with.workspace = true
+shell-words.workspace = true
 ts-rs.workspace = true
 
 # Tracing

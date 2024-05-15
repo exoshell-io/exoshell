@@ -1,9 +1,13 @@
 use super::prelude::*;
 
 impl super::Engine {
+  #[instrument(skip(self), ret, err)]
   pub async fn run_script(&self, script: Script) -> Result<ScriptRun> {
+    debug!("Running script: {:?}", script);
     let mut child = Command::new(&script.command)
       .args(&script.args)
+      .stdout(Stdio::piped())
+      .stderr(Stdio::piped())
       .spawn()
       .context("Failed to spawn child process")?;
 

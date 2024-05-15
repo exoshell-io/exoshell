@@ -14,4 +14,4 @@ pub use tokio::{
   sync::{mpsc, OnceCell, RwLock},
 };
 pub use tokio_util::io::ReaderStream;
-pub use tracing::{debug, error, info, warn};
+pub use tracing::{debug, error, info, instrument, warn};

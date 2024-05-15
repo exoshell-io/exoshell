@@ -1,22 +1,34 @@
-import { useStore } from '@/_state';
-import { ActionIcon, Tabs, Group } from '@mantine/core';
-import { RendererWorkflow } from './RendererWorkflow';
+import {
+  activeTabIndexAtom,
+  closeTabAtom,
+  useDashboards,
+  useScripts,
+  setActiveTabAtom,
+  tabsAtom,
+  useWorkflows,
+} from '@/_state';
+import { ActionIcon, Group, ScrollArea, Tabs } from '@mantine/core';
+import { useAtomValue, useSetAtom } from 'jotai';
+import { RendererTerminal } from './RendererTerminal';
 import { RendererDashboard } from './RendererDashboard';
-import { IconClose, IconDashboard, IconWorkflow } from './icons';
+import { RendererWorkflow } from './RendererWorkflow';
+import { IconClose, IconDashboard, IconTerminal, IconWorkflow } from './icons';
 
 export const Main: React.FC = () => {
-  const tabs = useStore((store) => store.tabs);
-  const activeTab = useStore((store) => store.activeTab);
-  const setActiveTab = useStore((store) => store.setActiveTab);
-  const closeTab = useStore((store) => store.closeTab);
-  const workflows = useStore((store) => store.workflows);
-  const dashboards = useStore((store) => store.dashboards);
+  const tabs = useAtomValue(tabsAtom);
+  const activeTab = useAtomValue(activeTabIndexAtom);
+  const scripts = useScripts();
+  const workflows = useWorkflows();
+  const dashboards = useDashboards();
+  const closeTab = useSetAtom(closeTabAtom);
+  const setActiveTab = useSetAtom(setActiveTabAtom);
+
   return (
     <>
       <Tabs
         value={`${activeTab}`}
         onChange={(newTab) =>
-          setActiveTab(newTab !== null ? parseInt(newTab) : undefined)
+          setActiveTab(newTab !== null ? parseInt(newTab) : null)
         }
         activateTabWithKeyboard={false}
         display='flex'
@@ -28,16 +40,37 @@ export const Main: React.FC = () => {
             let tabLabel: string;
             let tabIcon: React.ReactNode;
             if (tab.href.startsWith('workflow://')) {
-              tabLabel = workflows[tab.href.substr(11)].name;
+              tabLabel = workflows.isSuccess
+                ? workflows.data[tab.href.substring('workflow://'.length)]?.name
+                : workflows.isError
+                  ? `Error: ${workflows.error}`
+                  : `Loading`;
               tabIcon = <IconWorkflow />;
             } else if (tab.href.startsWith('dashboard://')) {
-              tabLabel = dashboards[tab.href.substr(12)].name;
+              tabLabel = dashboards.isSuccess
+                ? dashboards.data[tab.href.substring('dashboard://'.length)]
+                    ?.name
+                : dashboards.isError
+                  ? `Error: ${dashboards.error}`
+                  : `Loading`;
               tabIcon = <IconDashboard />;
+            } else if (tab.href.startsWith('terminal://')) {
+              tabLabel = scripts.isSuccess
+                ? scripts.data[tab.href.substring('terminal://'.length)]?.name
+                : scripts.isError
+                  ? `Error: ${scripts.error}`
+                  : `Loading`;
+              tabIcon = <IconTerminal />;
             } else {
               tabLabel = tab.href;
             }
             return (
-              <Tabs.Tab key={`${tab.href}`} value={`${index}`} px={8}>
+              <Tabs.Tab
+                key={`${tab.href}`}
+                value={`${index}`}
+                px={8}
+                component='div' // Fix button in button warning
+              >
                 <Group gap={6}>
                   {tabIcon}
                   {tabLabel}
@@ -59,7 +92,12 @@ export const Main: React.FC = () => {
         </Tabs.List>
         {tabs.map((tab, index) => {
           return (
-            <Tabs.Panel key={`${tab.href}`} value={`${index}`} flex='1 0 10%'>
+            <Tabs.Panel
+              key={`${tab.href}`}
+              value={`${index}`}
+              flex='1 0 10%'
+              className='overflow-hidden'
+            >
               {tab.href.startsWith('workflow://') ? (
                 <RendererWorkflow
                   id={tab.href.substring('workflow://'.length)}
@@ -67,6 +105,10 @@ export const Main: React.FC = () => {
               ) : tab.href.startsWith('dashboard://') ? (
                 <RendererDashboard
                   id={tab.href.substring('dashboard://'.length)}
+                />
+              ) : tab.href.startsWith('terminal://') ? (
+                <RendererTerminal
+                  id={tab.href.substring('terminal://'.length)}
                 />
               ) : (
                 tab.href
