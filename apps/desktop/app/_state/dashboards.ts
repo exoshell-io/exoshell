@@ -8,7 +8,7 @@ import {
 import { invoke } from '@tauri-apps/api/tauri';
 import { useSetAtom } from 'jotai';
 import { useCallback } from 'react';
-import { closeTabAtom, openTabAtom, type Dashboard } from '.';
+import { useCloseTab, useOpenTab, type Dashboard } from '.';
 
 const queryKey = ['dashboards'] as const;
 type Data = { [key: string]: Dashboard };
@@ -42,7 +42,7 @@ export const useDashboard = (id: string) => {
 
 export const useUpsertDashboard = () => {
   const queryClient = useQueryClient();
-  const openTab = useSetAtom(openTabAtom);
+  const openTab = useOpenTab();
   return useMutation({
     mutationKey: ['upsertDashboard'],
     mutationFn: async ({
@@ -71,7 +71,7 @@ export const useUpsertDashboard = () => {
 
 export const useDeleteDashboard = () => {
   const queryClient = useQueryClient();
-  const closeTab = useSetAtom(closeTabAtom);
+  const closeTab = useCloseTab();
   return useMutation({
     mutationKey: ['deleteDashboard'],
     mutationFn: async ({ id }: { id: string }) => {

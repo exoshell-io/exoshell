@@ -8,6 +8,7 @@
     "exoshell",
     "exoterm",
     "nodrag",
+    "nonblock",
     "nprogress",
     "pangea",
     "posthog",

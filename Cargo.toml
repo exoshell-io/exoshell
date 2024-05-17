@@ -18,6 +18,10 @@ thiserror = { version = "1.0.60" }
 clap = { version = "4.5.4", features = ["derive"] }
 chrono = { version = "0.4.38" }
 derive_builder = { version = "0.20.0" }
+io-mux = { version = "2.2.0", features = [
+  "async",
+  "experimental-unix-support",
+] }
 
 # Serialization
 serde = { version = "1.0.201", features = ["derive"] }

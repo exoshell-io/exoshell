@@ -1,5 +1,6 @@
 'use client';
 
+import { useDropScriptRuns } from '@/_state';
 import {
   ActionIcon,
   AppShell,
@@ -15,7 +16,7 @@ import { useToggle } from '@mantine/hooks';
 import { Allotment } from 'allotment';
 import { Main } from './Main';
 import { NavBar } from './NavBar';
-import { IconLeftPanelClosed, IconLeftPanelOpen } from './icons';
+import { IconLeftPanelClosed, IconLeftPanelOpen, IconTrash } from './icons';
 
 export const App: React.FC = () => {
   return (
@@ -51,9 +52,20 @@ export const App: React.FC = () => {
 
 export const Header: React.FC = () => {
   const [toggle, toggleToggle] = useToggle();
+  const dropScriptRuns = useDropScriptRuns();
   return (
     <>
       <Group justify='right' data-tauri-drag-region h='100%' px='xs'>
+        <Tooltip label='Drop script runs'>
+          <ActionIcon
+            variant='outline'
+            color='red'
+            onClick={() => dropScriptRuns.mutate()}
+            loading={dropScriptRuns.isPending}
+          >
+            <IconTrash />
+          </ActionIcon>
+        </Tooltip>
         <Tooltip label='TODO'>
           <ActionIcon
             variant='subtle'

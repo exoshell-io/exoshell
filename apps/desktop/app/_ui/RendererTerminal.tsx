@@ -1,9 +1,10 @@
 import {
   useDeleteScript,
   useDeleteScriptRun,
+  useDeleteScriptRuns,
   useRunScript,
   useScript,
-  useScriptRunsByScript,
+  useScriptRuns,
   useUpsertScript,
   type ScriptRun,
 } from '@/_state';
@@ -70,6 +71,8 @@ export const RendererTerminal: React.FC<{ id: string }> = ({ id }) => {
 
   const deleteScript = useDeleteScript();
 
+  const deleteScriptRuns = useDeleteScriptRuns();
+
   return (
     <ScrollArea h='100%'>
       <form onSubmit={onSubmit} className='max-h-full'>
@@ -117,6 +120,14 @@ export const RendererTerminal: React.FC<{ id: string }> = ({ id }) => {
             >
               Delete
             </Button>
+            <Button
+              color='red'
+              leftSection={<IconTrash />}
+              onClick={() => deleteScriptRuns.mutate({ scriptId: id })}
+              loading={deleteScriptRuns.isPending}
+            >
+              Delete all script runs
+            </Button>
           </Group>
         </Stack>
       </form>
@@ -126,10 +137,22 @@ export const RendererTerminal: React.FC<{ id: string }> = ({ id }) => {
 };
 
 const RendererScriptRuns: React.FC<{ scriptId: string }> = ({ scriptId }) => {
-  const scriptRuns = useScriptRunsByScript(scriptId);
+  const scriptRuns = useScriptRuns(scriptId);
 
   return (
     <>
+      <Accordion variant='contained' p='md'>
+        <AccordionItem value='debug'>
+          <AccordionControl px='md'>Script Runs</AccordionControl>
+          <AccordionPanel>
+            <CodeHighlight
+              code={JSON.stringify(scriptRuns.data ?? [], undefined, 2)}
+              language='json'
+              withCopyButton={false}
+            />
+          </AccordionPanel>
+        </AccordionItem>
+      </Accordion>
       <Tabs
         variant='outline'
         orientation='vertical'
@@ -137,7 +160,7 @@ const RendererScriptRuns: React.FC<{ scriptId: string }> = ({ scriptId }) => {
         className='rounded-md border border-solid border-gray-200'
       >
         <TabsList>
-          {Object.values(scriptRuns.data ?? {}).map((scriptRun) => {
+          {scriptRuns.data?.map((scriptRun) => {
             const scriptRunId = scriptRun.id!.id.String;
             return (
               <TabsTab key={scriptRunId} value={scriptRunId}>
@@ -146,7 +169,7 @@ const RendererScriptRuns: React.FC<{ scriptId: string }> = ({ scriptId }) => {
             );
           })}
         </TabsList>
-        {Object.values(scriptRuns.data ?? {}).map((scriptRun) => {
+        {scriptRuns.data?.map((scriptRun) => {
           const scriptRunId = scriptRun.id!.id.String;
           return (
             <TabsPanel key={scriptRunId} value={scriptRunId} p='sm'>

@@ -8,7 +8,7 @@ import {
 import { invoke } from '@tauri-apps/api/tauri';
 import { useSetAtom } from 'jotai';
 import { useCallback } from 'react';
-import { closeTabAtom, openTabAtom, type Workflow } from '.';
+import { useCloseTab, useOpenTab, type Workflow } from '.';
 
 const queryKey = ['workflows'];
 type Data = { [key: string]: Workflow };
@@ -40,7 +40,7 @@ export const useWorkflow = (id: string) => {
 
 export const useUpsertWorkflow = () => {
   const queryClient = useQueryClient();
-  const openTab = useSetAtom(openTabAtom);
+  const openTab = useOpenTab();
   return useMutation({
     mutationKey: ['upsertWorkflow'],
     mutationFn: async ({
@@ -68,7 +68,7 @@ export const useUpsertWorkflow = () => {
 
 export const useDeleteWorkflow = () => {
   const queryClient = useQueryClient();
-  const closeTab = useSetAtom(closeTabAtom);
+  const closeTab = useCloseTab();
   return useMutation({
     mutationKey: ['deleteWorkflow'],
     mutationFn: async ({ id }: { id: string }) => {

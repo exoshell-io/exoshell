@@ -1,8 +1,8 @@
 import {
-  activeTabAtom,
-  openTabAtom,
+  useActiveTab,
   useDashboards,
   useDeleteScript,
+  useOpenTab,
   useScripts,
   useUpsertDashboard,
   useUpsertScript,
@@ -10,16 +10,23 @@ import {
   useWorkflows,
 } from '@/_state';
 import { Box, NavLink, ScrollArea } from '@mantine/core';
-import { useAtomValue, useSetAtom } from 'jotai';
 import { useContextMenu } from 'mantine-contextmenu';
 import { useMemo } from 'react';
 import { LuWorkflow as IconWorkflow } from 'react-icons/lu';
 import { MdDashboard as IconDashboard } from 'react-icons/md';
-import { IconAdd, IconRefresh, IconTerminal, IconTrash } from './icons';
+import {
+  IconAdd,
+  IconConnection,
+  IconRefresh,
+  IconSettings,
+  IconSurreal,
+  IconTerminal,
+  IconTrash,
+} from './icons';
 
 export const NavBar: React.FC = () => {
-  const activeTab = useAtomValue(activeTabAtom);
-  const openTab = useSetAtom(openTabAtom);
+  const activeTab = useActiveTab();
+  const openTab = useOpenTab();
 
   const scripts = useScripts();
   const scriptsLinks = useMemo(() => {
@@ -167,6 +174,22 @@ export const NavBar: React.FC = () => {
             }
           />
         </NavLink>
+        <NavLink label='Connections' leftSection={<IconConnection />}>
+          <NavLink label='Local' />
+          <NavLink label='New' leftSection={<IconAdd />} />
+        </NavLink>
+        <NavLink label='Queries' leftSection={<IconSurreal />}>
+          <NavLink
+            label='Add'
+            leftSection={<IconAdd />}
+            onClick={() => openTab('surreal')}
+          />
+        </NavLink>
+        <NavLink
+          label='Settings'
+          leftSection={<IconSettings />}
+          onClick={() => openTab('settings')}
+        />
       </ScrollArea>
     </Box>
   );

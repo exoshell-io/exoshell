@@ -1,27 +1,35 @@
 import {
-  activeTabIndexAtom,
-  closeTabAtom,
-  setActiveTabAtom,
-  tabsAtom,
+  useActiveTabIndex,
+  useCloseTab,
   useDashboards,
   useScripts,
+  useSetActiveTab,
+  useTabs,
   useWorkflows,
 } from '@/_state';
 import { ActionIcon, Group, Tabs } from '@mantine/core';
-import { useAtomValue, useSetAtom } from 'jotai';
 import { RendererDashboard } from './RendererDashboard';
+import { RendererSettings } from './RendererSettings';
 import { RendererTerminal } from './RendererTerminal';
 import { RendererWorkflow } from './RendererWorkflow';
-import { IconClose, IconDashboard, IconTerminal, IconWorkflow } from './icons';
+import {
+  IconClose,
+  IconDashboard,
+  IconSettings,
+  IconSurreal,
+  IconTerminal,
+  IconWorkflow,
+} from './icons';
+import { RendererSurreal } from './RendererSurreal';
 
 export const Main: React.FC = () => {
-  const tabs = useAtomValue(tabsAtom);
-  const activeTab = useAtomValue(activeTabIndexAtom);
+  const tabs = useTabs();
+  const activeTab = useActiveTabIndex();
   const scripts = useScripts();
   const workflows = useWorkflows();
   const dashboards = useDashboards();
-  const closeTab = useSetAtom(closeTabAtom);
-  const setActiveTab = useSetAtom(setActiveTabAtom);
+  const closeTab = useCloseTab();
+  const setActiveTab = useSetActiveTab();
 
   return (
     <>
@@ -61,6 +69,12 @@ export const Main: React.FC = () => {
                   ? `Error: ${scripts.error}`
                   : `Loading`;
               tabIcon = <IconTerminal />;
+            } else if (tab.href === 'surreal') {
+              tabLabel = 'Surreal';
+              tabIcon = <IconSurreal />;
+            } else if (tab.href === 'settings') {
+              tabLabel = 'Settings';
+              tabIcon = <IconSettings />;
             } else {
               tabLabel = tab.href;
             }
@@ -110,6 +124,10 @@ export const Main: React.FC = () => {
                 <RendererTerminal
                   id={tab.href.substring('terminal://'.length)}
                 />
+              ) : tab.href === 'surreal' ? (
+                <RendererSurreal />
+              ) : tab.href === 'settings' ? (
+                <RendererSettings />
               ) : (
                 tab.href
               )}
