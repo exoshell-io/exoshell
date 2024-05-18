@@ -83,9 +83,18 @@ export const Main: React.FC = () => {
                 key={`${tab.href}`}
                 value={`${index}`}
                 px={8}
-                component='div' // Fix button in button warning
+                component='div' // Fix "forbidden button in button" warning
               >
-                <Group gap={6}>
+                <Group
+                  gap={6}
+                  onClick={(e) => {
+                    // Close tab on middle click
+                    if (e.button === 1) {
+                      e.stopPropagation();
+                      closeTab(index);
+                    }
+                  }}
+                >
                   {tabIcon}
                   {tabLabel}
                   <ActionIcon
