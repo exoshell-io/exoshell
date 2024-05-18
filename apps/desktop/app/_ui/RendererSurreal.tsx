@@ -1,17 +1,17 @@
 import { useQuery } from '@/_state';
+import { CodeHighlight } from '@mantine/code-highlight';
 import {
-  Box,
   Button,
   Code,
   Group,
   ScrollArea,
   Stack,
-  TextInput,
   Textarea,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { useMemo } from 'react';
-import { CodeHighlight } from '@mantine/code-highlight';
+import { getHotkeyHandler } from '@mantine/hooks';
+import { useMemo, useRef } from 'react';
+import { IconPlay } from './icons';
 
 export const RendererSurreal: React.FC = () => {
   const form = useForm({
@@ -32,14 +32,26 @@ export const RendererSurreal: React.FC = () => {
       }),
     [form, query],
   );
+  const submitButtonRef = useRef<HTMLButtonElement>(null);
   return (
     <ScrollArea p='md' h='100%'>
       <form onSubmit={onSubmit}>
         <Stack>
-          <Textarea label='Query' {...form.getInputProps('query')} />
+          <Textarea
+            label='Query'
+            {...form.getInputProps('query')}
+            onKeyDown={getHotkeyHandler([
+              ['mod+Enter', () => submitButtonRef.current?.click()],
+            ])}
+          />
           <Group>
-            <Button type='submit' loading={query.isPending}>
-              Run
+            <Button
+              ref={submitButtonRef}
+              type='submit'
+              loading={query.isPending}
+              leftSection={<IconPlay />}
+            >
+              Run (⌘+Enter)
             </Button>
           </Group>
           {query.isSuccess && <CodeHighlight code={query.data} />}
