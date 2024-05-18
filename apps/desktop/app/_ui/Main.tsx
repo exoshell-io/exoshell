@@ -14,6 +14,7 @@ import { RendererTerminal } from './RendererTerminal';
 import { RendererWorkflow } from './RendererWorkflow';
 import {
   IconClose,
+  IconCompass,
   IconDashboard,
   IconSettings,
   IconSurreal,
@@ -21,6 +22,7 @@ import {
   IconWorkflow,
 } from './icons';
 import { RendererSurreal } from './RendererSurreal';
+import { RendererDevModeOnly } from './RendererDevModeOnly';
 
 export const Main: React.FC = () => {
   const tabs = useTabs();
@@ -75,6 +77,9 @@ export const Main: React.FC = () => {
             } else if (tab.href === 'settings') {
               tabLabel = 'Settings';
               tabIcon = <IconSettings />;
+            } else if (tab.href === 'devMode') {
+              tabLabel = 'Dev Mode';
+              tabIcon = <IconCompass />;
             } else {
               tabLabel = tab.href;
             }
@@ -137,6 +142,8 @@ export const Main: React.FC = () => {
                 <RendererSurreal />
               ) : tab.href === 'settings' ? (
                 <RendererSettings />
+              ) : tab.href === 'devMode' ? (
+                <RendererDevModeOnly />
               ) : (
                 tab.href
               )}

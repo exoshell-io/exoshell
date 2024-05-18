@@ -16,6 +16,7 @@ import { LuWorkflow as IconWorkflow } from 'react-icons/lu';
 import { MdDashboard as IconDashboard } from 'react-icons/md';
 import {
   IconAdd,
+  IconCompass,
   IconConnection,
   IconRefresh,
   IconSettings,
@@ -190,6 +191,13 @@ export const NavBar: React.FC = () => {
           leftSection={<IconSettings />}
           onClick={() => openTab('settings')}
         />
+        {process.env.NODE_ENV === 'development' && (
+          <NavLink
+            label='DevModeOnly'
+            leftSection={<IconCompass />}
+            onClick={() => openTab('devMode')}
+          />
+        )}
       </ScrollArea>
     </Box>
   );

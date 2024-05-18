@@ -24,11 +24,11 @@ export default function RootLayout() {
         <MantineProvider>
           <Notifications />
           <ContextMenuProvider borderRadius='md'>
-            <ReactQueryProvider>
-              <JotaiProvider>
+            <JotaiProvider>
+              <ReactQueryProvider>
                 <App />
-              </JotaiProvider>
-            </ReactQueryProvider>
+              </ReactQueryProvider>
+            </JotaiProvider>
           </ContextMenuProvider>
         </MantineProvider>
       </body>

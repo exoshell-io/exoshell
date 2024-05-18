@@ -14,9 +14,14 @@ export {
   MdDashboard as IconDashboard,
   MdOutlineSettings as IconSettings,
 } from 'react-icons/md';
+export { PiCompassToolBold as IconCompass } from 'react-icons/pi';
+export { SiSurrealdb as IconSurreal } from 'react-icons/si';
+export {
+  TbPlugConnected as IconConnection,
+  TbGhost as IconJotai,
+  TbBrandReact as IconReactQuery,
+} from 'react-icons/tb';
 export {
   VscLayoutSidebarLeftOff as IconLeftPanelClosed,
   VscLayoutSidebarLeft as IconLeftPanelOpen,
 } from 'react-icons/vsc';
-export { TbPlugConnected as IconConnection } from 'react-icons/tb';
-export { SiSurrealdb as IconSurreal } from 'react-icons/si';

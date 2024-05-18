@@ -1,2 +1,8 @@
 @tailwind components;
 @tailwind utilities;
+
+/* Hide devtools buttons */
+div.tsqd-open-btn-container,
+button.jotai-devtools-trigger-button {
+  visibility: hidden;
+}
