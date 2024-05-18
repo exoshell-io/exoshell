@@ -1,5 +1,6 @@
 export type * from '@exoshell/model';
 export * from './dashboards';
+export * from './layout';
 export * from './query';
 export * from './scriptRuns';
 export * from './scripts';

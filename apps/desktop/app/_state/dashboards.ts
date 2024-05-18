@@ -6,7 +6,6 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 import { invoke } from '@tauri-apps/api/tauri';
-import { useSetAtom } from 'jotai';
 import { useCallback } from 'react';
 import { useCloseTab, useOpenTab, type Dashboard } from '.';
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { useDropScriptRuns } from '@/_state';
+import { useLeftBarVisibility, useSetLeftBarVisibility } from '@/_state';
 import {
   ActionIcon,
   AppShell,
@@ -10,15 +10,21 @@ import {
   Box,
   Group,
   ScrollArea,
-  Tooltip,
 } from '@mantine/core';
-import { useToggle } from '@mantine/hooks';
 import { Allotment } from 'allotment';
+import { useMemo } from 'react';
 import { Main } from './Main';
 import { NavBar } from './NavBar';
-import { IconLeftPanelClosed, IconLeftPanelOpen, IconTrash } from './icons';
+import { IconLeftPanelClosed, IconLeftPanelOpen } from './icons';
 
 export const App: React.FC = () => {
+  const leftBarVisibility = useLeftBarVisibility();
+  const setLeftBarVisibility = useSetLeftBarVisibility();
+  const handlePanelVisibilityChange = (index: number, visible: boolean) => {
+    if (index === 0) {
+      setLeftBarVisibility(visible);
+    }
+  };
   return (
     <Box>
       <AppShell header={{ height: 32 }} footer={{ height: 20 }}>
@@ -27,12 +33,13 @@ export const App: React.FC = () => {
         </AppShellHeader>
 
         <AppShellMain h='100dvh' mah='100dvh'>
-          <Allotment>
+          <Allotment onVisibleChange={handlePanelVisibilityChange}>
             <Allotment.Pane
               minSize={172}
               preferredSize={172}
               className='select-none'
               snap
+              visible={leftBarVisibility}
             >
               <ScrollArea h='100%'>
                 <NavBar />
@@ -51,30 +58,30 @@ export const App: React.FC = () => {
 };
 
 export const Header: React.FC = () => {
-  const [toggle, toggleToggle] = useToggle();
-  const dropScriptRuns = useDropScriptRuns();
+  const setLeftBarVisibility = useSetLeftBarVisibility();
+  const leftBarVisibility = useLeftBarVisibility();
+  const iconStyles = useMemo<React.CSSProperties>(
+    () => ({
+      width: '90%',
+      height: '90%',
+    }),
+    [],
+  );
   return (
     <>
       <Group justify='right' data-tauri-drag-region h='100%' px='xs'>
-        <Tooltip label='Drop script runs'>
-          <ActionIcon
-            variant='outline'
-            color='red'
-            onClick={() => dropScriptRuns.mutate()}
-            loading={dropScriptRuns.isPending}
-          >
-            <IconTrash />
-          </ActionIcon>
-        </Tooltip>
-        <Tooltip label='TODO'>
-          <ActionIcon
-            variant='subtle'
-            color='gray'
-            onClick={() => toggleToggle()}
-          >
-            {toggle ? <IconLeftPanelOpen /> : <IconLeftPanelClosed />}
-          </ActionIcon>
-        </Tooltip>
+        <ActionIcon
+          variant='subtle'
+          color='gray'
+          onClick={() => setLeftBarVisibility(!leftBarVisibility)}
+          size={20}
+        >
+          {leftBarVisibility ? (
+            <IconLeftPanelOpen style={iconStyles} />
+          ) : (
+            <IconLeftPanelClosed style={iconStyles} />
+          )}
+        </ActionIcon>
       </Group>
     </>
   );
