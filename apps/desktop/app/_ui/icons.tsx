@@ -1,7 +1,9 @@
 export {
+  FaCircle as IconCircle,
   FaTerminal as IconTerminal,
   FaRegTrashAlt as IconTrash,
 } from 'react-icons/fa';
+export { HiBolt as IconBolt } from 'react-icons/hi2';
 export {
   IoMdAdd as IconAdd,
   IoMdPlay as IconPlay,

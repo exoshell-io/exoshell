@@ -2,6 +2,7 @@ import {
   useDeleteScript,
   useDeleteScriptRun,
   useDeleteScriptRuns,
+  useKillScriptRun,
   useRunScript,
   useScript,
   useScriptRuns,
@@ -18,6 +19,7 @@ import {
   Button,
   Code,
   Group,
+  Loader,
   ScrollArea,
   Stack,
   Tabs,
@@ -29,7 +31,14 @@ import {
 import { isNotEmpty, useForm } from '@mantine/form';
 import { useQueryClient } from '@tanstack/react-query';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { IconPlay, IconRefresh, IconSave, IconTrash } from './icons';
+import {
+  IconBolt,
+  IconCircle,
+  IconPlay,
+  IconRefresh,
+  IconSave,
+  IconTrash,
+} from './icons';
 
 export const RendererTerminal: React.FC<{ id: string }> = ({ id }) => {
   const script = useScript(id);
@@ -158,6 +167,7 @@ const RendererScriptRuns: React.FC<{ scriptId: string }> = ({ scriptId }) => {
         orientation='vertical'
         m='sm'
         className='rounded-md border border-solid border-gray-200'
+        p='sm'
       >
         <TabsList>
           {scriptRuns.data?.map((scriptRun) => {
@@ -176,7 +186,7 @@ const RendererScriptRuns: React.FC<{ scriptId: string }> = ({ scriptId }) => {
               <Stack>
                 <Accordion variant='contained'>
                   <AccordionItem value='debug'>
-                    <AccordionControl>Debug</AccordionControl>
+                    <AccordionControl px='md'>Debug</AccordionControl>
                     <AccordionPanel>
                       <CodeHighlight
                         code={JSON.stringify(scriptRun, undefined, 2)}
@@ -217,10 +227,38 @@ const RendererScriptRun: React.FC<{ scriptRun: ScriptRun }> = ({
   const deleteScriptRun = useDeleteScriptRun();
   const scriptId = useMemo(() => scriptRun.script.id!.id.String, [scriptRun]);
   const id = useMemo(() => scriptRun.id!.id.String, [scriptRun]);
+  const killScriptRun = useKillScriptRun();
+
+  const status: 'running' | 'failed' | 'success' = useMemo(() => {
+    if (scriptRun.finishedAt === null) {
+      return 'running';
+    } else if (
+      scriptRun.exitStatus &&
+      'exitCode' in scriptRun.exitStatus &&
+      scriptRun.exitStatus.exitCode === 0
+    ) {
+      return 'success';
+    } else {
+      return 'failed';
+    }
+  }, [scriptRun.exitStatus, scriptRun.finishedAt]);
 
   return (
     <>
       <Group>
+        <Group gap={4} align='baseline'>
+          {status === 'running' ? (
+            <Loader size='xs' color='cyan' />
+          ) : (
+            <IconCircle
+              className={
+                status === 'failed' ? 'text-red-500' : 'text-green-400'
+              }
+              size={10}
+            />
+          )}
+          <span className='capitalize'>{status}</span>
+        </Group>
         <Button
           leftSection={<IconRefresh />}
           onClick={() =>
@@ -229,14 +267,26 @@ const RendererScriptRun: React.FC<{ scriptRun: ScriptRun }> = ({
         >
           Refresh
         </Button>
-        <Button
-          loading={deleteScriptRun.isPending}
-          onClick={() => deleteScriptRun.mutate({ scriptId, id })}
-          color='red'
-          leftSection={<IconTrash />}
-        >
-          Delete
-        </Button>
+        {status !== 'running' && (
+          <Button
+            loading={deleteScriptRun.isPending}
+            onClick={() => deleteScriptRun.mutate({ scriptId, id })}
+            color='red'
+            leftSection={<IconTrash />}
+          >
+            Delete
+          </Button>
+        )}
+        {status === 'running' && (
+          <Button
+            color='Red'
+            leftSection={<IconBolt />}
+            onClick={() => killScriptRun.mutate({ scriptId, scriptRunId: id })}
+            loading={killScriptRun.isPending}
+          >
+            Kill
+          </Button>
+        )}
       </Group>
       <Code w='100%' p='sm'>
         {logs}

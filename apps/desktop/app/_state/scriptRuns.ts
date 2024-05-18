@@ -5,8 +5,8 @@ import {
   type DefaultError,
   type UseQueryOptions,
 } from '@tanstack/react-query';
-import { type ScriptRun, queryKeys } from '.';
 import { invoke } from '@tauri-apps/api/tauri';
+import { queryKeys, type ScriptRun } from '.';
 
 export const useScriptRuns = <T = ScriptRun[]>(
   scriptId: string,
@@ -61,6 +61,25 @@ export const useDropScriptRuns = () => {
     mutationFn: async () => {
       await invoke('plugin:ipc|drop_script_runs');
       queryClient.invalidateQueries({ queryKey: queryKeys['scriptRuns'] });
+    },
+  });
+};
+
+export const useKillScriptRun = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationKey: ['killScriptRun'],
+    mutationFn: async ({
+      scriptId,
+      scriptRunId,
+    }: {
+      scriptId: string;
+      scriptRunId: string;
+    }) => {
+      await invoke('plugin:ipc|kill_script', { id: scriptRunId });
+      queryClient.invalidateQueries({
+        queryKey: [...queryKeys['scriptRuns'], scriptId],
+      });
     },
   });
 };

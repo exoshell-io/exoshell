@@ -32,11 +32,6 @@ impl super::Engine {
       let id = id.clone();
       let db = self.db.clone();
 
-      // db.db
-      //   .update(id.into())
-      //   .patch(PatchOp::replace("/exitCode", &exit_code))
-      //   .await?;
-
       tokio::spawn(async move {
         loop {
           tokio::select! {
@@ -69,18 +64,54 @@ impl super::Engine {
               }
             }
             exit_status = child.wait() => {
+              debug!("Exit status: {:#?}", exit_status);
+              let mut q = db.db.query("UPDATE type::thing('script_run', $id) SET finishedAt = $finishedAt RETURN NONE")
+              .bind(("id", id.to_raw()))
+              .bind(("finishedAt", Utc::now()));
               match exit_status {
                 Ok(status) => {
                   if let Some(exit_code) = status.code() {
-                    db.db
-                    .query("UPDATE type::thing('script_run', $id) SET exitCode = $exitCode RETURN NONE")
-                    .bind(("id", id.to_raw()))
-                    .bind(("exitCode", exit_code)).await?;
+                    q = q.query("UPDATE type::thing('script_run', $id) SET exitStatus = $exitStatus RETURN NONE")
+                     .bind(("id", id.to_raw()))
+                     .bind(("exitStatus", ExitStatus::ExitCode(exit_code)));
+                  } else {
+                  #[cfg(target_family = "unix")]
+                  if let Some(signal) = status.signal() {
+                    q = q.query("UPDATE type::thing('script_run', $id) SET exitStatus = $exitStatus RETURN NONE")
+                      .bind(("id", id.to_raw()))
+                      .bind(("exitStatus", ExitStatus::Signal(signal)));
                   }
+                }
                 }
                 Err(e) => {
                   error!("Error waiting for child: {}", e);
                 },
+              }
+              q.await?;
+              loop {
+                if let Some(buf) = mux.read_nonblock()? {
+                  if buf.tag == out_tag {
+                    db.append_script_run_log(
+                      &id.clone(),
+                      &ScriptRunLog::Stdout {
+                        txt: String::from_utf8_lossy(buf.data).to_string(),
+                        ts: Utc::now(),
+                      },
+                    )
+                    .await?;
+                  } else if buf.tag == err_tag {
+                    db.append_script_run_log(
+                      &id.clone(),
+                      &ScriptRunLog::Stderr {
+                        txt: String::from_utf8_lossy(buf.data).to_string(),
+                        ts: Utc::now(),
+                      },
+                    )
+                    .await?;
+                  }
+                } else {
+                  break
+                }
               }
               break;
             }
@@ -88,33 +119,6 @@ impl super::Engine {
               match cmd {
                 ChildCommand::Kill => {
                   child.kill().await?;
-                }
-              }
-            }
-          }
-          loop {
-            let buf = mux.read_nonblock()?;
-            match buf {
-              None => break,
-              Some(buf) => {
-                if buf.tag == out_tag {
-                  db.append_script_run_log(
-                    &id.clone(),
-                    &ScriptRunLog::Stdout {
-                      txt: String::from_utf8_lossy(buf.data).to_string(),
-                      ts: Utc::now(),
-                    },
-                  )
-                  .await?;
-                } else if buf.tag == err_tag {
-                  db.append_script_run_log(
-                    &id.clone(),
-                    &ScriptRunLog::Stderr {
-                      txt: String::from_utf8_lossy(buf.data).to_string(),
-                      ts: Utc::now(),
-                    },
-                  )
-                  .await?;
                 }
               }
             }
@@ -133,6 +137,7 @@ impl super::Engine {
     Ok(script_run)
   }
 
+  #[instrument(skip(self), err)]
   pub async fn kill_script(&self, id: &str) -> Result<()> {
     let children = self.children.read().await;
     let child = children

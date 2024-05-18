@@ -13,9 +13,17 @@ pub struct ScriptRun {
   #[builder(default)]
   pub finished_at: Option<DateTime<Utc>>,
   #[builder(default)]
-  pub exit_code: Option<i32>,
+  pub exit_status: Option<ExitStatus>,
   #[builder(default)]
   pub log: Vec<ScriptRunLog>,
+}
+
+#[macro_model::model]
+#[derive(TS)]
+#[ts(export)]
+pub enum ExitStatus {
+  ExitCode(i32),
+  Signal(i32),
 }
 
 #[macro_model::model]
