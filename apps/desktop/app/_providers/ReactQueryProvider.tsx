@@ -15,7 +15,7 @@ export const queryClient = new QueryClient({
       networkMode: 'always',
       retry: false,
       onError: (error) => {
-        console.error('Error:', error);
+        console.error('ReactQuery mutation error:', error);
         showNotification({
           message: error as unknown as string,
           color: 'red',

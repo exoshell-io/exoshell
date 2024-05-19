@@ -24,7 +24,6 @@ export const RendererSurreal: React.FC = () => {
   const onSubmit = useMemo(
     () =>
       form.onSubmit((values) => {
-        console.log(values);
         query.mutate({
           query: values.query,
           vars: values.vars,
