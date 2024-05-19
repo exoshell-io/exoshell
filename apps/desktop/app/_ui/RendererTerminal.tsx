@@ -70,12 +70,21 @@ export const RendererTerminal: React.FC<{ id: string }> = ({ id }) => {
       }),
     [form, upsertScript],
   );
+  const scriptRuns = useScriptRuns(id);
 
-  const run = useCallback(() => {
-    console.debug('Run', form.getValues());
-    runScript.mutate({
+  const [tab, setTab] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (tab === null && scriptRuns.isSuccess && scriptRuns.data.length > 0) {
+      setTab(scriptRuns.data[0].id?.id.String ?? null);
+    }
+  }, [scriptRuns.data, scriptRuns.isSuccess, tab]);
+
+  const run = useCallback(async () => {
+    const scriptRun = await runScript.mutateAsync({
       script: form.getValues(),
     });
+    setTab(scriptRun.id?.id.String ?? null);
   }, [form, runScript]);
 
   const deleteScript = useDeleteScript();
@@ -140,12 +149,16 @@ export const RendererTerminal: React.FC<{ id: string }> = ({ id }) => {
           </Group>
         </Stack>
       </form>
-      <RendererScriptRuns scriptId={id} />
+      <RendererScriptRuns scriptId={id} tab={tab} setTab={setTab} />
     </ScrollArea>
   );
 };
 
-const RendererScriptRuns: React.FC<{ scriptId: string }> = ({ scriptId }) => {
+const RendererScriptRuns: React.FC<{
+  scriptId: string;
+  tab: string | null;
+  setTab: (value: string | null) => void;
+}> = ({ scriptId, tab, setTab }) => {
   const scriptRuns = useScriptRuns(scriptId);
 
   return (
@@ -162,46 +175,54 @@ const RendererScriptRuns: React.FC<{ scriptId: string }> = ({ scriptId }) => {
           </AccordionPanel>
         </AccordionItem>
       </Accordion>
-      <Tabs
-        variant='outline'
-        orientation='vertical'
-        m='sm'
-        className='rounded-md border border-solid border-gray-200'
-        p='sm'
-      >
-        <TabsList>
+      <div className='mx-4 rounded-md border border-solid border-gray-200 p-3'>
+        {scriptRuns.isPending ? (
+          <Loader />
+        ) : scriptRuns.isSuccess && scriptRuns.data.length === 0 ? (
+          <p className='text-center text-sm text-slate-600'>
+            No script runs yet
+          </p>
+        ) : null}
+        <Tabs
+          variant='outline'
+          orientation='vertical'
+          value={tab}
+          onChange={(value) => setTab(value)}
+        >
+          <TabsList>
+            {scriptRuns.data?.map((scriptRun) => {
+              const scriptRunId = scriptRun.id!.id.String;
+              return (
+                <TabsTab key={scriptRunId} value={scriptRunId}>
+                  {scriptRunId}
+                </TabsTab>
+              );
+            })}
+          </TabsList>
           {scriptRuns.data?.map((scriptRun) => {
             const scriptRunId = scriptRun.id!.id.String;
             return (
-              <TabsTab key={scriptRunId} value={scriptRunId}>
-                {scriptRunId}
-              </TabsTab>
+              <TabsPanel key={scriptRunId} value={scriptRunId} p='sm'>
+                <Stack>
+                  <Accordion variant='contained'>
+                    <AccordionItem value='debug'>
+                      <AccordionControl px='md'>Debug</AccordionControl>
+                      <AccordionPanel>
+                        <CodeHighlight
+                          code={JSON.stringify(scriptRun, undefined, 2)}
+                          language='json'
+                          withCopyButton={false}
+                        />
+                      </AccordionPanel>
+                    </AccordionItem>
+                  </Accordion>
+                  <RendererScriptRun scriptRun={scriptRun} />
+                </Stack>
+              </TabsPanel>
             );
           })}
-        </TabsList>
-        {scriptRuns.data?.map((scriptRun) => {
-          const scriptRunId = scriptRun.id!.id.String;
-          return (
-            <TabsPanel key={scriptRunId} value={scriptRunId} p='sm'>
-              <Stack>
-                <Accordion variant='contained'>
-                  <AccordionItem value='debug'>
-                    <AccordionControl px='md'>Debug</AccordionControl>
-                    <AccordionPanel>
-                      <CodeHighlight
-                        code={JSON.stringify(scriptRun, undefined, 2)}
-                        language='json'
-                        withCopyButton={false}
-                      />
-                    </AccordionPanel>
-                  </AccordionItem>
-                </Accordion>
-                <RendererScriptRun scriptRun={scriptRun} />
-              </Stack>
-            </TabsPanel>
-          );
-        })}
-      </Tabs>
+        </Tabs>
+      </div>
     </>
   );
 };

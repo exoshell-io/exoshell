@@ -88,12 +88,13 @@ export const useRunScript = () => {
   return useMutation({
     mutationKey: ['runScript'],
     mutationFn: async ({ script }: { script: Script }) => {
-      await invoke<ScriptRun>('plugin:ipc|run_script', {
+      const scriptRun = await invoke<ScriptRun>('plugin:ipc|run_script', {
         script,
       });
       queryClient.invalidateQueries({
         queryKey: [...queryKeys['scriptRuns'], script.id!.id.String],
       });
+      return scriptRun;
     },
   });
 };
