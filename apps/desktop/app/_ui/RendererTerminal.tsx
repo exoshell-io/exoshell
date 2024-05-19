@@ -229,7 +229,7 @@ const RendererScriptRun: React.FC<{ scriptRun: ScriptRun }> = ({
   const id = useMemo(() => scriptRun.id!.id.String, [scriptRun]);
   const killScriptRun = useKillScriptRun();
 
-  const status: 'running' | 'failed' | 'success' = useMemo(() => {
+  const status: 'running' | 'failed' | 'killed' | 'success' = useMemo(() => {
     if (scriptRun.finishedAt === null) {
       return 'running';
     } else if (
@@ -238,6 +238,8 @@ const RendererScriptRun: React.FC<{ scriptRun: ScriptRun }> = ({
       scriptRun.exitStatus.exitCode === 0
     ) {
       return 'success';
+    } else if (scriptRun.exitStatus && 'signal' in scriptRun.exitStatus) {
+      return 'killed';
     } else {
       return 'failed';
     }
@@ -252,7 +254,9 @@ const RendererScriptRun: React.FC<{ scriptRun: ScriptRun }> = ({
           ) : (
             <IconCircle
               className={
-                status === 'failed' ? 'text-red-500' : 'text-green-400'
+                status === 'failed' || status === 'killed'
+                  ? 'text-red-500'
+                  : 'text-green-400'
               }
               size={10}
             />
