@@ -12,6 +12,7 @@ use tauri::plugin::{Builder, TauriPlugin};
 pub struct IpcState {
   filepath: PathBuf,
   ng: OnceCell<Engine>,
+  task_listen_database: Mutex<Option<JoinHandle<()>>>,
 }
 
 impl IpcState {
@@ -22,6 +23,7 @@ impl IpcState {
     Ok(Self {
       filepath: filepath.as_ref().to_owned(),
       ng: OnceCell::new(),
+      task_listen_database: Mutex::new(None),
     })
   }
   pub async fn get_ng(&self) -> Result<&Engine> {
@@ -35,21 +37,45 @@ impl IpcState {
   }
 }
 
-// async fn handle_script_run<R: Runtime>(
-//   result: surrealdb::Result<surrealdb::Notification<ScriptRun>>,
-//   app_handle: &tauri::AppHandle<R>,
-// ) -> Result<()> {
-//   let notification = result?;
-//   info!("{:?}", notification);
-//   app_handle.emit_all("plugin:ipc|script_run", notification.data)?;
-//   Ok(())
-// }
+#[instrument(skip(app_handle, state), err)]
+#[tauri::command]
+async fn initialize<R: Runtime>(
+  app_handle: tauri::AppHandle<R>,
+  state: State<'_, IpcState>,
+) -> IpcResult<()> {
+  let db = state.get_ng().await?.db.clone();
+  let mut task_listen_database = state
+    .task_listen_database
+    .lock()
+    .expect("state.task_listen_database is poisoned");
+  if task_listen_database.is_some() {
+    return Ok(());
+  }
+  *task_listen_database = Some(tokio::spawn(async move {
+    let mut stream = db.db.select("script_run").live().await.unwrap();
+    while let Some(result) = stream.next().await {
+      emit_script_run(result, &app_handle).unwrap();
+    }
+  }));
+  Ok(())
+}
+
+fn emit_script_run<R: Runtime>(
+  result: surrealdb::Result<surrealdb::Notification<ScriptRun>>,
+  app_handle: &tauri::AppHandle<R>,
+) -> Result<()> {
+  let notification = result?;
+  info!("{:?}", notification);
+  app_handle.emit_all("plugin_ipc:script_run", notification.data)?;
+  Ok(())
+}
 
 const PLUGIN_NAME: &str = "ipc";
 
 pub fn init<R: Runtime>() -> TauriPlugin<R> {
   Builder::new(PLUGIN_NAME)
     .invoke_handler(tauri::generate_handler![
+      initialize,
       scripts::list_scripts,
       scripts::upsert_script,
       scripts::delete_script,

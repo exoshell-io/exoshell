@@ -7,6 +7,7 @@ export * from './scripts';
 export * from './settings';
 export * from './tabs';
 export * from './workflows';
+export * from './events';
 
 export const queryKeys = {
   scripts: ['scripts'],

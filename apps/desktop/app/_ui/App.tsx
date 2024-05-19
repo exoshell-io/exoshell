@@ -1,6 +1,10 @@
 'use client';
 
-import { useLeftBarVisibility, useSetLeftBarVisibility } from '@/_state';
+import {
+  useBackendEvents,
+  useLeftBarVisibility,
+  useSetLeftBarVisibility,
+} from '@/_state';
 import {
   ActionIcon,
   AppShell,
@@ -25,6 +29,7 @@ export const App: React.FC = () => {
       setLeftBarVisibility(visible);
     }
   };
+  useBackendEvents();
   return (
     <Box>
       <AppShell header={{ height: 32 }} footer={{ height: 20 }}>
