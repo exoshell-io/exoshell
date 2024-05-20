@@ -33,25 +33,29 @@ bun run build
 >
 > - Create and fill up **`.env`**. Use a **`.env.local`** if you need to overwrite values locally.
 > - Update version:
-> > - set correct version in **`Cargo.toml`**
-> > - set correct version in **`apps/desktop/src-tauri/tauri.conf.json`**
-> > - Run **`cargo update`** (updates **`Cargo.lock`**)
+>   - set correct version in **`Cargo.toml`**
+>   - set correct version in **`apps/desktop/src-tauri/tauri.conf.json`**
+>   - Run **`cargo update`** (updates **`Cargo.lock`**)
 > - Run **`bun run update`** (updates **`bun.lockb`**)
 
 <details>
-<summary>⬇️ Versioning logic ⬇️</summary>
+<summary>ℹ️ VERSION ℹ️</summary>
 
 We convert the version into an universal version for packager/installer compatibility and uniformity.
 
 **Tag** format: `v[0-255].[0-255].[0-255]-[alpha|beta|rc].[0-31]`
+
 **Version** format: `[0-255].[0-255].[0-255]-[alpha|beta|rc].[0-31]`
+
 **Universal version** format: `[0-255].[0-255].[0-65535]`
 
-_Formula_:
-
-> `encoded_patch = patch * 2048 + prerelease_type_code * 32 + parseInt(prerelease_version, 10);`
-
-> 💡 alpha = 0; beta = 1; rc = 2;
+> _Universal version formula_:
+>
+> `major` and `minor` are untouched, `patch` and `prerelease_version` are combined into `encoded_patch`.
+>
+> `prerelease_code_type` = 0 (`alpha`) | 1 (`beta`) | 2 (`rc`)
+>
+> `encoded_patch = patch * 2048 + prerelease_type_code * 32 + parseInt(prerelease_version, 10)`
 
 Examples:
 
