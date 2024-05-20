@@ -5,16 +5,14 @@ import 'allotment/dist/style.css';
 import 'jotai-devtools/styles.css';
 import 'mantine-contextmenu/styles.css';
 import 'reactflow/dist/style.css';
-
-import './global.css';
+import './layout.css';
 
 import { JotaiProvider, ReactQueryProvider } from '@/_providers';
-import { App } from '@/_ui/App';
 import { ColorSchemeScript, MantineProvider } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
 import { ContextMenuProvider } from 'mantine-contextmenu';
 
-export default function RootLayout() {
+export default function RootLayout({ children }: React.PropsWithChildren) {
   return (
     <html>
       <head>
@@ -25,9 +23,7 @@ export default function RootLayout() {
           <Notifications />
           <ContextMenuProvider borderRadius='md'>
             <JotaiProvider>
-              <ReactQueryProvider>
-                <App />
-              </ReactQueryProvider>
+              <ReactQueryProvider>{children}</ReactQueryProvider>
             </JotaiProvider>
           </ContextMenuProvider>
         </MantineProvider>

@@ -5,6 +5,10 @@ mod engine;
 mod ipc;
 mod prelude;
 
+use prelude::*;
+
+use tauri::{GlobalShortcutManager, Manager};
+
 fn main() {
   tracing_subscriber::fmt::init();
 
@@ -24,6 +28,16 @@ fn main() {
         debug!("App Log Dir: {:?}", path_resolver.app_log_dir());
         debug!("App Resource Dir: {:?}", path_resolver.resource_dir());
       }
+      let app_handle = _app.app_handle();
+      let shortcut = "CommandOrControl+Escape";
+      app_handle
+        .global_shortcut_manager()
+        .register(shortcut, move || {
+          if let Err(err) = app_handle.get_window("quickbar").unwrap().set_focus() {
+            error!("Failed to show quickbar: {:?}", err);
+          }
+        })
+        .with_context(|| format!("Failed to register global shortcut: {shortcut}"))?;
       Ok(())
     })
     .plugin(ipc::init())

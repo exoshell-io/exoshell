@@ -55,6 +55,8 @@ darling = { version = "0.20.9" }
 # Tauri
 tauri = { version = "1.6.6", features = [
   "window-start-dragging",
-  "process-command-api",
+  "window-hide",
+  "global-shortcut",
+  "macos-private-api",
 ] }
 tauri-build = { version = "1.5.2", features = [] }

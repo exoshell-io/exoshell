@@ -11,10 +11,12 @@
     "distDir": "../out"
   },
   "tauri": {
+    "macOSPrivateApi": true,
     "allowlist": {
       "all": false,
       "window": {
-        "startDragging": true
+        "startDragging": true,
+        "hide": true
       }
     },
     "bundle": {
@@ -62,6 +64,18 @@
         "width": 800,
         "hiddenTitle": true,
         "titleBarStyle": "Overlay"
+      },
+      {
+        "label": "quickbar",
+        "url": "quickbar",
+        "center": true,
+        "minWidth": 75,
+        "decorations": false,
+        "alwaysOnTop": true,
+        "skipTaskbar": true,
+        "titleBarStyle": "Transparent",
+        "transparent": true,
+        "visible": false
       }
     ]
   }
