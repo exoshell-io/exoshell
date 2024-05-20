@@ -32,8 +32,7 @@ bun run build
 
 > 🚧 **Remember** 🚧
 >
-> - Create and fill up **`.env.local`** from **`.env.local.template`**
-> - Create and fill up **`.env`** from **`.env.template`**
+> - Create and fill up **`.env`**. Use a **`.env.local`** if you need to overwrite values locally.
 > - Update version in **`Cargo.toml`**
 > - Run **`cargo update`**
 > - Run **`bun update`**
