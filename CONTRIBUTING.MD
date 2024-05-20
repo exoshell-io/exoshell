@@ -33,13 +33,13 @@ bun run build
 >
 > - Create and fill up **`.env`**. Use a **`.env.local`** if you need to overwrite values locally.
 > - Update version:
-  > - set correct version in **`Cargo.toml`**
-  > - set correct version in **`apps/desktop/src-tauri/tauri.conf.json`**
-  > - Run **`cargo update`**
-> - Run **`bun run update`**
+> > - set correct version in **`Cargo.toml`**
+> > - set correct version in **`apps/desktop/src-tauri/tauri.conf.json`**
+> > - Run **`cargo update`** (updates **`Cargo.lock`**)
+> - Run **`bun run update`** (updates **`bun.lockb`**)
 
 <details>
-<summary>⬇️ Logic for versioning</summary>
+<summary>⬇️ Versioning logic ⬇️</summary>
 
 We convert the version into an universal version for packager/installer compatibility and uniformity.
 
