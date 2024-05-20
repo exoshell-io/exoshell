@@ -18,10 +18,16 @@ bun install
 bun run ci
 ```
 
+## Dev-mode
+
+```bash
+bun run dev
+```
+
 ## Build
 
 ```bash
-bun run tauri build
+bun run build
 ```
 
 > 🚧 **Remember** 🚧
