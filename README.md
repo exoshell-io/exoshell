@@ -1,3 +1,5 @@
+# ExoShell
+
 <a name="exoshell"></a>
 
 <!-- DATA -->
@@ -40,23 +42,10 @@
       <a href="#usage">Usage</a>
       <ul>
         <li><a href="#installation">Installation</a></li>
+        <li><a href="#update">Update</a></li>
+        <li><a href="#run">Run</a></li>
       </ul>
     </li>
-    <li>
-      <a href="#development">Development</a>
-      <ul>
-        <li><a href="#contribute">Contribute</a></li>
-        <li><a href="#requirements">Requirements</a></li>
-        <li><a href="#setup">Setup</a></li>
-        <li><a href="#test">Test</a></li>
-        <li><a href="#build">Build</a></li>
-        <li><a href="#ci-cd">CI/CD</a></li>
-      </ul>
-    </li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
-    <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
   </ol>
 </details>
 
@@ -85,6 +74,10 @@
 ## Usage
 
 ### Installation
+
+TODO
+
+### Update
 
 TODO
 
