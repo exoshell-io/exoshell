@@ -39,7 +39,7 @@ bun run build
 > - Run **`bun run update`** (updates **`bun.lockb`**)
 
 <details>
-<summary>ℹ️ VERSION ℹ️</summary>
+<summary>💡 VERSION 💡</summary>
 
 We convert the version into an universal version for packager/installer compatibility and uniformity.
 
