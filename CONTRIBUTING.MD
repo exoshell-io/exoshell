@@ -10,7 +10,8 @@
 ## Setup
 
 ```bash
-mise up
+mise install
+bun install
 ```
 
 ## Test
