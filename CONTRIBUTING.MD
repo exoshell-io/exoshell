@@ -93,4 +93,4 @@ Examples:
 
 <!-- LINKS -->
 
-[mise-url]: ttps://mise.jdx.dev/
+[mise-url]: https://mise.jdx.dev/
