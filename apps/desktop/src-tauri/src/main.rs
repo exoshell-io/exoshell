@@ -76,8 +76,10 @@ fn main() {
             match event {
               SystemTrayEvent::MenuItemClick { id, .. } => match id.as_str() {
                 "open" => {
-                  info!("Opening main window");
                   if let Some(main_window) = app_handle_events.get_window("main") {
+                    if let Err(err) = main_window.show() {
+                      error!("Failed to show main window: {:?}", err);
+                    }
                     if let Err(err) = main_window.set_focus() {
                       error!("Failed to focus main window: {:?}", err);
                     }
