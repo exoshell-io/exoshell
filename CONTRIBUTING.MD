@@ -69,27 +69,6 @@ Examples:
 
 </details>
 
-## CI/CD
-
-**CI:**
-
-- steps:
-  - lint
-  - test
-- triggers:
-  - all `pull_request` creation/updates
-  - all `tag` creation (tag must start with `v`)
-  - all `workflow_dispatch`
-
-**CD:**
-
-- steps:
-  - setup vars
-  - build
-  - release
-- triggers:
-  - all `tag` creation (tag must start with `v`)
-
 <!-- LINKS -->
 
 [mise-url]: https://mise.jdx.dev/
