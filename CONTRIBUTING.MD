@@ -1,8 +1,6 @@
 
 # Contributing
 
-## Contribute
-
 ## Requirements
 
 - [mise][mise-url]
