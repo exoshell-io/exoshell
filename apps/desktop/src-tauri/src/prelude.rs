@@ -9,6 +9,7 @@ pub use serde::{Deserialize, Serialize};
 pub use std::collections::HashMap;
 pub use std::path::{Path, PathBuf};
 pub use std::sync::Arc;
+pub use tap::Tap;
 pub use tokio::{
   io::{AsyncBufReadExt, AsyncReadExt},
   sync::{mpsc, OnceCell, RwLock},

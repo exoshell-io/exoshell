@@ -22,6 +22,7 @@ thiserror.workspace = true
 chrono.workspace = true
 derive_builder.workspace = true
 io-mux.workspace = true
+tap.workspace = true
 
 # Serialization
 serde.workspace = true
