@@ -1,5 +1,5 @@
 {
-  "name": "@exoterm/chrome",
+  "name": "@exoshell/chrome",
   "private": true,
   "scripts": {
     "build": "turbo run build:",

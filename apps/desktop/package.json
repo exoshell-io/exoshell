@@ -1,5 +1,5 @@
 {
-  "name": "@exoterm/desktop",
+  "name": "@exoshell/desktop",
   "private": true,
   "type": "module",
   "scripts": {
