@@ -34,9 +34,8 @@
         "timonwong.shellcheck",
         "vunguyentuan.vscode-css-variables",
         "vunguyentuan.vscode-postcss",
-        "yatki.vscode-surround",
-        // cSpell:enable,
-        "tauri-apps.tauri-vscode"
+        "yatki.vscode-surround"
+        // cSpell:enable
       ]
     }
   }

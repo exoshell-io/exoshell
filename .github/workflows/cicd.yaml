@@ -12,14 +12,6 @@ on:
     types: [opened, synchronize, edited]
   workflow_dispatch:
     inputs:
-      # environment:
-      #   description: Environment to deploy
-      #   type: choice
-      #   default: dev
-      #   options:
-      #     - dev
-      #     - staging
-      #     - prod
       skip-ci:
         description: Skip CI step y/n ?
         type: boolean
