@@ -28,6 +28,7 @@ export const RendererDevModeOnly: React.FC = () => {
           React Query DevTools
         </Button>
         <Button
+          disabled
           color='black'
           variant='outline'
           leftSection={<IconJotai />}
