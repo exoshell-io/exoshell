@@ -1,8 +1,8 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { listen, type UnlistenFn } from '@tauri-apps/api/event';
+import { invoke } from '@tauri-apps/api/tauri';
 import { useEffect } from 'react';
 import { queryKeys } from '.';
-import { invoke } from '@tauri-apps/api/tauri';
 
 export const useBackendEvents = () => {
   const queryClient = useQueryClient();

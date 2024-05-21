@@ -7,19 +7,18 @@ import {
 } from '@tanstack/react-query';
 import { invoke } from '@tauri-apps/api/tauri';
 import { useCallback } from 'react';
-import { useCloseTab, useOpenTab, type Dashboard } from '.';
+import { queryKeys, useCloseTab, useOpenTab, type Dashboard } from '.';
 
-const queryKey = ['dashboards'] as const;
-type Data = { [key: string]: Dashboard };
+type State = { [key: string]: Dashboard };
 
-export const useDashboards = <T = Data>(
+export const useDashboards = <T = State>(
   options?: Omit<
-    UseQueryOptions<Data, DefaultError, T>,
+    UseQueryOptions<State, DefaultError, T>,
     'queryKey' | 'queryFn'
   >,
 ) => {
   return useQuery({
-    queryKey,
+    queryKey: queryKeys['dashboards'],
     queryFn: async () => {
       const dashboards = await invoke<Dashboard[]>(
         'plugin:ipc|list_dashboards',
@@ -27,7 +26,7 @@ export const useDashboards = <T = Data>(
       return dashboards.reduce((acc, dashboard) => {
         acc[dashboard.id!.id.String] = dashboard;
         return acc;
-      }, {} as Data);
+      }, {} as State);
     },
     ...options,
   });
@@ -35,7 +34,7 @@ export const useDashboards = <T = Data>(
 
 export const useDashboard = (id: string) => {
   return useDashboards({
-    select: useCallback((dashboards: Data) => dashboards[id], [id]),
+    select: useCallback((dashboards: State) => dashboards[id], [id]),
   });
 };
 
@@ -56,7 +55,7 @@ export const useUpsertDashboard = () => {
         { dashboard },
       );
       const id = _dashboard.id!.id.String;
-      queryClient.setQueryData(queryKey, (prevData: Data) => {
+      queryClient.setQueryData(queryKeys['dashboards'], (prevData: State) => {
         return {
           ...prevData,
           [id]: _dashboard,
@@ -76,7 +75,7 @@ export const useDeleteDashboard = () => {
     mutationFn: async ({ id }: { id: string }) => {
       await invoke('plugin:ipc|delete_dashboard', { id });
       closeTab(`dashboard://${id}`);
-      queryClient.setQueryData(queryKey, (prevData: Data) => {
+      queryClient.setQueryData(queryKeys['dashboards'], (prevData: State) => {
         delete prevData[id];
         return { ...prevData };
       });

@@ -1,9 +1,9 @@
 import { useMutation } from '@tanstack/react-query';
 import { invoke } from '@tauri-apps/api/tauri';
 
-export function useQuery() {
+export function useQuerySurreal() {
   return useMutation({
-    mutationKey: ['query'],
+    mutationKey: ['querySurreal'],
     mutationFn: async (args: {
       query: string;
       vars: { [key: string]: unknown };

@@ -6,11 +6,9 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 import { invoke } from '@tauri-apps/api/tauri';
-import { useSetAtom } from 'jotai';
 import { useCallback } from 'react';
-import { useCloseTab, useOpenTab, type Workflow } from '.';
+import { queryKeys, useCloseTab, useOpenTab, type Workflow } from '.';
 
-const queryKey = ['workflows'];
 type Data = { [key: string]: Workflow };
 
 export const useWorkflows = <T = Data>(
@@ -20,7 +18,7 @@ export const useWorkflows = <T = Data>(
   >,
 ) => {
   return useQuery({
-    queryKey: queryKey,
+    queryKey: queryKeys['workflows'],
     queryFn: async () => {
       const workflows = await invoke<Workflow[]>('plugin:ipc|list_workflows');
       return workflows.reduce((acc, workflow) => {
@@ -54,7 +52,7 @@ export const useUpsertWorkflow = () => {
         workflow,
       });
       const id = _workflow.id!.id.String;
-      queryClient.setQueryData(queryKey, (prevData: Data) => {
+      queryClient.setQueryData(queryKeys['workflows'], (prevData: Data) => {
         return {
           ...prevData,
           [id]: _workflow,
@@ -74,7 +72,7 @@ export const useDeleteWorkflow = () => {
     mutationFn: async ({ id }: { id: string }) => {
       await invoke('plugin:ipc|delete_workflow', { id });
       closeTab(`workflow://${id}`);
-      queryClient.setQueryData(queryKey, (prevData: Data) => {
+      queryClient.setQueryData(queryKeys['workflows'], (prevData: Data) => {
         delete prevData[id];
         return { ...prevData };
       });

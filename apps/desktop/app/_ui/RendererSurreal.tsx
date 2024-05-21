@@ -1,4 +1,4 @@
-import { useQuery } from '@/_state';
+import { useQuerySurreal } from '@/_state';
 import { CodeHighlight } from '@mantine/code-highlight';
 import {
   Button,
@@ -20,7 +20,7 @@ export const RendererSurreal: React.FC = () => {
       vars: {} as { [key: string]: unknown },
     },
   });
-  const query = useQuery();
+  const query = useQuerySurreal();
   const onSubmit = useMemo(
     () =>
       form.onSubmit((values) => {
