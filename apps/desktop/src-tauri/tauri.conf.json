@@ -11,11 +11,17 @@
     "distDir": "../out"
   },
   "tauri": {
+    "macOSPrivateApi": true,
     "allowlist": {
       "all": false,
       "window": {
-        "startDragging": true
+        "startDragging": true,
+        "hide": true
       }
+    },
+    "systemTray": {
+      "iconPath": "icons/icon.ico",
+      "title": "ExoShell"
     },
     "bundle": {
       "active": true,
@@ -58,10 +64,23 @@
     },
     "windows": [
       {
+        "label": "main",
         "height": 600,
         "width": 800,
         "hiddenTitle": true,
         "titleBarStyle": "Overlay"
+      },
+      {
+        "label": "quickbar",
+        "url": "quickbar",
+        "center": true,
+        "minWidth": 75,
+        "decorations": false,
+        "alwaysOnTop": true,
+        "skipTaskbar": true,
+        "titleBarStyle": "Transparent",
+        "transparent": true,
+        "visible": false
       }
     ]
   }

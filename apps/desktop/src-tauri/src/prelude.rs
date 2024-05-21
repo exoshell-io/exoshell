@@ -9,9 +9,10 @@ pub use serde::{Deserialize, Serialize};
 pub use std::collections::HashMap;
 pub use std::path::{Path, PathBuf};
 pub use std::sync::Arc;
+pub use tap::Tap;
 pub use tokio::{
   io::{AsyncBufReadExt, AsyncReadExt},
   sync::{mpsc, OnceCell, RwLock},
 };
 pub use tokio_util::io::ReaderStream;
-pub use tracing::{debug, error, info, warn};
+pub use tracing::{debug, error, info, instrument, warn};

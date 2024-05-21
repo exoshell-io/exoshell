@@ -1,6 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["github>ctison/renovate"],
-  "repositories": ["ctison/exoterm"],
+  "repositories": ["exoshell-dev/exoshell"],
   "automerge": true
 }

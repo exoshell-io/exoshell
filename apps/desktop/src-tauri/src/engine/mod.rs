@@ -3,7 +3,11 @@ use self::prelude::*;
 #[derive(Debug)]
 pub struct Engine {
   pub db: Arc<Database>,
-  pub children: Arc<RwLock<HashMap<String, Arc<RwLock<Child>>>>>,
+  pub children: Arc<RwLock<HashMap<String, Arc<Mutex<mpsc::UnboundedSender<ChildCommand>>>>>>,
+}
+
+pub enum ChildCommand {
+  Kill,
 }
 
 impl Engine {

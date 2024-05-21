@@ -1,9 +1,16 @@
 use super::prelude::*;
 
 impl super::Engine {
+  #[instrument(skip(self), ret, err)]
   pub async fn run_script(&self, script: Script) -> Result<ScriptRun> {
+    let mut mux = AsyncMux::new()?;
+    let (out_tag, out_sender) = mux.make_sender()?;
+    let (err_tag, err_sender) = mux.make_sender()?;
+
     let mut child = Command::new(&script.command)
       .args(&script.args)
+      .stdout(out_sender)
+      .stderr(err_sender)
       .spawn()
       .context("Failed to spawn child process")?;
 
@@ -19,55 +26,101 @@ impl super::Engine {
 
     let id = &script_run.id.as_ref().unwrap().id;
 
+    let (tx, mut rx) = mpsc::unbounded_channel::<ChildCommand>();
+
     {
       let id = id.clone();
-      let stdout = child.stdout.take().unwrap();
-      let stderr = child.stderr.take().unwrap();
-
       let db = self.db.clone();
 
       tokio::spawn(async move {
-        let mut stdout = tokio::io::BufReader::new(stdout);
-        let mut stderr = tokio::io::BufReader::new(stderr);
-
-        let mut buf_stdout = vec![];
-        let mut buf_stderr = vec![];
-
         loop {
           tokio::select! {
-            res = stdout.read_until(b'\n', &mut buf_stdout) => {
-              let res = res?;
-              if res == 0 {
-                break;
+            buf = mux.read() => {
+              match buf {
+                Ok(buf) => {
+                  if buf.tag == out_tag {
+                    db.append_script_run_log(
+                      &id.clone(),
+                      &ScriptRunLog::Stdout {
+                        txt: String::from_utf8_lossy(buf.data).to_string(),
+                        ts: Utc::now(),
+                      },
+                    )
+                    .await?;
+                  } else if buf.tag == err_tag {
+                    db.append_script_run_log(
+                      &id.clone(),
+                      &ScriptRunLog::Stderr {
+                        txt: String::from_utf8_lossy(buf.data).to_string(),
+                        ts: Utc::now(),
+                      },
+                    )
+                    .await?;
+                  }
+                },
+                Err(e) => {
+                  error!("Error reading from mux: {}", e);
+                },
               }
-              let script_run_log = ScriptRunLog::Stdout {
-                txt: std::str::from_utf8(&buf_stdout).unwrap().to_string(),
-                ts: Utc::now(),
-              };
-              // tx.send(StdIoEvent::Stdout(buf_stdout.clone())).await.unwrap();
-              db.append_script_run_log(
-                &id.clone(),
-                &script_run_log,
-              )
-              .await?;
-              buf_stdout.clear();
             }
-            res = stderr.read_until(b'\n', &mut buf_stderr) => {
-              let res = res?;
-              if res == 0 {
-                break;
+            exit_status = child.wait() => {
+              debug!("Exit status: {:#?}", exit_status);
+              let mut q = db.db.query("UPDATE type::thing('script_run', $id) SET finishedAt = $finishedAt RETURN NONE")
+              .bind(("id", id.to_raw()))
+              .bind(("finishedAt", Utc::now()));
+              match exit_status {
+                Ok(status) => {
+                  if let Some(exit_code) = status.code() {
+                    q = q.query("UPDATE type::thing('script_run', $id) SET exitStatus = $exitStatus RETURN NONE")
+                     .bind(("id", id.to_raw()))
+                     .bind(("exitStatus", ExitStatus::ExitCode(exit_code)));
+                  } else {
+                  #[cfg(target_family = "unix")]
+                  if let Some(signal) = status.signal() {
+                    q = q.query("UPDATE type::thing('script_run', $id) SET exitStatus = $exitStatus RETURN NONE")
+                      .bind(("id", id.to_raw()))
+                      .bind(("exitStatus", ExitStatus::Signal(signal)));
+                  }
+                }
+                }
+                Err(e) => {
+                  error!("Error waiting for child: {}", e);
+                },
               }
-              let script_run_log = ScriptRunLog::Stderr {
-                txt: std::str::from_utf8(&buf_stderr).unwrap().to_string(),
-                ts: Utc::now(),
-              };
-              // tx.send(StdIoEvent::Stderr(buf_stderr.clone())).await.unwrap();
-              db.append_script_run_log(
-                &id.clone(),
-                &script_run_log,
-              )
-              .await?;
-              buf_stderr.clear();
+              q.await?;
+              loop {
+                if let Some(buf) = mux.read_nonblock()? {
+                  if buf.tag == out_tag {
+                    db.append_script_run_log(
+                      &id.clone(),
+                      &ScriptRunLog::Stdout {
+                        txt: String::from_utf8_lossy(buf.data).to_string(),
+                        ts: Utc::now(),
+                      },
+                    )
+                    .await?;
+                  } else if buf.tag == err_tag {
+                    db.append_script_run_log(
+                      &id.clone(),
+                      &ScriptRunLog::Stderr {
+                        txt: String::from_utf8_lossy(buf.data).to_string(),
+                        ts: Utc::now(),
+                      },
+                    )
+                    .await?;
+                  }
+                } else {
+                  break
+                }
+              }
+              break;
+            }
+            Some(cmd) = rx.recv() => {
+              match cmd {
+                ChildCommand::Kill => {
+                  child.kill().await?;
+                }
+              }
             }
           }
         }
@@ -79,18 +132,20 @@ impl super::Engine {
       .children
       .write()
       .await
-      .insert(id.clone().to_string(), Arc::new(RwLock::new(child)));
+      .insert(id.clone().to_string(), Arc::new(Mutex::new(tx)));
 
     Ok(script_run)
   }
 
+  #[instrument(skip(self), err)]
   pub async fn kill_script(&self, id: &str) -> Result<()> {
     let children = self.children.read().await;
     let child = children
       .get(id)
-      .ok_or_else(|| anyhow!("Child not found: {id}"))?;
-    let mut child = child.write().await;
-    child.kill().await?;
+      .ok_or_else(|| anyhow!("Child not found: {id}"))?
+      .lock()
+      .expect("mutex poisoned");
+    child.send(ChildCommand::Kill)?;
     Ok(())
   }
 }

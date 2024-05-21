@@ -1,5 +1,5 @@
 {
-  "name": "@exoterm/chrome",
+  "name": "@exoshell/chrome",
   "private": true,
   "scripts": {
     "build": "turbo run build:",
@@ -10,6 +10,6 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@types/chrome": "0.0.266"
+    "@types/chrome": "0.0.268"
   }
 }

@@ -1,5 +1,5 @@
 {
-  "name": "@exoterm/desktop",
+  "name": "@exoshell/desktop",
   "private": true,
   "type": "module",
   "scripts": {
@@ -9,13 +9,14 @@
     "clean": "rm -rf -- out/",
     "dev": "RUST_BACKTRACE=1 RUST_LOG=debug tauri dev",
     "dev:web": "next dev -p 3333",
-    "lint": "next lint"
+    "lint": "turbo run lint:",
+    "lint:": "next lint"
   },
   "dependencies": {
     "@exoshell/model": "workspace:*"
   },
   "devDependencies": {
-    "@tauri-apps/api": "1.5.3",
-    "@tauri-apps/cli": "1.5.11"
+    "@tauri-apps/api": "1.5.6",
+    "@tauri-apps/cli": "1.5.14"
   }
 }
