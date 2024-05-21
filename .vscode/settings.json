@@ -3,18 +3,19 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "cSpell.words": [
+    "clsx",
+    "contextmenu",
     "exoshell",
-    "exoterm",
     "nodrag",
+    "nonblock",
     "nprogress",
     "pangea",
+    "posthog",
+    "quickbar",
     "reactflow",
-    "specta",
     "tanstack",
     "tauri",
-    "taurpc",
-    "thiserror",
-    "zustand"
+    "thiserror"
   ],
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
@@ -24,6 +25,12 @@
   "files.associations": {
     "**/*.json": "jsonc",
     "**/package.json": "json"
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/bower_components": true,
+    "**/*.code-search": true,
+    "**/_next": true
   },
   "files.eol": "\n",
   "files.insertFinalNewline": true,

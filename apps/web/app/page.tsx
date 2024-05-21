@@ -22,9 +22,9 @@ import { isEmail, useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 import { useMemo } from 'react';
 import { FaCheck as IconCheck } from 'react-icons/fa';
-import { MdInfoOutline } from 'react-icons/md';
 import Markdown from 'react-markdown';
 import { registerEmail } from './_db/registerEmail';
+import { IconQuestionCircle } from './_ui/icons';
 
 const FAQ: { question: string; answer: string }[] = [
   {
@@ -69,38 +69,38 @@ You can start to schedule scripts, which we call bots. For example, you can:
 const PRICING: {
   title: string;
   tooltip?: string;
-  freePlan: string;
-  proPlan: string;
+  freePlan: React.ReactNode;
+  proPlan: React.ReactNode;
 }[] = [
   {
     title: 'Desktop apps',
     tooltip: `Windows, Macos and Linux`,
-    freePlan: '✅',
-    proPlan: '✅',
+    freePlan: <IconCheck className='text-emerald-400' />,
+    proPlan: <IconCheck className='text-emerald-400' />,
   },
   {
     title: 'Mobile apps',
     tooltip: `Android and iOS`,
-    freePlan: '✅',
-    proPlan: '✅',
+    freePlan: <IconCheck className='text-emerald-400' />,
+    proPlan: <IconCheck className='text-emerald-400' />,
   },
   {
     title: 'Browser extensions',
     tooltip: `Webkit, Firefox and Chromium based browsers`,
-    freePlan: '✅',
-    proPlan: '✅',
+    freePlan: <IconCheck className='text-emerald-400' />,
+    proPlan: <IconCheck className='text-emerald-400' />,
   },
   {
     title: 'Docker images',
     tooltip: `Run anywhere with Docker`,
-    freePlan: '✅',
-    proPlan: '✅',
+    freePlan: <IconCheck className='text-emerald-400' />,
+    proPlan: <IconCheck className='text-emerald-400' />,
   },
   {
     title: 'Cloud hosting',
     tooltip: 'Automate your scripts in ExoShell cloud',
-    freePlan: '✅ Limited free tier',
-    proPlan: '✅ Unlimited pay as you use',
+    freePlan: 'Free tier',
+    proPlan: 'Pay as you use',
   },
 ];
 
@@ -109,7 +109,7 @@ export default function Page() {
     <>
       <Hero />
       <Faq />
-      <Pricing />
+      <Features />
       <Newsletter />
     </>
   );
@@ -155,40 +155,52 @@ const Faq: React.FC = () => {
   );
 };
 
-const Pricing: React.FC = () => {
+const Features: React.FC = () => {
   return (
     <Box className='border-0 border-t border-solid border-gray-200'>
       <Container pt={8} pb={100}>
-        <h2 className='text-center text-5xl'>Pricing</h2>
+        <h2 className='text-center text-5xl'>Features</h2>
         <Table
+          mx='auto'
           mt={60}
           highlightOnHover
+          horizontalSpacing='lg'
+          withRowBorders={false}
+          classNames={{
+            table: '!border-separate border-spacing-x-6 border-spacing-y-0',
+            td: 'border-0 border-t border-solid border-zinc-200',
+          }}
           data={{
             head: [
               null,
-              null,
-              <b key={'free'}>Free forever</b>,
-              <b key={'pro'}>Pro plan: 10$/month</b>,
+              <p key={'free'} className='text-center'>
+                Free
+              </p>,
+              <p key={'pro'} className='text-center'>
+                Pro
+              </p>,
             ],
             body: PRICING.map((feature) => [
-              <b key={feature.title}>{feature.title}</b>,
-              feature.tooltip && (
+              <Group key={feature.title} gap='sm' align='center'>
+                <span className='font-semibold text-[#000000]'>
+                  {feature.title}
+                </span>
                 <Tooltip
                   label={feature.tooltip}
                   events={{ hover: true, touch: true, focus: false }}
+                  withArrow
                 >
-                  <ActionIcon
-                    variant='light'
-                    radius={25}
-                    color='blue'
-                    size={20}
-                  >
-                    <MdInfoOutline />
+                  <ActionIcon variant='transparent' radius={25} size={15}>
+                    <IconQuestionCircle className='text-zinc-300 hover:text-slate-400' />
                   </ActionIcon>
                 </Tooltip>
-              ),
-              feature.freePlan,
-              feature.proPlan,
+              </Group>,
+              <div key={feature.title} className='text-center capitalize'>
+                {feature.freePlan}
+              </div>,
+              <div key={feature.title} className='text-center capitalize'>
+                {feature.proPlan}
+              </div>,
             ]),
           }}
         />
@@ -222,7 +234,7 @@ const Newsletter: React.FC = () => {
           id: notificationId,
           title: 'Successfully registered to waitlist!',
           message: email,
-          icon: <IconCheck />,
+          icon: <IconCheck className='text-emerald-400' />,
           loading: false,
           color: 'teal',
           withCloseButton: true,

@@ -5,7 +5,7 @@ use super::*;
 #[ts(export)]
 pub struct Script {
   #[builder(default, setter(custom))]
-  #[ts(type = r#"{tb:string;id:string} | null"#)]
+  #[ts(type = r#"{tb:string;id:{String:string}} | null"#)]
   pub id: super::Id,
   #[builder(setter(into))]
   pub name: String,
@@ -17,9 +17,6 @@ pub struct Script {
   pub env: HashMap<String, String>,
   #[builder(default)]
   pub working_dir: Option<String>,
-  // stdin, stdout, stderr
-  // #[builder(default)]
-  // pub nice: Option<isize>,
 }
 
 #[cfg(test)]

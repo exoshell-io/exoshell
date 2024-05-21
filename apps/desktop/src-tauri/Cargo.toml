@@ -11,21 +11,24 @@ edition.workspace = true
 custom-protocol = ["tauri/custom-protocol"]
 
 [build-dependencies]
-tauri-build = { version = "1.5.1", features = [] }
+tauri-build.workspace = true
 
 [dependencies]
-tauri = { version = "1.6.1", features = [ "updater", "window-start-dragging", "process-command-api"] }
+tauri.workspace = true
 
 # Helpers
 anyhow.workspace = true
 thiserror.workspace = true
 chrono.workspace = true
 derive_builder.workspace = true
+io-mux.workspace = true
+tap.workspace = true
 
 # Serialization
 serde.workspace = true
 serde_json.workspace = true
 serde_with.workspace = true
+shell-words.workspace = true
 ts-rs.workspace = true
 
 # Tracing

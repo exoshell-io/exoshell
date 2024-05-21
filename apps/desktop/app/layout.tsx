@@ -1,22 +1,34 @@
 import '@mantine/core/styles.css';
-import './global.css';
 
+import '@mantine/code-highlight/styles.css';
+import '@mantine/notifications/styles.css';
+import '@mantine/spotlight/styles.css';
+import 'allotment/dist/style.css';
+import 'mantine-contextmenu/styles.css';
+import 'reactflow/dist/style.css';
+
+import './layout.css';
+
+import { JotaiProvider, ReactQueryProvider } from '@/_providers';
 import { ColorSchemeScript, MantineProvider } from '@mantine/core';
-import { App } from './_ui/App';
-import { ReactQueryProvider } from './_ui/ReactQueryProvider';
+import { Notifications } from '@mantine/notifications';
+import { ContextMenuProvider } from 'mantine-contextmenu';
 
-export default function RootLayout() {
+export default function RootLayout({ children }: React.PropsWithChildren) {
   return (
     <html>
       <head>
         <ColorSchemeScript />
       </head>
       <body>
-        <ReactQueryProvider>
-          <MantineProvider>
-            <App />
-          </MantineProvider>
-        </ReactQueryProvider>
+        <MantineProvider>
+          <Notifications />
+          <ContextMenuProvider borderRadius='md'>
+            <JotaiProvider>
+              <ReactQueryProvider>{children}</ReactQueryProvider>
+            </JotaiProvider>
+          </ContextMenuProvider>
+        </MantineProvider>
       </body>
     </html>
   );
