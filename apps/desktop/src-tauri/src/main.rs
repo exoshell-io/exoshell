@@ -19,7 +19,6 @@ fn main() {
     .setup(|_app| {
       #[cfg(debug_assertions)] // only include this code on debug builds
       {
-        use prelude::*;
         let path_resolver = _app.path_resolver();
         debug!("App Cache Dir: {:?}", path_resolver.app_cache_dir());
         debug!("App Config Dir: {:?}", path_resolver.app_config_dir());

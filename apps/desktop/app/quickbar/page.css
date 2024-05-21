@@ -1,0 +1,4 @@
+.mantine-Spotlight-inner > .mantine-Paper-root {
+  height: fit-content;
+  border-radius: 10px;
+}
