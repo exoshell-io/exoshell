@@ -50,7 +50,6 @@
   },
   "devDependencies": {
     "@next/bundle-analyzer": "14.2.3",
-    "@swc-jotai/debug-label": "0.1.0",
     "@tanstack/eslint-plugin-query": "5.35.6",
     "@tanstack/react-query-devtools": "5.37.1",
     "@types/node": "20.12.12",

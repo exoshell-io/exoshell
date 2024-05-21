@@ -6,7 +6,6 @@
     "clsx",
     "contextmenu",
     "exoshell",
-    "exoterm",
     "nodrag",
     "nonblock",
     "nprogress",
@@ -14,12 +13,9 @@
     "posthog",
     "quickbar",
     "reactflow",
-    "specta",
     "tanstack",
     "tauri",
-    "taurpc",
-    "thiserror",
-    "zustand"
+    "thiserror"
   ],
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
