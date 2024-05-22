@@ -5,6 +5,7 @@
   "customizations": {
     "vscode": {
       "extensions": [
+        // cSpell:disable
         "bierner.github-markdown-preview",
         "bradlc.vscode-tailwindcss",
         "dbaeumer.vscode-eslint",
@@ -33,8 +34,8 @@
         "timonwong.shellcheck",
         "vunguyentuan.vscode-css-variables",
         "vunguyentuan.vscode-postcss",
-        "yatki.vscode-surround",
-        "shd101wyy.markdown-preview-enhanced"
+        "yatki.vscode-surround"
+        // cSpell:enable
       ]
     }
   }

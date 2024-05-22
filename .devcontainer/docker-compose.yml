@@ -1,9 +1,10 @@
-version: '3.9'
+version: '3'
 
 services:
   dev:
-    image: ghcr.io/ctison/dev
-    working_dir: /exoshell
-    command: fish -c "mise trust && mise install -y && mise exec -- bun install && sleep inf"
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+    command: sleep inf
     volumes:
       - ..:/exoshell
