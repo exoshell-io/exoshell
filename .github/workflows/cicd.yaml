@@ -11,46 +11,6 @@ on:
   pull_request:
     types: [opened, synchronize, edited]
   workflow_dispatch:
-    inputs:
-      skip-ci:
-        description: Skip CI step y/n ?
-        type: boolean
-        default: false
-      always-cd:
-        description: Force CD step y/n ?
-        type: boolean
-        default: false
-      # dry-run-cd:
-      #   description: Dry-run CD step y/n ?
-      #   type: boolean
-      #   default: false
-      version:
-        description: Package semver version, relevant for workflow_dispatch (Github tag and release must exist currently because of CI permissions).
-        type: string
-        default: ''
-      # is-draft-release:
-      #   description: Release as Draft y/n ? (no tag)
-      #   type: boolean
-      #   default: false
-      builds:
-        description: Target builds
-        type: choice
-        default: all
-        options:
-          - all
-          - desktop
-          - cli
-          - mobile
-          - web
-      platforms:
-        description: Target platforms (relevant for desktop)
-        type: choice
-        default: all
-        options:
-          - all
-          - linux
-          - macos
-          - windows
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
@@ -59,120 +19,86 @@ concurrency:
 permissions: {}
 
 jobs:
-  setup:
-    runs-on: ubuntu-22.04
-    timeout-minutes: 5
-    permissions:
-      contents: read
-    outputs:
-      # environment: ${{ steps.set_vars.outputs.environment }}
-      # dry-run-cd: ${{ steps.set_vars.outputs.dry-run-cd }}
-      version: ${{ steps.set_vars.outputs.version }}
-      universal-version: ${{ steps.set_vars.outputs.universal-version }}
-      # is-draft-release: ${{ steps.set_vars.outputs.is-draft-release }}
-      is-prerelease: ${{ steps.set_vars.outputs.is-prerelease }}
-      should-ci: ${{ steps.set_vars.outputs.should-ci }}
-      should-desktop-cd: ${{ steps.set_vars.outputs.should-desktop-cd }}
-      platforms-matrix: ${{ steps.set_vars.outputs.platforms-matrix }}
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Install dependencies
-        run: npm install
-        working-directory: .github/scripts
-      - name: Compute variables
-        uses: actions/github-script@v7
-        id: set_vars
-        with:
-          script: (await import('${{ github.workspace }}/.github/scripts/compute-variables.mjs')).default(context, core)
-
   ci:
     runs-on: ubuntu-22.04
-    if: needs.setup.outputs.should-ci == 'true'
-    timeout-minutes: 5
-    permissions:
-      contents: read
-    needs: setup
+    timeout-minutes: 20
+    outputs:
+      shouldRelease: ${{ steps.compute_variables.outputs.shouldRelease }}
+      appVersion: ${{ steps.compute_variables.outputs.appVersion }}
+      cdTauriMatrix: ${{ steps.compute_variables.outputs.cdTauriMatrix }}
+      rustVersion: ${{ steps.compute_variables.outputs.rustVersion }}
+    env:
+      SCCACHE_GHA_ENABLED: true
+      RUSTC_WRAPPER: sccache
     steps:
       - uses: actions/checkout@v4
-
-      - uses: oven-sh/setup-bun@v1
-
-      - name: Install > Lint > Test
-        run: |
-          bun install --frozen-lockfile
-          bun run ci
-
-  desktop-cd:
-    runs-on: ${{ matrix.settings.platform}}
-    if: needs.setup.outputs.should-desktop-cd == 'true'
-    timeout-minutes: 60
-    permissions:
-      contents: write
-    strategy:
-      # TODO should be true, false while we iterate
-      fail-fast: false
-      matrix: ${{fromJson(needs.setup.outputs.platforms-matrix)}}
-    needs:
-      - setup
-      - ci
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
+      - uses: jdx/mise-action@v2
+      - uses: Mozilla-Actions/sccache-action@v0.0.4
+      - run: bun install --frozen-lockfile
+      - name: Compute variables
+        uses: actions/github-script@v7
+        id: compute_variables
         with:
-          node-version-file: .nvmrc
+          script: (await import('${{ github.workspace }}/.github/scripts/compute-variables.mjs')).default(context, core)
+      - name: Install Tauri system dependencies
+        uses: ./.github/actions/tauri-install-system-deps
+      - name: Lint & Test
+        run: |
+          bun run ci
+          cargo test --locked ${{ github.workspace }}
 
+  cd-tauri:
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.ci.outputs.cdTauriMatrix) }}
+    runs-on: ${{ matrix.platform}}
+    timeout-minutes: 60
+    needs: [ci]
+    env:
+      SCCACHE_GHA_ENABLED: true
+      RUSTC_WRAPPER: sccache
+    steps:
+      - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v1
-
+        with:
+          bun-version: latest
       - uses: dtolnay/rust-toolchain@stable
         with:
-          targets: ${{ matrix.settings.platform == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
-
-      - name: Install
-        run: |
-          bun install --frozen-lockfile
-
-      - name: Install dependencies (Linux only)
-        if: matrix.settings.platform == 'ubuntu-22.04'
-        # libwebkit2gtk-4.0-dev == needed for Tauriv1
-        # libwebkit2gtk-4.1-dev == needed for Tauriv2
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libwebkit2gtk-4.0-dev libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
-
-      - name: Rust cache
-        uses: swatinem/rust-cache@v2
-        with:
-          workspaces: '${{ github.workspace }}/apps/desktop/src-tauri -> target'
-
-      - name: Build and release
-        uses: tauri-apps/tauri-action@v0
+          toolchain: ${{ needs.ci.outputs.rustVersion }}
+          targets: ${{ matrix.rustTargets || matrix.tauriBuildTarget }}
+      - uses: Mozilla-Actions/sccache-action@v0.0.4
+      - run: bun install --frozen-lockfile
+      - name: Install Tauri system dependencies
+        uses: ./.github/actions/tauri-install-system-deps
+      - name: Generate Typescript types from Rust
+        run: bun run gen:types
+      - uses: tauri-apps/tauri-action@v0
+        id: tauri
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAURI_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
           TAURI_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
         with:
           projectPath: ./apps/desktop
+          appVersion: ${{ needs.ci.outputs.appVersion }}
           tauriScript: bun tauri
-          args: ${{ matrix.settings.args }}
-          tagName: v${{ needs.setup.outputs.version }}
-          releaseName: 'ExoShell v${{ needs.setup.outputs.version }}'
-          appVersion: ${{ needs.setup.outputs.universal-version }}
-          # releaseDraft: ${{ matrix.settings.is-draft-release == 'true' && true || false }}
-          prerelease: ${{ matrix.settings.is-prerelease == 'true' && true || false }}
-          # releaseBody: ''
-          # releaseId:
-          # distPath:
-          # iconPath:
-          # bundleIdentifier:
-          # includeDebug:
-          # includeRelease:
+          args: ${{ format('--target {0}', matrix.tauriBuildTarget) }}
           includeUpdaterJson: true
           updaterJsonPreferNsis: true
           updaterJsonKeepUniversal: true
+      - uses: actions/upload-artifact@v4
+        with:
+          name: desktop-${{ matrix.tauriBuildTarget }}
+          path: |-
+            ${{ join(fromJSON(steps.tauri.outputs.artifactPaths), '
+            ') }}
+          if-no-files-found: error
+
+  release:
+    if: needs.ci.outputs.shouldRelease != 'false'
+    needs: [ci, cd-tauri]
+    runs-on: ubuntu-22.04
+    timeout-minutes: 10
+    steps:
+      - run: echo ko
+      # - uses: softprops/action-gh-release@v2
