@@ -30,6 +30,7 @@ const FAQ: { question: string; answer: string }[] = [
   {
     question: 'What does ExoShell provide?',
     answer: `
+ExoShell provides a set of free and open-source tools:
 - Desktop applications for Windows, Macos and Linux
 - Mobile applications for iOS and Android
 - Browser extensions for Firefox and Chromium based browsers`,
@@ -142,7 +143,7 @@ const Faq: React.FC = () => {
               <AccordionControl>
                 <Text fw='bold'>{e.question}</Text>
               </AccordionControl>
-              <AccordionPanel>
+              <AccordionPanel pl={32}>
                 <TypographyStylesProvider>
                   <Markdown>{e.answer}</Markdown>
                 </TypographyStylesProvider>
