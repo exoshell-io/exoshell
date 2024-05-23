@@ -25,7 +25,7 @@ io-mux = { version = "2.2.0", features = [
 tap = { version = "1.0.1" }
 
 # Serialization
-serde = { version = "1.0.201", features = ["derive"] }
+serde = { version = "1.0.202", features = ["derive"] }
 serde_json = { version = "1.0.117" }
 serde_with = { version = "3.8.1" }
 heck = { version = "0.5.0" }
@@ -40,7 +40,7 @@ tracing-subscriber = { version = "0.3.18", features = [
 ] }
 
 # Database
-surrealdb = { version = "1.3.1", features = ["kv-rocksdb", "kv-mem"] }
+surrealdb = { version = "1.5.1", features = ["kv-rocksdb", "kv-mem"] }
 
 # Async
 tokio = { version = "1.37.0", features = ["process", "sync"] }
@@ -48,13 +48,13 @@ tokio-util = { version = "0.7.11", features = ["io"] }
 futures = { version = "0.3.30" }
 
 # Macro helpers
-syn = { version = "2.0.64" }
+syn = { version = "2.0.65" }
 quote = { version = "1.0.36" }
-proc-macro2 = { version = "1.0.82" }
+proc-macro2 = { version = "1.0.83" }
 darling = { version = "0.20.9" }
 
 # Tauri
-tauri = { version = "1.6.6", features = [
+tauri = { version = "1.6.7", features = [
   "window-start-dragging",
   "window-hide",
   "global-shortcut",
