@@ -67,39 +67,39 @@ You can start to schedule scripts, which we call bots. For example, you can:
   },
 ];
 
-const PRICING: {
+const FEATURES: {
   title: string;
   tooltip?: string;
-  freePlan: React.ReactNode;
-  proPlan: React.ReactNode;
+  freePlan?: React.ReactNode;
+  proPlan?: React.ReactNode;
 }[] = [
   {
     title: 'Desktop apps',
     tooltip: `Windows, Macos and Linux`,
-    freePlan: <IconCheck className='text-emerald-400' />,
-    proPlan: <IconCheck className='text-emerald-400' />,
   },
   {
     title: 'Mobile apps',
     tooltip: `Android and iOS`,
-    freePlan: <IconCheck className='text-emerald-400' />,
-    proPlan: <IconCheck className='text-emerald-400' />,
   },
   {
     title: 'Browser extensions',
     tooltip: `Webkit, Firefox and Chromium based browsers`,
-    freePlan: <IconCheck className='text-emerald-400' />,
-    proPlan: <IconCheck className='text-emerald-400' />,
   },
   {
     title: 'Docker images',
     tooltip: `Run anywhere with Docker`,
-    freePlan: <IconCheck className='text-emerald-400' />,
-    proPlan: <IconCheck className='text-emerald-400' />,
   },
   {
-    title: 'Cloud hosting',
-    tooltip: 'Automate your scripts in ExoShell cloud',
+    title: 'IDE extensions',
+    tooltip: 'VSCode and maybe others',
+  },
+  {
+    title: 'ExoHub',
+    tooltip: 'Share, sell and buy scripts with the community',
+  },
+  {
+    title: 'ExoCloud',
+    tooltip: 'Automate your scripts in our official hosted cloud',
     freePlan: 'Free tier',
     proPlan: 'Pay as you use',
   },
@@ -169,7 +169,6 @@ const Features: React.FC = () => {
         <Table
           mx='auto'
           mt={60}
-          highlightOnHover
           horizontalSpacing='lg'
           withRowBorders={false}
           classNames={{
@@ -186,7 +185,7 @@ const Features: React.FC = () => {
                 Pro
               </p>,
             ],
-            body: PRICING.map((feature) => [
+            body: FEATURES.map((feature) => [
               <Group key={feature.title} gap='sm' align='center'>
                 <span className='font-semibold text-[#000000]'>
                   {feature.title}
@@ -202,10 +201,14 @@ const Features: React.FC = () => {
                 </Tooltip>
               </Group>,
               <div key={feature.title} className='text-center capitalize'>
-                {feature.freePlan}
+                {(feature.freePlan !== undefined && feature.freePlan) || (
+                  <IconCheck className='text-emerald-400' />
+                )}
               </div>,
               <div key={feature.title} className='text-center capitalize'>
-                {feature.proPlan}
+                {(feature.proPlan !== undefined && feature.proPlan) || (
+                  <IconCheck className='text-emerald-400' />
+                )}
               </div>,
             ]),
           }}
