@@ -2,6 +2,7 @@ import '@mantine/core/styles.css';
 import '@mantine/notifications/styles.css';
 import './globals.css';
 
+import { CSPostHogProvider } from '@/_analytics';
 import { Logo } from '@/_ui/Logo';
 import {
   ActionIcon,
@@ -14,18 +15,20 @@ import {
 } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
 import type { Metadata } from 'next';
-import { Noto_Sans, Signika } from 'next/font/google';
+import { Signika, Sora } from 'next/font/google';
 import { MdNotificationsNone as IconNotification } from 'react-icons/md';
 import { Brand } from './_ui/Brand';
-import { CSPostHogProvider } from '@/_analytics';
+
+const font = Sora({
+  subsets: ['latin'],
+  display: 'swap',
+});
 
 const logoFont = Signika({
   display: 'swap',
   variable: '--font-logo',
   subsets: ['latin'],
 });
-
-const font = Noto_Sans({ subsets: ['latin'], display: 'swap' });
 
 export const metadata: Metadata = {
   title: {
