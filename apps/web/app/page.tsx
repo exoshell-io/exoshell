@@ -136,8 +136,13 @@ const Faq: React.FC = () => {
       className='border-0 border-t border-solid border-gray-200'
     >
       <Container pt={8} pb={100} size='md'>
-        <h2 className='text-center text-5xl font-bold'>FAQs</h2>
-        <Accordion multiple={true} chevronPosition='left' mt={36}>
+        <h2 className='text-center text-5xl font-bold'>FAQ</h2>
+        <Accordion
+          multiple={true}
+          chevronPosition='left'
+          mt={36}
+          defaultValue={FAQ.map((e) => e.question)}
+        >
           {FAQ.map((e) => (
             <AccordionItem key={e.question} value={e.question}>
               <AccordionControl>
