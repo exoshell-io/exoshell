@@ -118,7 +118,7 @@ export default function Page() {
 
 const Hero: React.FC = () => {
   return (
-    <Box h={600} ta='center' pt={30} pb={60}>
+    <Box ta='center' pt={60} pb={120}>
       <Container size='md'>
         <h1 className='mx-auto max-w-screen-sm text-3xl font-extrabold lg:text-5xl'>
           Use your computers like never before
@@ -132,10 +132,11 @@ const Hero: React.FC = () => {
 const Faq: React.FC = () => {
   return (
     <Box
+      id='faq'
       bg='#fafafa'
       className='border-0 border-t border-solid border-gray-200'
     >
-      <Container pt={8} pb={100} size='md'>
+      <Container pt={60} pb={120} size='md'>
         <h2 className='text-center text-5xl font-bold'>FAQ</h2>
         <Accordion
           multiple={true}
@@ -163,8 +164,11 @@ const Faq: React.FC = () => {
 
 const Features: React.FC = () => {
   return (
-    <Box className='border-0 border-t border-solid border-gray-200'>
-      <Container pt={8} pb={100}>
+    <Box
+      id='features'
+      className='border-0 border-t border-solid border-gray-200'
+    >
+      <Container py={60} pb={120}>
         <h2 className='text-center text-5xl'>Features</h2>
         <Table
           mx='auto'
@@ -253,8 +257,9 @@ const Newsletter: React.FC = () => {
   );
   return (
     <Box
+      id='newsletter'
       ta='center'
-      py={100}
+      py={120}
       className='border-0 border-t border-solid border-gray-200'
       bg='#fafafa'
     >
