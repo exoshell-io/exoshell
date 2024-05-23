@@ -53,7 +53,7 @@ You can start to schedule scripts, which we call bots. For example, you can:
   },
   {
     question: 'Do I need to code?',
-    answer: `Not a all because developers can share their scripts through our official hub at https://exoshell.dev/hub.`,
+    answer: `Not a all because developers can share their scripts through our official hub at https://exoshell.io/hub.`,
   },
   {
     question:
