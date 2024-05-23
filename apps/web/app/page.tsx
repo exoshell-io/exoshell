@@ -222,7 +222,7 @@ const Newsletter: React.FC = () => {
     () =>
       form.onSubmit(async ({ email }) => {
         const notificationId = notifications.show({
-          title: 'Registering to waitlist',
+          title: 'Registering to the newsletter',
           message: email,
           loading: true,
           withCloseButton: false,
@@ -232,7 +232,7 @@ const Newsletter: React.FC = () => {
         await registerEmail(email);
         notifications.update({
           id: notificationId,
-          title: 'Successfully registered to waitlist!',
+          title: 'Successfully registered to the newsletter!',
           message: email,
           icon: <IconCheck className='text-emerald-400' />,
           loading: false,
@@ -250,7 +250,7 @@ const Newsletter: React.FC = () => {
       bg='#fafafa'
     >
       <Container>
-        <Title>Subscribe to the waitlist</Title>
+        <Title>Subscribe to the newsletter</Title>
         <form onSubmit={onSubmit}>
           <Group mx='auto' maw={600} mt={50} justify='stretch' align='stretch'>
             <TextInput
