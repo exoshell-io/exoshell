@@ -8,6 +8,7 @@ const defaultOutputs = {
   /** @type {false | 'prerelease' | 'stable'} */
   shouldRelease: false,
   appVersion: '0.0.0',
+  releaseVersion: '0.0.0',
   cdTauriMatrix: '{}',
   rustVersion: '',
 };
@@ -57,6 +58,8 @@ export default async function (context, core) {
     const channel = matches['channel'];
     const channelPatch =
       'channelPatch' in matches ? parseInt(matches['channelPatch']) : undefined;
+
+    outputs.releaseVersion = `v${major}.${minor}.${patch}-${channel}.${channelPatch}`;
 
     if (channel === undefined) {
       outputs.shouldRelease = 'stable';
