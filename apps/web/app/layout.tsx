@@ -2,9 +2,9 @@ import '@mantine/core/styles.css';
 import '@mantine/notifications/styles.css';
 import './globals.css';
 
+import { CSPostHogProvider } from '@/_analytics';
 import { Logo } from '@/_ui/Logo';
 import {
-  ActionIcon,
   Box,
   ColorSchemeScript,
   Container,
@@ -14,18 +14,19 @@ import {
 } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
 import type { Metadata } from 'next';
-import { Noto_Sans, Signika } from 'next/font/google';
-import { MdNotificationsNone as IconNotification } from 'react-icons/md';
+import { Signika, Sora } from 'next/font/google';
 import { Brand } from './_ui/Brand';
-import { CSPostHogProvider } from '@/_analytics';
+
+const font = Sora({
+  subsets: ['latin'],
+  display: 'swap',
+});
 
 const logoFont = Signika({
   display: 'swap',
   variable: '--font-logo',
   subsets: ['latin'],
 });
-
-const font = Noto_Sans({ subsets: ['latin'], display: 'swap' });
 
 export const metadata: Metadata = {
   title: {
@@ -61,10 +62,16 @@ export default function RootLayout({
                 className='flex items-center justify-between'
               >
                 <Brand />
-                <Group>
-                  <ActionIcon variant='subtle' color='black' radius='xl'>
-                    <IconNotification />
-                  </ActionIcon>
+                <Group gap='xl'>
+                  {HEADER_MENU.map((link) => (
+                    <a
+                      key={link.href}
+                      href={link.href}
+                      className='font-semibold text-zinc-900 underline-offset-4 hover:underline'
+                    >
+                      {link.label}
+                    </a>
+                  ))}
                 </Group>
               </Container>
             </Box>
@@ -95,3 +102,18 @@ export default function RootLayout({
     </html>
   );
 }
+
+const HEADER_MENU: { href: string; label: string }[] = [
+  {
+    href: '#faq',
+    label: 'FAQ',
+  },
+  {
+    href: '#features',
+    label: 'Features',
+  },
+  {
+    href: '#newsletter',
+    label: 'Newsletter',
+  },
+];
