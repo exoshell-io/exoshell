@@ -153,7 +153,7 @@ function computeOutputs(core, outputs) {
     ],
     ...Object.entries(outputs).map(([k, v]) => {
       core.setOutput(k, v);
-      return [k, `${v}`];
+      return [k, '\n\n```' + `${v}` + '\n```'];
     }),
   ]);
 }
