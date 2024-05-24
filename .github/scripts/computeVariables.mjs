@@ -5,10 +5,10 @@
 import { readFileSync } from 'fs';
 
 const defaultOutputs = {
-  /** @type {false | 'prerelease' | 'stable'} */
+  /** @type {false | 'draft' | 'prerelease' | 'stable'} */
   shouldRelease: false,
   appVersion: '0.0.0',
-  releaseVersion: '0.0.0',
+  releaseVersion: 'v0.0.0',
   cdTauriMatrix: '{}',
   rustVersion: '',
 };
@@ -55,7 +55,9 @@ export default async function (context, core) {
     const major = parseInt(matches['major']);
     const minor = parseInt(matches['minor']);
     const patch = parseInt(matches['patch']);
-    const channel = matches['channel'];
+    const channel = /** @type {'alpha' | 'beta' |'rc' | undefined } */ (
+      matches['channel']
+    );
     const channelPatch =
       'channelPatch' in matches ? parseInt(matches['channelPatch']) : undefined;
 
@@ -63,15 +65,29 @@ export default async function (context, core) {
 
     if (channel === undefined) {
       outputs.shouldRelease = 'stable';
-      outputs.appVersion = `${major}.${minor}.${patch}`;
     } else {
       outputs.shouldRelease = 'prerelease';
-      const encodedPatch =
-        patch * 2048 +
-        castNonNull({ alpha: 0, beta: 1, rc: 2 }[channel]) * 32 +
-        castNonNull(channelPatch);
-      outputs.appVersion = `${major}.${minor}.${encodedPatch}`;
     }
+    outputs.appVersion = computeAppVersion(
+      major,
+      minor,
+      patch,
+      `${channel}`,
+      channelPatch,
+    );
+  } else if (
+    context.eventName === 'pull_request' &&
+    getVariableFromPullRequestBody(context, 'test-release') === 'true'
+  ) {
+    outputs.shouldRelease = 'draft';
+    outputs.releaseVersion = `v0.0.0-pr.${context.payload.pull_request?.number}`;
+    outputs.appVersion = computeAppVersion(
+      0,
+      0,
+      0,
+      'pr',
+      castNonNull(context.payload.pull_request?.number),
+    );
   }
 
   outputs.cdTauriMatrix = JSON.stringify(defaultCdTauriMatrix, undefined, 2);
@@ -88,6 +104,39 @@ export default async function (context, core) {
   core.summary.addHeading('Computed variables', 2);
   computeOutputs(core, outputs);
   await core.summary.write();
+}
+
+const channelToNumber = { pr: 0, alpha: 1, beta: 2, rc: 3, undefined: 4 };
+
+/**
+ * @param {number} major
+ * @param {number} minor
+ * @param {number} patch
+ * @param {keyof typeof channelToNumber} channel
+ * @param {number | undefined} channelPatch
+ * @returns {string}
+ */
+function computeAppVersion(major, minor, patch, channel, channelPatch) {
+  const encodedPatch =
+    patch * 2048 +
+    castNonNull(channelToNumber[channel]) * 32 +
+    (channelPatch ?? 0);
+  return `v${major}.${minor}.${encodedPatch}`;
+}
+
+/**
+ * @param {GithubContext} context
+ * @param {string} varName
+ * @returns {string | undefined}
+ */
+function getVariableFromPullRequestBody(context, varName) {
+  if (context.eventName === 'pull_request') {
+    const match = context.payload.pull_request?.body?.match(
+      new RegExp(`\\[${varName}=(.+?)]`),
+    );
+    return match?.[1];
+  }
+  return undefined;
 }
 
 /**
