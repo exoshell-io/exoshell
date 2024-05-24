@@ -5,9 +5,6 @@ on:
     tags:
       - v*
       - desktop/v*
-    # - cli/v*
-    # - mobile/v*
-    # - web/v*
   pull_request:
     types: [opened, synchronize, edited]
   workflow_dispatch:
@@ -103,16 +100,22 @@ jobs:
     steps:
       - uses: actions/download-artifact@v4
         with:
+          path: desktop/
           pattern: desktop-*
           merge-multiple: true
+      - run: |
+          shopt -s nullglob
+          for s in **/*.{dmg,deb,AppImage}; do
+            mv "$s" "${s/${{ needs.ci.outputs.appVersion }}/${{ needs.ci.outputs.releaseVersion }}}"
+          done
       - uses: softprops/action-gh-release@v2
         with:
           name: ${{ needs.ci.outputs.releaseVersion }}
           prerelease: ${{ needs.ci.outputs.shouldRelease == 'prerelease' }}
           files: |
-            **/*.dmg
-            **/*.deb
-            **/*.AppImage
+            desktop/**/*.dmg
+            desktop/**/*.deb
+            desktop/**/*.AppImage
           fail_on_unmatched_files: true
           generate_release_notes: true
           make_latest: ${{ needs.ci.outputs.shouldRelease == 'stable' && 'true' }}
