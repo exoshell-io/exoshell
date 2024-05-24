@@ -28,7 +28,7 @@ pub fn model(args: TokenStream, item: TokenStream) -> TokenStream {
   let args = match darling::ast::NestedMeta::parse_meta_list(args.into()) {
     Err(err) => return TokenStream::from(darling::Error::from(err).write_errors()),
     Ok(args) => match ModelArgs::from_list(&args) {
-      Err(err) => return TokenStream::from(darling::Error::from(err).write_errors()),
+      Err(err) => return TokenStream::from(err.write_errors()),
       Ok(args) => args,
     },
   };

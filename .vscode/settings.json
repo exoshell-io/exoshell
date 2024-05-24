@@ -48,5 +48,6 @@
     "**/*.sass",
     "**/*.less",
     "node_modules/@mantine/core/styles.css"
-  ]
+  ],
+  "rust-analyzer.check.command": "clippy"
 }
