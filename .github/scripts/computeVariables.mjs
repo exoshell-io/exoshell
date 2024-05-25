@@ -121,7 +121,7 @@ function computeAppVersion(major, minor, patch, channel, channelPatch) {
     patch * 2048 +
     castNonNull(channelToNumber[channel]) * 32 +
     (channelPatch ?? 0);
-  return `v${major}.${minor}.${encodedPatch}`;
+  return `${major}.${minor}.${encodedPatch}`;
 }
 
 /**
@@ -153,7 +153,7 @@ function computeOutputs(core, outputs) {
     ],
     ...Object.entries(outputs).map(([k, v]) => {
       core.setOutput(k, v);
-      return [k, '\n\n```' + `${v}` + '\n```'];
+      return [k, '\n\n```\n' + `${v}` + '\n```\n'];
     }),
   ]);
 }
