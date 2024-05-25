@@ -113,7 +113,7 @@ jobs:
           script: (await import('${{ github.workspace }}/.github/scripts/prepareRelease.mjs')).default(context, '${{ needs.ci.outputs.appVersion }}', '${{ needs.ci.outputs.releaseVersion }}')
       - uses: softprops/action-gh-release@v2
         with:
-          name: ${{ needs.ci.outputs.releaseVersion }}
+          name: ExoShell ${{ needs.ci.outputs.releaseVersion }}
           draft: ${{ needs.ci.outputs.shouldRelease == 'draft' }}
           prerelease: ${{ needs.ci.outputs.shouldRelease == 'prerelease' || needs.ci.outputs.shouldRelease == 'draft' }}
           files: |

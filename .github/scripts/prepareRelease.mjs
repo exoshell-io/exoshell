@@ -1,4 +1,9 @@
-import { resolve as resolveFilepath, basename } from 'path';
+import {
+  resolve as resolveFilepath,
+  basename,
+  parse as parsePath,
+  format as formatPath,
+} from 'node:path';
 import { create as createGlob } from '@actions/glob';
 import {
   readFileSync,
@@ -56,12 +61,12 @@ export default async function (context, appVersion, releaseVersion) {
       );
       const files = await glob.glob();
       for (const file of files) {
-        renameFileSync(
-          file,
-          file
-            .replace(appVersion, releaseVersion)
-            .replace('exoshell', 'ExoShell'),
-        );
+        const parsedPath = parsePath(file);
+        parsedPath.base = parsedPath.base
+          .replace(appVersion, releaseVersion)
+          .replace('exoshell', 'ExoShell')
+          .replace('exo-shell', 'ExoShell');
+        renameFileSync(file, formatPath(parsedPath));
       }
     }
 
