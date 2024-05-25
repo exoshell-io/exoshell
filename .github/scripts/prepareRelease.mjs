@@ -28,7 +28,7 @@ import {
  */
 export default async function (context, appVersion, releaseVersion) {
   const updaterFile = resolveFilepath(process.cwd(), 'latest.json');
-  /** @satisfies {UpdaterFile} */
+  /** @type {UpdaterFile} */
   const updaterFileContent = {
     version: releaseVersion,
     notes: '',
@@ -56,7 +56,12 @@ export default async function (context, appVersion, releaseVersion) {
       );
       const files = await glob.glob();
       for (const file of files) {
-        renameFileSync(file, file.replace(appVersion, releaseVersion));
+        renameFileSync(
+          file,
+          file
+            .replace(appVersion, releaseVersion)
+            .replace('exoshell', 'ExoShell'),
+        );
       }
     }
 
@@ -65,8 +70,8 @@ export default async function (context, appVersion, releaseVersion) {
     console.debug(`Matched files: ${files}`);
     for (const asset of files) {
       const newAssetPath = asset.replace(
-        '/exoshell.',
-        `/exoshell_${releaseVersion}_${arch}.`,
+        '/ExoShell.',
+        `/ExoShell_${releaseVersion}_${arch}.`,
       );
       renameFileSync(asset, newAssetPath);
       renameFileSync(`${asset}.sig`, `${newAssetPath}.sig`);

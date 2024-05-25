@@ -82,9 +82,6 @@ jobs:
           appVersion: ${{ needs.ci.outputs.appVersion }}
           tauriScript: bun tauri
           args: ${{ format('--target {0}', matrix.tauriBuildTarget) }}
-          includeUpdaterJson: true
-          updaterJsonPreferNsis: true
-          updaterJsonKeepUniversal: true
       - uses: actions/upload-artifact@v4
         with:
           name: desktop-${{ matrix.tauriBuildTarget }}
