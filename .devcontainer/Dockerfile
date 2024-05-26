@@ -25,16 +25,11 @@ RUN apt-get update && \
   apt-get clean && \
   rm -rf /var/lib/apt/lists/*
 
-
 # Fetch env variables
 ARG USERNAME
 ARG UID
 ARG GROUPNAME
 ARG GID
-ENV USERNAME ${USERNAME}
-ENV UID ${UID}
-ENV GROUPNAME ${GROUPNAME}
-ENV GID ${GID}
 
 # Set UID same as host
 RUN OLD_USERNAME="$(getent passwd ${UID} | cut -d: -f1)" \

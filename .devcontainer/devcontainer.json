@@ -1,10 +1,14 @@
 {
+  "remoteUser": "${localEnv:USERNAME}",
+  "containerUser": "${localEnv:USERNAME}",
   "dockerComposeFile": "docker-compose.yml",
-  "remoteUser": "${env:USERNAME}",
-  "name": "exoshell-dev",
   "service": "dev",
+  "name": "exoshell-dev",
+  "mounts": [
+    "source=${localWorkspaceFolder},target=/exoshell,type=bind,consistency=cached"
+  ],
   "workspaceFolder": "/exoshell",
-  "initializeCommand": "echo \"USERNAME=$(id -un)\nUID=$(id -u)\nGROUPNAME=$(id -gn)\nGID=$(id -g)\" > .devcontainer/.env",
+  "initializeCommand": "(cat .env .env.local | grep -v '^#' | grep -v '^$' | sort -t '=' -k 1,1 | awk -F '=' '!seen[$1]++' && echo \"USERNAME=$(id -un)\" && echo \"UID=$(id -u)\" && echo \"GROUPNAME=$(id -gn)\" && echo \"GID=$(id -g)\") > .devcontainer/.env",
   "customizations": {
     "vscode": {
       "settings": {
