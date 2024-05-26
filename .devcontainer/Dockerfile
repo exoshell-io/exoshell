@@ -31,23 +31,29 @@ ARG UID
 ARG GROUPNAME
 ARG GID
 
-# Set UID same as host
-RUN OLD_USERNAME="$(getent passwd ${UID} | cut -d: -f1)" \
+# Set UID same as host if necessary
+RUN CURRENT_UID=$(id -u) \
+  && if [ "${CURRENT_UID}" != "${UID}" ]; then \
+  OLD_USERNAME="$(getent passwd ${UID} | cut -d: -f1)" \
   && if [ -n "${OLD_USERNAME}" ]; then \
   usermod -l ${USERNAME} ${OLD_USERNAME} \
   && usermod -d /home/${USERNAME} -m ${USERNAME}; \
   else \
   useradd -u ${UID} -m -s /bin/bash ${USERNAME}; \
+  fi; \
   fi
 
-# Set GID same as host
-RUN OLD_GROUPNAME="$(getent group ${GID} | cut -d: -f1)" \
+# Set GID same as host if necessary
+RUN CURRENT_GID=$(id -g ) \
+  && if [ "${CURRENT_GID}" != "${GID}" ]; then \
+  OLD_GROUPNAME="$(getent group ${GID} | cut -d: -f1)" \
   && if [ -n "${OLD_GROUPNAME}" ]; then \
   groupmod -n ${GROUPNAME} ${OLD_GROUPNAME}; \
   else \
   groupadd -g ${GID} ${GROUPNAME}; \
   fi \
-  && usermod -g ${GROUPNAME} ${USERNAME}
+  && usermod -g ${GROUPNAME} ${USERNAME}; \
+  fi
 
 # Ensure the user is in the correct group and home directory exists
 RUN if [ ! -d /home/${USERNAME} ]; then \
@@ -56,7 +62,7 @@ RUN if [ ! -d /home/${USERNAME} ]; then \
   fi \
   && chown -R ${USERNAME}:${GROUPNAME} /home/${USERNAME}
 
-# Switch to regular user
+# Switch to user
 USER ${USERNAME}
 
 # Set workdir
