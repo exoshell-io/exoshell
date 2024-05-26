@@ -7,9 +7,6 @@ SHELL [ "/bin/bash", "--norc", "--noprofile", "-euxo", "pipefail", "-O", "nullgl
 # User root for setup
 USER root
 
-# Set workdir
-WORKDIR /exoshell
-
 # Setup system
 RUN set -eux
 RUN apt-get update && \
@@ -24,9 +21,74 @@ RUN echo "deb [signed-by=/etc/apt/keyrings/mise-archive-keyring.gpg arch=amd64] 
 RUN apt-get update && \
   apt-get upgrade -y && \
   apt-get dist-upgrade && \
-  apt-get -y --no-install-recommends vim gh install curl git build-essential pkg-config libssl-dev clang libgtk-3-dev libayatana-appindicator3-dev libwebkit2gtk-4.0-dev librsvg2-dev mise gosu && \
+  apt-get -y --no-install-recommends install vim gh curl git build-essential pkg-config libssl-dev clang libgtk-3-dev libayatana-appindicator3-dev libwebkit2gtk-4.0-dev librsvg2-dev mise gosu && \
   apt-get clean && \
   rm -rf /var/lib/apt/lists/*
+
+
+# Fetch env variables
+ARG USERNAME
+ARG UID
+ARG GROUPNAME
+ARG GID
+ENV USERNAME ${USERNAME}
+ENV UID ${UID}
+ENV GROUPNAME ${GROUPNAME}
+ENV GID ${GID}
+
+# Set UID same as host
+RUN OLD_USERNAME="$(getent passwd ${UID} | cut -d: -f1)" \
+  && if [ -n "${OLD_USERNAME}" ]; then \
+  usermod -l ${USERNAME} ${OLD_USERNAME} \
+  && usermod -d /home/${USERNAME} -m ${USERNAME}; \
+  else \
+  useradd -u ${UID} -m -s /bin/bash ${USERNAME}; \
+  fi
+
+# Set GID same as host
+RUN OLD_GROUPNAME="$(getent group ${GID} | cut -d: -f1)" \
+  && if [ -n "${OLD_GROUPNAME}" ]; then \
+  groupmod -n ${GROUPNAME} ${OLD_GROUPNAME}; \
+  else \
+  groupadd -g ${GID} ${GROUPNAME}; \
+  fi \
+  && usermod -g ${GROUPNAME} ${USERNAME}
+
+# Ensure the user is in the correct group and home directory exists
+RUN if [ ! -d /home/${USERNAME} ]; then \
+  mkdir -p /home/${USERNAME} \
+  && chown ${USERNAME}:${GROUPNAME} /home/${USERNAME}; \
+  fi \
+  && chown -R ${USERNAME}:${GROUPNAME} /home/${USERNAME}
+
+# Switch to regular user
+USER ${USERNAME}
+
+# Set workdir
+WORKDIR /exoshell
+
+# Set user shells in .bashrc
+RUN echo "export MISE_DATA_DIR=/home/${USERNAME}/.local/share/mise" | tee -a /home/${USERNAME}/.bashrc \
+  && echo "export MISE_TRUSTED_CONFIG_PATHS=/exoshell/.mise.toml" | tee -a /home/${USERNAME}/.bashrc \
+  && echo "export PATH=/home/${USERNAME}/.local/share/mise/shims:${PATH}" | tee -a /home/${USERNAME}/.bashrc \
+  && echo 'eval "$(mise activate bash)"' | tee -a /home/${USERNAME}/.bashrc
+
+# Set user shells in .profile
+RUN echo "export MISE_DATA_DIR=/home/${USERNAME}/.local/share/mise" | tee -a /home/${USERNAME}/.profile \
+  && echo "export MISE_TRUSTED_CONFIG_PATHS=/exoshell/.mise.toml" | tee -a /home/${USERNAME}/.profile \
+  && echo "export PATH=/home/${USERNAME}/.local/share/mise/shims:${PATH}" | tee -a /home/${USERNAME}/.profile \
+  && echo 'eval "$(mise activate bash)"' | tee -a /home/${USERNAME}/.profile
+
+# Setup dependencies
+COPY package.json package.json
+COPY bun.lockb bun.lockb
+COPY .mise.toml .mise.toml
+RUN mise trust
+# Add 2 .env dummy files to stop 'mise' error
+RUN touch .env .env.local
+RUN mise install -y
+RUN mise exec -- rustup default stable
+RUN mise exec -- bun install
 
 # Entrypoint script
 ENTRYPOINT [".devcontainer/entrypoint.sh"]

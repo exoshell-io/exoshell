@@ -5,6 +5,16 @@ services:
       dockerfile: .devcontainer/Dockerfile
       args:
         DEVCONTAINER_BASE_DOCKER_IMAGE: ${DEVCONTAINER_BASE_DOCKER_IMAGE}
+        USERNAME: ${USERNAME}
+        UID: ${UID}
+        GROUPNAME: ${GROUPNAME}
+        GID: ${GID}
+    environment:
+      DEVCONTAINER_BASE_DOCKER_IMAGE: ${DEVCONTAINER_BASE_DOCKER_IMAGE}
+      USERNAME: ${USERNAME}
+      UID: ${UID}
+      GROUPNAME: ${GROUPNAME}
+      GID: ${GID}
     env_file:
       - path: .env
         required: true
