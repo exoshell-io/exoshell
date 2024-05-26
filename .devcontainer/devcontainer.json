@@ -1,6 +1,7 @@
 {
-  "remoteUser": "${localEnv:USERNAME}",
-  "containerUser": "${localEnv:USERNAME}",
+  "remoteUser": "${localEnv:USER}",
+  "containerUser": "${localEnv:USER}",
+  "updateRemoteUserUID": true,
   "dockerComposeFile": "docker-compose.yml",
   "service": "dev",
   "name": "exoshell-dev",
@@ -8,7 +9,7 @@
     "source=${localWorkspaceFolder},target=/exoshell,type=bind,consistency=cached"
   ],
   "workspaceFolder": "/exoshell",
-  "initializeCommand": "(cat .env .env.local | grep -v '^#' | grep -v '^$' | sort -t '=' -k 1,1 | awk -F '=' '!seen[$1]++' && echo \"USERNAME=$(id -un)\" && echo \"UID=$(id -u)\" && echo \"GROUPNAME=$(id -gn)\" && echo \"GID=$(id -g)\") > .devcontainer/.env",
+  "initializeCommand": "(cat .env .env.local | grep -v '^#' | grep -v '^$' | sort -t '=' -k 1,1 | awk -F '=' '!seen[$1]++' && echo \"DEVCONTAINER_HOST_USERNAME=$(id -un)\" && echo \"DEVCONTAINER_HOST_UID=$(id -u)\" && echo \"DEVCONTAINER_HOST_GROUPNAME=$(id -gn)\" && echo \"DEVCONTAINER_HOST_GID=$(id -g)\") > .devcontainer/.env",
   "customizations": {
     "vscode": {
       "settings": {
