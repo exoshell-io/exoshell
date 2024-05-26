@@ -56,11 +56,15 @@ RUN CURRENT_GID=$(id -g ) \
   fi
 
 # Ensure the user is in the correct group and home directory exists
-RUN if [ ! -d /home/${USERNAME} ]; then \
-  mkdir -p /home/${USERNAME} \
-  && chown ${USERNAME}:${GROUPNAME} /home/${USERNAME}; \
-  fi \
-  && chown -R ${USERNAME}:${GROUPNAME} /home/${USERNAME}
+RUN CURRENT_UID=$(id -u) && \
+  CURRENT_GID=$(id -g) && \
+  if [ "${CURRENT_UID}" != "${UID}" ] || [ "${CURRENT_GID}" != "${GID}" ]; then \
+  if [ ! -d /home/${USERNAME} ]; then \
+  mkdir -p /home/${USERNAME} && \
+  chown ${USERNAME}:${GROUPNAME} /home/${USERNAME}; \
+  fi && \
+  chown -R ${USERNAME}:${GROUPNAME} /home/${USERNAME}; \
+  fi
 
 # Switch to user
 USER ${USERNAME}
