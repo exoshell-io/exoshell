@@ -1,16 +1,17 @@
-import {
-  resolve as resolveFilepath,
-  basename,
-  parse as parsePath,
-  format as formatPath,
-} from 'node:path';
 import { create as createGlob } from '@actions/glob';
 import {
   readFileSync,
   readdirSync,
-  writeFileSync,
   renameSync as renameFileSync,
+  writeFileSync,
 } from 'fs';
+import {
+  format as formatPath,
+  parse as parsePath,
+  resolve as resolveFilepath,
+} from 'node:path';
+import { castNonNull } from './utils.mjs';
+import { basename } from 'path';
 
 /**
  * @typedef {{
@@ -28,15 +29,14 @@ import {
 
 /**
  * @param {import('@actions/github/lib/context.js').Context} context
- * @param {string} appVersion
  * @param {string} releaseVersion
  */
-export default async function (context, appVersion, releaseVersion) {
-  const updaterFile = resolveFilepath(process.cwd(), 'latest.json');
+export default async function (context, releaseVersion) {
+  const updaterFile = resolveFilepath(process.cwd(), 'updater.json');
   /** @type {UpdaterFile} */
   const updaterFileContent = {
     version: releaseVersion,
-    notes: '',
+    notes: `https://github.com/${context.repo.owner}/${context.repo.repo}/releases/tag/${releaseVersion}`,
     pub_date: new Date().toISOString(),
     platforms: {},
   };
@@ -52,7 +52,6 @@ export default async function (context, appVersion, releaseVersion) {
     const arch = artifact.search('x86_64') > -1 ? 'x86_64' : 'aarch64';
     const platform = `${os}-${arch}`;
 
-    // Change appVersion to releaseVersion
     {
       const glob = await createGlob(
         ['dmg', 'tar.gz', 'sig', 'deb', 'AppImage']
@@ -62,29 +61,26 @@ export default async function (context, appVersion, releaseVersion) {
       const files = await glob.glob();
       for (const file of files) {
         const parsedPath = parsePath(file);
-        parsedPath.base = parsedPath.base
-          .replace(appVersion, releaseVersion)
-          .replace('exoshell', 'ExoShell')
-          .replace('exo-shell', 'ExoShell');
-        renameFileSync(file, formatPath(parsedPath));
+        const fileExtension = castNonNull(
+          castNonNull(parsedPath.base.match(/.+?\.([^0-9]+)$/))[1],
+        );
+        const filename = `ExoShell_${platform.replace('-', '_')}.${fileExtension}`;
+        const filepath = formatPath({
+          dir: parsedPath.dir,
+          base: filename,
+        });
+        renameFileSync(file, filepath);
       }
-    }
-
-    const glob = await createGlob(`desktop/${artifact}/**/*.tar.gz`);
-    const files = await glob.glob();
-    console.debug(`Matched files: ${files}`);
-    for (const asset of files) {
-      const newAssetPath = asset.replace(
-        '/ExoShell.',
-        `/ExoShell_${releaseVersion}_${arch}.`,
-      );
-      renameFileSync(asset, newAssetPath);
-      renameFileSync(`${asset}.sig`, `${newAssetPath}.sig`);
-      console.debug(`Adding ${os} ${arch} ${newAssetPath} to updater manifest`);
-      updaterFileContent.platforms[platform] = {
-        signature: readFileSync(`${newAssetPath}.sig`, 'utf8'),
-        url: `https://github.com/${context.repo.owner}/${context.repo.repo}/releases/download/${releaseVersion}/${basename(newAssetPath)}`,
-      };
+      {
+        const glob = await createGlob(`desktop/${artifact}/**/*.tar.gz`);
+        const files = await glob.glob();
+        for (const file of files) {
+          updaterFileContent.platforms[platform] = {
+            signature: readFileSync(`${file}.sig`, 'utf8'),
+            url: `https://github.com/${context.repo.owner}/${context.repo.repo}/releases/download/${releaseVersion}/${basename(file)}`,
+          };
+        }
+      }
     }
   }
 

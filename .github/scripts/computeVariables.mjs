@@ -3,6 +3,7 @@
 /** @typedef {typeof defaultOutputs} Outputs */
 
 import { readFileSync } from 'fs';
+import { castNonNull } from './utils.mjs';
 
 const defaultOutputs = {
   /** @type {false | 'draft' | 'prerelease' | 'stable'} */
@@ -156,14 +157,4 @@ function computeOutputs(core, outputs) {
       return [k, '\n\n```\n' + `${v}` + '\n```\n'];
     }),
   ]);
-}
-
-/**
- * Cast (unwrap) a non-null value to a non-null type.
- * It is equivalent to the ! operator in Typescript (eg. `a!.b!.c`)
- * @template T
- * @param {T} value
- */
-function castNonNull(value) {
-  return /** @type {NonNullable<T>} */ (value);
 }
