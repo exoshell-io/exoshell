@@ -1,11 +1,19 @@
 {
   "dockerComposeFile": "docker-compose.yml",
+  "remoteUser": "${env:USERNAME}",
+  "name": "exoshell-dev",
   "service": "dev",
-  "workspaceFolder": "/exoshell/",
+  "workspaceFolder": "/exoshell",
+  "initializeCommand": "echo \"USERNAME=$(id -un)\nUID=$(id -u)\nGROUPNAME=$(id -gn)\nGID=$(id -g)\" > .devcontainer/.env",
   "customizations": {
     "vscode": {
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "terminal.integrated.profiles.linux": {
+          "bash": { "path": "/usr/bin/bash" }
+        }
+      },
       "extensions": [
-        // cSpell:disable
         "bierner.github-markdown-preview",
         "bradlc.vscode-tailwindcss",
         "dbaeumer.vscode-eslint",
@@ -34,8 +42,8 @@
         "timonwong.shellcheck",
         "vunguyentuan.vscode-css-variables",
         "vunguyentuan.vscode-postcss",
-        "yatki.vscode-surround"
-        // cSpell:enable
+        "yatki.vscode-surround",
+        "tauri-apps.tauri-vscode"
       ]
     }
   }
