@@ -88,8 +88,7 @@ impl super::Engine {
                 },
               }
               q.await?;
-              loop {
-                if let Some(buf) = mux.read_nonblock()? {
+                while let Some(buf) = mux.read_nonblock()? {
                   if buf.tag == out_tag {
                     db.append_script_run_log(
                       &id.clone(),
@@ -109,10 +108,7 @@ impl super::Engine {
                     )
                     .await?;
                   }
-                } else {
-                  break
                 }
-              }
               break;
             }
             Some(cmd) = rx.recv() => {

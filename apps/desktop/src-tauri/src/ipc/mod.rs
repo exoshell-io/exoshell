@@ -126,10 +126,10 @@ enum Error {
   Tauri(#[from] tauri::Error),
 
   #[error(transparent)]
-  Error(#[from] anyhow::Error),
+  Anyhow(#[from] anyhow::Error),
 
   #[error(transparent)]
-  ParseError(#[from] shell_words::ParseError),
+  ShellParsing(#[from] shell_words::ParseError),
 }
 
 impl serde::Serialize for Error {

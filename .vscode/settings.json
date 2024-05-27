@@ -3,6 +3,7 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "cSpell.words": [
+    "aarch",
     "clsx",
     "contextmenu",
     "exoshell",
@@ -47,5 +48,6 @@
     "**/*.sass",
     "**/*.less",
     "node_modules/@mantine/core/styles.css"
-  ]
+  ],
+  "rust-analyzer.check.command": "clippy"
 }

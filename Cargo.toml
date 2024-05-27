@@ -60,5 +60,11 @@ tauri = { version = "1.6.7", features = [
   "global-shortcut",
   "macos-private-api",
   "system-tray",
+  "updater",
 ] }
 tauri-build = { version = "1.5.2", features = [] }
+
+[workspace.lints.clippy]
+type_complexity = 'allow'
+single_match = 'allow'
+collapsible_else_if = 'allow'

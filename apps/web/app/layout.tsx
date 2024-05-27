@@ -3,19 +3,11 @@ import '@mantine/notifications/styles.css';
 import './globals.css';
 
 import { CSPostHogProvider } from '@/_analytics';
-import { Logo } from '@/_ui/Logo';
-import {
-  Box,
-  ColorSchemeScript,
-  Container,
-  Group,
-  MantineProvider,
-  createTheme,
-} from '@mantine/core';
+import { ColorSchemeScript, MantineProvider, createTheme } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
 import type { Metadata } from 'next';
 import { Signika, Sora } from 'next/font/google';
-import { Brand } from './_ui/Brand';
+import { FrontLayout } from './FrontLayout';
 
 const font = Sora({
   subsets: ['latin'],
@@ -44,76 +36,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='en'>
+    <html
+      lang='en'
+      className={`${font.className} ${logoFont.variable} text-zinc-900`}
+    >
       <head>
         <ColorSchemeScript />
       </head>
       <CSPostHogProvider>
-        <body
-          className={`${font.className} ${logoFont.variable} text-zinc-900`}
-        >
+        <body>
           <MantineProvider theme={theme}>
             <Notifications />
-            <Box component='header'>
-              <Container
-                size='xl'
-                h={70}
-                px={16}
-                className='flex items-center justify-between'
-              >
-                <Brand />
-                <Group gap='xl'>
-                  {HEADER_MENU.map((link) => (
-                    <a
-                      key={link.href}
-                      href={link.href}
-                      className='font-semibold text-zinc-900 underline-offset-4 hover:underline'
-                    >
-                      {link.label}
-                    </a>
-                  ))}
-                </Group>
-              </Container>
-            </Box>
-            <Box component='main'>{children}</Box>
-            <Box
-              component='footer'
-              className='border-t border-solid border-gray-200 py-2'
-            >
-              <Container
-                size='xl'
-                h={70}
-                px={16}
-                className='flex items-center justify-between '
-              >
-                <Group align='end'>
-                  <>
-                    <Logo />
-                    <span className='text-xs'>
-                      @ {new Date().getFullYear()}
-                    </span>
-                  </>
-                </Group>
-              </Container>
-            </Box>
+            <FrontLayout>{children}</FrontLayout>
           </MantineProvider>
         </body>
       </CSPostHogProvider>
     </html>
   );
 }
-
-const HEADER_MENU: { href: string; label: string }[] = [
-  {
-    href: '#faq',
-    label: 'FAQ',
-  },
-  {
-    href: '#features',
-    label: 'Features',
-  },
-  {
-    href: '#newsletter',
-    label: 'Newsletter',
-  },
-];

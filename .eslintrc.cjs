@@ -21,5 +21,5 @@ module.exports = {
       plugins: ['@typescript-eslint'],
     },
   ],
-  ignorePatterns: ['!.github/', '!.lintstagedrc.mjs', 'apps/*/dist/'],
+  ignorePatterns: ['!.lintstagedrc.mjs', '!.github/', 'apps/*/dist/'],
 };

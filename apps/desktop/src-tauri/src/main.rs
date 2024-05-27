@@ -70,7 +70,6 @@ fn main() {
               )
               .add_item(CustomMenuItem::new("quit", "⏻  Quit")),
           )
-          .with_title("ExoShell")
           .on_event(move |event| {
             match event {
               SystemTrayEvent::MenuItemClick { id, .. } => match id.as_str() {

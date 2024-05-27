@@ -1,8 +1,7 @@
 {
   "$schema": "../../../node_modules/@tauri-apps/cli/schema.json",
   "package": {
-    "productName": "ExoShell",
-    "version": "0.0.0"
+    "productName": "ExoShell"
   },
   "build": {
     "beforeBuildCommand": "bun run build:web",
@@ -38,10 +37,11 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "dev.exoshell.exoshell",
+      "identifier": "io.exoshell.exoshell",
       "longDescription": "",
       "macOS": {
         "entitlements": null,
+        "minimumSystemVersion": "12.0",
         "exceptionDomain": "",
         "frameworks": [],
         "providerShortName": null,
@@ -49,7 +49,7 @@
       },
       "resources": [],
       "shortDescription": "",
-      "targets": "all",
+      "targets": ["deb", "appimage", "nsis", "app", "dmg", "updater", "msi"],
       "windows": {
         "certificateThumbprint": null,
         "digestAlgorithm": "sha256",
@@ -60,7 +60,15 @@
       "csp": null
     },
     "updater": {
-      "active": false
+      "active": true,
+      "endpoints": [
+        "https://github.com/exoshell-dev/exoshell/releases/latest/download/latest.json"
+      ],
+      "dialog": true,
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IERBRDVEMzY0QzJCQTJBQUQKUldTdEtyckNaTlBWMmw1cmdCcVhHTVRrbCtrZ3ZDb0VFMWl2MzVjWVl4b2Q1OW9rTUdjekVGRmEK",
+      "windows": {
+        "installMode": "basicUi"
+      }
     },
     "windows": [
       {
@@ -68,6 +76,7 @@
         "height": 600,
         "width": 800,
         "hiddenTitle": true,
+        "title": "ExoShell",
         "titleBarStyle": "Overlay"
       },
       {
