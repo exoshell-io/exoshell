@@ -1,6 +1,6 @@
 {
-  "remoteUser": "${localEnv:USER}",
-  "containerUser": "${localEnv:USER}",
+  // "remoteUser": "${localEnv:USER}",
+  // "containerUser": "${localEnv:USER}",
   "updateRemoteUserUID": true,
   "dockerComposeFile": "docker-compose.yml",
   "service": "dev",
