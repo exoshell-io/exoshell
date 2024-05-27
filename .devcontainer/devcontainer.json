@@ -5,11 +5,10 @@
   "dockerComposeFile": "docker-compose.yml",
   "service": "dev",
   "name": "exoshell-dev",
-  // "mounts": [
-  //   "source=${localWorkspaceFolder},target=/workspaces/exoshell,type=bind"
-  // ],
-  // "workspaceMount": "source=${localWorkspaceFolder},target=/workspaces/exoshell,type=bind",
-  "workspaceFolder": "/exoshell",
+  "mounts": [
+    "source=${localWorkspaceFolder},target=/workspaces/exoshell,type=bind"
+  ],
+  "workspaceFolder": "/workspaces/exoshell",
   "initializeCommand": "(cat .env .env.local | grep -v '^#' | grep -v '^$' | sort -t '=' -k 1,1 | awk -F '=' '!seen[$1]++' && echo \"DEVCONTAINER_HOST_USERNAME=$(id -un)\" && echo \"DEVCONTAINER_HOST_UID=$(id -u)\" && echo \"DEVCONTAINER_HOST_GROUPNAME=$(id -gn)\" && echo \"DEVCONTAINER_HOST_GID=$(id -g)\") > .devcontainer/.env",
   "customizations": {
     "vscode": {
