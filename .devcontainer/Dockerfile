@@ -44,7 +44,7 @@ RUN CURRENT_UID=$(id -u) \
   fi
 
 # Set GID same as host if necessary
-RUN CURRENT_GID=$(id -g ) \
+RUN CURRENT_GID=$(id -g) \
   && if [ "${CURRENT_GID}" != "${DEVCONTAINER_HOST_GID}" ]; then \
   OLD_GROUPNAME="$(getent group ${DEVCONTAINER_HOST_GID} | cut -d: -f1)" \
   && if [ -n "${OLD_GROUPNAME}" ]; then \
