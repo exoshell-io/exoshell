@@ -1,7 +1,4 @@
 {
-  // "remoteUser": "${localEnv:USER}",
-  // "containerUser": "${localEnv:USER}",
-  "updateRemoteUserUID": true,
   "dockerComposeFile": "docker-compose.yml",
   "service": "dev",
   "name": "exoshell-dev",
