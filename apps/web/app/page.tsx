@@ -8,11 +8,17 @@ import {
   ActionIcon,
   Box,
   Button,
+  Card,
   Container,
   Group,
   Title as MantineTitle,
-  Skeleton,
+  SimpleGrid,
+  Stack,
   Table,
+  Tabs,
+  TabsList,
+  TabsPanel,
+  TabsTab,
   Text,
   TextInput,
   Tooltip,
@@ -24,7 +30,14 @@ import { useMemo } from 'react';
 import { FaCheck as IconCheck } from 'react-icons/fa';
 import Markdown from 'react-markdown';
 import { registerEmail } from './_db/registerEmail';
-import { IconQuestionCircle } from './_ui/icons';
+import { ConditionalWrapper } from './_ui/ConditionalWrapper';
+import {
+  IconApple,
+  IconDownload,
+  IconLinux,
+  IconQuestionCircle,
+  IconWindows,
+} from './_ui/icons';
 
 const FAQ: { question: string; answer: string }[] = [
   {
@@ -116,14 +129,100 @@ export default function Page() {
   );
 }
 
+const DOWNLOAD_BASEURL =
+  'https://github.com/exoshell-dev/exoshell/releases/download/latest';
+
+const DOWNLOADS = [
+  {
+    icon: <IconWindows />,
+    os: 'Windows',
+  },
+  {
+    os: 'MacOS',
+    icon: <IconApple />,
+    buttons: [
+      {
+        text: 'x86_64 (Intel)',
+        url: `${DOWNLOAD_BASEURL}/ExoShell_darwin_x86_64.dmg`,
+      },
+      {
+        text: 'aarch64 (Apple Silicon)',
+        url: `${DOWNLOAD_BASEURL}/ExoShell_darwin_aarch64.dmg`,
+      },
+    ],
+  },
+  {
+    os: 'Linux',
+    icon: <IconLinux />,
+    buttons: [
+      {
+        text: 'x86_64 AppImage',
+        url: `${DOWNLOAD_BASEURL}/ExoShell_linux_x86_64.AppImage`,
+      },
+      {
+        text: 'x86_64 Deb',
+        url: `${DOWNLOAD_BASEURL}/ExoShell_linux_x86_64.deb`,
+      },
+    ],
+  },
+];
+
 const Hero: React.FC = () => {
   return (
-    <Box ta='center' pt={60} pb={120}>
+    <Box ta='center' pt={120}>
       <Container size='md'>
         <h1 className='mx-auto max-w-screen-sm text-3xl font-extrabold lg:text-5xl'>
           Use your computers like never before
         </h1>
-        <Skeleton height={300} width='100%' mx='auto' mt={60} />
+        <Tabs defaultValue='MacOS' variant='default' my={100}>
+          <TabsList grow>
+            {DOWNLOADS.map((dll) => (
+              <ConditionalWrapper
+                key={dll.os}
+                condition={dll.buttons === undefined}
+                wrapper={(children) => (
+                  <Tooltip label='Available soon'>{children}</Tooltip>
+                )}
+              >
+                <TabsTab
+                  value={dll.os}
+                  leftSection={dll.icon}
+                  disabled={dll.buttons === undefined}
+                >
+                  {dll.os}
+                </TabsTab>
+              </ConditionalWrapper>
+            ))}
+          </TabsList>
+          {DOWNLOADS.map((dll) => (
+            <TabsPanel key={dll.os} value={dll.os} py='xl'>
+              <SimpleGrid cols={{ base: 1, xs: 2 }}>
+                {dll.buttons?.map((btn) => (
+                  <Card
+                    key={btn.text}
+                    withBorder
+                    shadow='md'
+                    padding='lg'
+                    radius='sm'
+                  >
+                    <Stack>
+                      <Text>{btn.text}</Text>
+                      <Button
+                        component='a'
+                        target='_blank'
+                        href={btn.url}
+                        color='blue.4'
+                        leftSection={<IconDownload />}
+                      >
+                        Download
+                      </Button>
+                    </Stack>
+                  </Card>
+                ))}
+              </SimpleGrid>
+            </TabsPanel>
+          ))}
+        </Tabs>
       </Container>
     </Box>
   );
@@ -138,12 +237,7 @@ const Faq: React.FC = () => {
     >
       <Container pt={60} pb={120} size='md'>
         <h2 className='text-center text-5xl font-bold'>FAQ</h2>
-        <Accordion
-          multiple={true}
-          chevronPosition='left'
-          mt={36}
-          defaultValue={FAQ.map((e) => e.question)}
-        >
+        <Accordion multiple={true} chevronPosition='left' mt={36}>
           {FAQ.map((e) => (
             <AccordionItem key={e.question} value={e.question}>
               <AccordionControl>
