@@ -9,5 +9,5 @@ services:
         DEVCONTAINER_HOST_UID: ${DEVCONTAINER_HOST_UID}
         DEVCONTAINER_HOST_GROUPNAME: ${DEVCONTAINER_HOST_GROUPNAME}
         DEVCONTAINER_HOST_GID: ${DEVCONTAINER_HOST_GID}
-    # volumes:
-    #   - ../:/exoshell
+    volumes:
+      - ../:/exoshell

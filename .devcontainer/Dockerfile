@@ -70,17 +70,17 @@ RUN CURRENT_UID=$(id -u) && \
 USER ${DEVCONTAINER_HOST_USERNAME}
 
 # Set workdir
-WORKDIR /workspaces/exoshell
+WORKDIR /exoshell
 
 # Set user shells in .bashrc
 RUN echo "export MISE_DATA_DIR=${HOME}/.local/share/mise" | tee -a ${HOME}/.bashrc \
-  && echo "export MISE_TRUSTED_CONFIG_PATHS=/workspaces/exoshell/.mise.toml" | tee -a ${HOME}/.bashrc \
+  && echo "export MISE_TRUSTED_CONFIG_PATHS=/exoshell/.mise.toml" | tee -a ${HOME}/.bashrc \
   && echo "export PATH=${HOME}/.local/share/mise/shims:${PATH}" | tee -a ${HOME}/.bashrc \
   && echo 'eval "$(mise activate bash)"' | tee -a ${HOME}/.bashrc
 
 # Set user shells in .profile
 RUN echo "export MISE_DATA_DIR=${HOME}/.local/share/mise" | tee -a ${HOME}/.profile \
-  && echo "export MISE_TRUSTED_CONFIG_PATHS=/workspaces/exoshell/.mise.toml" | tee -a ${HOME}/.profile \
+  && echo "export MISE_TRUSTED_CONFIG_PATHS=/exoshell/.mise.toml" | tee -a ${HOME}/.profile \
   && echo "export PATH=${HOME}/.local/share/mise/shims:${PATH}" | tee -a ${HOME}/.profile \
   && echo 'eval "$(mise activate bash)"' | tee -a ${HOME}/.profile
 
