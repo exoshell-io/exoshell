@@ -130,7 +130,7 @@ export default function Page() {
 }
 
 const DOWNLOAD_BASEURL =
-  'https://github.com/exoshell-dev/exoshell/releases/download/latest';
+  'https://github.com/exoshell-dev/exoshell/releases/latest/download';
 
 const DOWNLOADS = [
   {
@@ -209,9 +209,9 @@ const Hero: React.FC = () => {
                       <Text>{btn.text}</Text>
                       <Button
                         component='a'
-                        target='_blank'
                         href={btn.url}
                         color='blue.4'
+                        c='white'
                         leftSection={<IconDownload />}
                       >
                         Download
