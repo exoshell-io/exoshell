@@ -24,7 +24,6 @@ anyhow.workspace = true
 thiserror.workspace = true
 chrono.workspace = true
 derive_builder.workspace = true
-io-mux.workspace = true
 tap.workspace = true
 
 # Serialization
@@ -45,4 +44,5 @@ surrealdb.workspace = true
 # Async
 tokio.workspace = true
 tokio-util.workspace = true
+tokio-stream.workspace = true
 futures.workspace = true

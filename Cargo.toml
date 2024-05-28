@@ -18,10 +18,6 @@ thiserror = { version = "1.0.61" }
 clap = { version = "4.5.4", features = ["derive"] }
 chrono = { version = "0.4.38" }
 derive_builder = { version = "0.20.0" }
-io-mux = { version = "2.2.0", features = [
-  "async",
-  "experimental-unix-support",
-] }
 tap = { version = "1.0.1" }
 
 # Serialization
@@ -45,6 +41,7 @@ surrealdb = { version = "1.5.1", features = ["kv-rocksdb", "kv-mem"] }
 # Async
 tokio = { version = "1.37.0", features = ["process", "sync"] }
 tokio-util = { version = "0.7.11", features = ["io"] }
+tokio-stream = { version = "0.1.15", features = ["io-util"] }
 futures = { version = "0.3.30" }
 
 # Macro helpers
