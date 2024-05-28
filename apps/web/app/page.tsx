@@ -31,6 +31,7 @@ import { FaCheck as IconCheck } from 'react-icons/fa';
 import Markdown from 'react-markdown';
 import { registerEmail } from './_db/registerEmail';
 import { ConditionalWrapper } from './_ui/ConditionalWrapper';
+import { CodeHighlight } from '@mantine/code-highlight';
 import {
   IconApple,
   IconDownload,
@@ -169,7 +170,7 @@ const DOWNLOADS = [
 
 const Hero: React.FC = () => {
   return (
-    <Box ta='center' pt={120}>
+    <Box pt={120}>
       <Container size='md'>
         <h1 className='mx-auto max-w-screen-sm text-3xl font-extrabold lg:text-5xl'>
           Use your computers like never before
@@ -196,6 +197,19 @@ const Hero: React.FC = () => {
           </TabsList>
           {DOWNLOADS.map((dll) => (
             <TabsPanel key={dll.os} value={dll.os} py='xl'>
+              {dll.os === 'MacOS' && (
+                <>
+                  <h3>
+                    Install with <a href=''>Brew</a>
+                  </h3>
+                  <CodeHighlight
+                    code='brew install exoshell-dev/exoshell/exoshell'
+                    lang='sh'
+                    withCopyButton={false}
+                  />
+                </>
+              )}
+              <h3>Manual install</h3>
               <SimpleGrid cols={{ base: 1, xs: 2 }}>
                 {dll.buttons?.map((btn) => (
                   <Card
@@ -206,7 +220,7 @@ const Hero: React.FC = () => {
                     radius='sm'
                   >
                     <Stack>
-                      <Text>{btn.text}</Text>
+                      <Text ta='center'>{btn.text}</Text>
                       <Button
                         component='a'
                         href={btn.url}

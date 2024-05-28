@@ -1,0 +1,18 @@
+@layer base, tailwind, mantine;
+
+@layer base {
+  @tailwind base;
+}
+
+@layer tailwind {
+  @tailwind components;
+  @tailwind utilities;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  &:visited {
+    color: inherit;
+  }
+}

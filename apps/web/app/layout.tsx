@@ -1,6 +1,8 @@
-import '@mantine/core/styles.css';
-import '@mantine/notifications/styles.css';
-import './globals.css';
+import '@mantine/core/styles/global.layer.css';
+import '@mantine/code-highlight/styles.layer.css';
+import '@mantine/core/styles.layer.css';
+import '@mantine/notifications/styles.layer.css';
+import './layout.css';
 
 import { CSPostHogProvider } from '@/_analytics';
 import { ColorSchemeScript, MantineProvider, createTheme } from '@mantine/core';
