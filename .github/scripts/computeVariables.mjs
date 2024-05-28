@@ -19,7 +19,7 @@ const defaultCdTauriMatrix = {
     { platform: 'ubuntu-22.04', tauriBuildTarget: 'x86_64-unknown-linux-gnu' },
     { platform: 'macos-latest', tauriBuildTarget: 'aarch64-apple-darwin' },
     { platform: 'macos-latest', tauriBuildTarget: 'x86_64-apple-darwin' },
-    // { platform: 'windows-latest', tauriBuildTarget: 'x86_64-pc-windows-msvc' },
+    { platform: 'windows-latest', tauriBuildTarget: 'x86_64-pc-windows-msvc' },
     // { platform: 'macos-latest', tauriBuildArgs: '--target universal-apple-darwin', rustTargets: 'x86_64-apple-darwin,aarch64-apple-darwin' },
   ],
 };

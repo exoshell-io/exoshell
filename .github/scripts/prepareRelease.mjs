@@ -42,13 +42,19 @@ export default async function (context, releaseVersion) {
   };
 
   const artifacts = readdirSync('desktop/');
+  console.debug('Artifacts:', artifacts);
   for (const artifact of artifacts) {
     const os =
       artifact.search('darwin') > -1
         ? 'darwin'
         : artifact.search('linux') > -1
           ? 'linux'
-          : 'windows';
+          : artifact.search('windows') > -1
+            ? 'windows'
+            : undefined;
+    if (os === undefined) {
+      throw new Error(`Unknown OS for artifact ${artifact}`);
+    }
     const arch = artifact.search('x86_64') > -1 ? 'x86_64' : 'aarch64';
     const platform = `${os}-${arch}`;
 
