@@ -25,7 +25,7 @@ io-mux = { version = "2.2.0", features = [
 tap = { version = "1.0.1" }
 
 # Serialization
-serde = { version = "1.0.202", features = ["derive"] }
+serde = { version = "1.0.203", features = ["derive"] }
 serde_json = { version = "1.0.117" }
 serde_with = { version = "3.8.1" }
 heck = { version = "0.5.0" }
@@ -48,9 +48,9 @@ tokio-util = { version = "0.7.11", features = ["io"] }
 futures = { version = "0.3.30" }
 
 # Macro helpers
-syn = { version = "2.0.65" }
+syn = { version = "2.0.66" }
 quote = { version = "1.0.36" }
-proc-macro2 = { version = "1.0.83" }
+proc-macro2 = { version = "1.0.84" }
 darling = { version = "0.20.9" }
 
 # Tauri
