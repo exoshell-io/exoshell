@@ -123,6 +123,10 @@ jobs:
             desktop/**/*.dmg
             desktop/**/*.deb
             desktop/**/*.AppImage
+            desktop/**/*.msi
+            desktop/**/*.exe
+            desktop/**/*.zip
+            desktop/**/*.zip.sig
           fail_on_unmatched_files: true
           generate_release_notes: true
           make_latest: ${{ needs.ci.outputs.shouldRelease == 'stable' && 'true' || 'false' }}
