@@ -52,6 +52,7 @@ export default async function (context, releaseVersion) {
           : artifact.search('windows') > -1
             ? 'windows'
             : undefined;
+
     if (os === undefined) {
       throw new Error(`Unknown OS for artifact ${artifact}`);
     }
@@ -60,7 +61,7 @@ export default async function (context, releaseVersion) {
 
     {
       const glob = await createGlob(
-        ['dmg', 'tar.gz', 'sig', 'deb', 'AppImage']
+        ['dmg', 'tar.gz', 'sig', 'deb', 'AppImage', 'msi', 'exe', 'zip']
           .map((ext) => `desktop/${artifact}/**/*.${ext}`)
           .join('\n'),
       );
@@ -78,7 +79,15 @@ export default async function (context, releaseVersion) {
         renameFileSync(file, filepath);
       }
       {
-        const glob = await createGlob(`desktop/${artifact}/**/*.tar.gz`);
+        const glob = await createGlob(
+          [
+            ...['tar.gz', 'zip'].map(
+              (ext) => `desktop/${artifact}/**/*.${ext}`,
+            ),
+            // cSpell:ignore nsis
+            `!desktop/${artifact}/**/*.nsis.zip`,
+          ].join('\n'),
+        );
         const files = await glob.glob();
         for (const file of files) {
           updaterFileContent.platforms[platform] = {
