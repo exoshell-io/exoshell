@@ -1,5 +1,13 @@
-@tailwind components;
-@tailwind utilities;
+@layer base, tailwind, mantine;
+
+@layer base {
+  @tailwind base;
+}
+
+@layer tailwind {
+  @tailwind components;
+  @tailwind utilities;
+}
 
 /* Hide devtools buttons */
 div.tsqd-open-btn-container,
