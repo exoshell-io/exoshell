@@ -3,14 +3,10 @@ use super::prelude::*;
 impl super::Engine {
   #[instrument(skip(self), ret, err)]
   pub async fn run_script(&self, script: Script) -> Result<ScriptRun> {
-    let mut mux = AsyncMux::new()?;
-    let (out_tag, out_sender) = mux.make_sender()?;
-    let (err_tag, err_sender) = mux.make_sender()?;
-
     let mut child = Command::new(&script.command)
       .args(&script.args)
-      .stdout(out_sender)
-      .stderr(err_sender)
+      .stdout(Stdio::piped())
+      .stderr(Stdio::piped())
       .spawn()
       .context("Failed to spawn child process")?;
 
@@ -28,6 +24,25 @@ impl super::Engine {
 
     let (tx, mut rx) = mpsc::unbounded_channel::<ChildCommand>();
 
+    let stdout = {
+      let stdout = child.stdout.take().expect("stdout not set");
+      let boxed: Pin<Box<dyn AsyncRead + Send>> = Box::pin(stdout);
+      let buf_reader = BufReader::new(boxed);
+      let lines = buf_reader.lines();
+      LinesStream::new(lines)
+    };
+    let stderr = {
+      let stderr = child.stderr.take().expect("stderr not set");
+      let boxed: Pin<Box<dyn AsyncRead + Send>> = Box::pin(stderr);
+      let buf_reader = BufReader::new(boxed);
+      let lines = buf_reader.lines();
+      LinesStream::new(lines)
+    };
+
+    let mut mux = StreamMap::new();
+    mux.insert(ChildStdOutputs::Stdout, stdout);
+    mux.insert(ChildStdOutputs::Stderr, stderr);
+
     {
       let id = id.clone();
       let db = self.db.clone();
@@ -35,33 +50,8 @@ impl super::Engine {
       tokio::spawn(async move {
         loop {
           tokio::select! {
-            buf = mux.read() => {
-              match buf {
-                Ok(buf) => {
-                  if buf.tag == out_tag {
-                    db.append_script_run_log(
-                      &id.clone(),
-                      &ScriptRunLog::Stdout {
-                        txt: String::from_utf8_lossy(buf.data).to_string(),
-                        ts: Utc::now(),
-                      },
-                    )
-                    .await?;
-                  } else if buf.tag == err_tag {
-                    db.append_script_run_log(
-                      &id.clone(),
-                      &ScriptRunLog::Stderr {
-                        txt: String::from_utf8_lossy(buf.data).to_string(),
-                        ts: Utc::now(),
-                      },
-                    )
-                    .await?;
-                  }
-                },
-                Err(e) => {
-                  error!("Error reading from mux: {}", e);
-                },
-              }
+            Some((key, line)) = mux.next() => {
+              handle_child_outputs(&id, &db, &key, line).await;
             }
             exit_status = child.wait() => {
               debug!("Exit status: {:#?}", exit_status);
@@ -87,40 +77,26 @@ impl super::Engine {
                   error!("Error waiting for child: {}", e);
                 },
               }
-              q.await?;
-                while let Some(buf) = mux.read_nonblock()? {
-                  if buf.tag == out_tag {
-                    db.append_script_run_log(
-                      &id.clone(),
-                      &ScriptRunLog::Stdout {
-                        txt: String::from_utf8_lossy(buf.data).to_string(),
-                        ts: Utc::now(),
-                      },
-                    )
-                    .await?;
-                  } else if buf.tag == err_tag {
-                    db.append_script_run_log(
-                      &id.clone(),
-                      &ScriptRunLog::Stderr {
-                        txt: String::from_utf8_lossy(buf.data).to_string(),
-                        ts: Utc::now(),
-                      },
-                    )
-                    .await?;
-                  }
-                }
+              if let Err(err) = q.await {
+                error!("Failed to update script run with exit status: {err}");
+              }
+              // Flush stdout and stderr
+              while let Some((key, line)) = mux.next().await {
+                handle_child_outputs(&id, &db, &key, line).await;
+              }
               break;
             }
             Some(cmd) = rx.recv() => {
               match cmd {
                 ChildCommand::Kill => {
-                  child.kill().await?;
+                  if let Err(err) = child.kill().await {
+                    error!("Failed to kill child: {err}");
+                  }
                 }
               }
             }
           }
         }
-        Ok::<(), anyhow::Error>(())
       });
     }
 
@@ -144,6 +120,60 @@ impl super::Engine {
     child.send(ChildCommand::Kill)?;
     Ok(())
   }
+}
+
+async fn handle_child_outputs(
+  id: &surrealdb::sql::Id,
+  db: &Arc<Database>,
+  key: &ChildStdOutputs,
+  line: std::result::Result<String, std::io::Error>,
+) {
+  match key {
+    ChildStdOutputs::Stdout => match line {
+      Ok(line) => {
+        if let Err(err) = db
+          .append_script_run_log(
+            id,
+            &ScriptRunLog::Stdout {
+              txt: line,
+              ts: Utc::now(),
+            },
+          )
+          .await
+        {
+          error!("Failed to append script run log: {err}");
+        }
+      }
+      Err(err) => {
+        error!("Failed to read line from stdout: {err}");
+      }
+    },
+    ChildStdOutputs::Stderr => match line {
+      Ok(line) => {
+        if let Err(err) = db
+          .append_script_run_log(
+            id,
+            &ScriptRunLog::Stderr {
+              txt: line,
+              ts: Utc::now(),
+            },
+          )
+          .await
+        {
+          error!("Failed to append script run log: {err}");
+        }
+      }
+      Err(err) => {
+        error!("Failed to read line from stderr: {err}");
+      }
+    },
+  }
+}
+
+#[derive(PartialEq, Eq, Hash, Clone)]
+enum ChildStdOutputs {
+  Stdout,
+  Stderr,
 }
 
 #[cfg(test)]

@@ -137,6 +137,16 @@ const DOWNLOADS = [
   {
     icon: <IconWindows />,
     os: 'Windows',
+    buttons: [
+      {
+        text: 'x86_64 Exe',
+        url: `${DOWNLOAD_BASEURL}/ExoShell_windows_x86_64.exe`,
+      },
+      {
+        text: 'x86_64 Msi',
+        url: `${DOWNLOAD_BASEURL}/ExoShell_windows_x86_64.msi`,
+      },
+    ],
   },
   {
     os: 'MacOS',
@@ -200,7 +210,15 @@ const Hero: React.FC = () => {
               {dll.os === 'MacOS' && (
                 <>
                   <h3>
-                    Install with <a href=''>Brew</a>
+                    Install with{' '}
+                    <a
+                      href='https://brew.sh/'
+                      referrerPolicy='no-referrer'
+                      target='_blank'
+                      className='!text-blue-600 hover:underline'
+                    >
+                      Brew
+                    </a>
                   </h3>
                   <CodeHighlight
                     code='brew install exoshell-dev/exoshell/exoshell'
