@@ -39,7 +39,7 @@ tracing-subscriber = { version = "0.3.18", features = [
 surrealdb = { version = "1.5.1", features = ["kv-rocksdb", "kv-mem"] }
 
 # Async
-tokio = { version = "1.37.0", features = ["process", "sync"] }
+tokio = { version = "1.38.0", features = ["process", "sync"] }
 tokio-util = { version = "0.7.11", features = ["io"] }
 tokio-stream = { version = "0.1.15", features = ["io-util"] }
 futures = { version = "0.3.30" }
@@ -47,11 +47,11 @@ futures = { version = "0.3.30" }
 # Macro helpers
 syn = { version = "2.0.66" }
 quote = { version = "1.0.36" }
-proc-macro2 = { version = "1.0.84" }
+proc-macro2 = { version = "1.0.85" }
 darling = { version = "0.20.9" }
 
 # Tauri
-tauri = { version = "1.6.7", features = [
+tauri = { version = "1.6.8", features = [
   "window-start-dragging",
   "window-hide",
   "global-shortcut",
