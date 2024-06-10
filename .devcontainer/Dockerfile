@@ -20,7 +20,7 @@ RUN echo "deb [signed-by=/etc/apt/keyrings/mise-archive-keyring.gpg arch=amd64] 
   chmod a+r /etc/apt/keyrings/mise-archive-keyring.gpg
 RUN apt-get update && \
   apt-get upgrade -y && \
-  apt-get dist-upgrade && \
+  apt-get dist-upgrade -y && \
   apt-get install -y --no-install-recommends vim gh curl git build-essential pkg-config libssl-dev clang libgtk-3-dev libayatana-appindicator3-dev libwebkit2gtk-4.0-dev librsvg2-dev mise gosu && \
   apt-get clean && \
   rm -rf /var/lib/apt/lists/*
