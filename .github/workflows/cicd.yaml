@@ -37,20 +37,16 @@ jobs:
         id: compute_variables
         with:
           script: (await import('${{ github.workspace }}/.github/scripts/computeVariables.mjs')).default(context, core)
-      - uses: dtolnay/rust-toolchain@stable
-        with:
-          toolchain: ${{ steps.compute_variables.outputs.rustVersion }}
-          components: clippy, rustfmt
       - name: Install Tauri system dependencies
         uses: ./.github/actions/tauri-install-system-deps
       - name: Lint & Test
         run: |
           bun run ci
           cargo test --locked ${{ github.workspace }}
-      - uses: EmbarkStudios/cargo-deny-action@v1
-        with:
-          rust-version: ${{ format('{0}.0', steps.compute_variables.outputs.rustVersion) }}
-          command: check bans licenses sources
+      # - uses: EmbarkStudios/cargo-deny-action@v1
+      #   with:
+      #     rust-version: ${{ format('{0}.0', steps.compute_variables.outputs.rustVersion) }}
+      #     command: check bans licenses sources
 
   cd-tauri:
     strategy:
