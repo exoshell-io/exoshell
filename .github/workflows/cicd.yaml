@@ -37,6 +37,10 @@ jobs:
         id: compute_variables
         with:
           script: (await import('${{ github.workspace }}/.github/scripts/computeVariables.mjs')).default(context, core)
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: ${{ steps.compute_variables.outputs.rustVersion }}
+          components: clippy, rustfmt
       - name: Install Tauri system dependencies
         uses: ./.github/actions/tauri-install-system-deps
       - name: Lint & Test
