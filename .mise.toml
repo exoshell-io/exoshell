@@ -4,7 +4,7 @@ rust = '1.78'
 node = 'lts'
 
 [env]
-'_'.file = ['.env', '.env.local']
+'_'.file = ['.env']
 
 [settings]
 status.show_env = true
