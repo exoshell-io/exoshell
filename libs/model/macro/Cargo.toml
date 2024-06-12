@@ -2,6 +2,7 @@
 name = "macro_model"
 edition.workspace = true
 version.workspace = true
+publish = false
 
 [lints]
 workspace = true

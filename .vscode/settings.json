@@ -4,6 +4,7 @@
   },
   "cSpell.words": [
     "aarch",
+    "clippy",
     "clsx",
     "contextmenu",
     "exoshell",
@@ -14,6 +15,7 @@
     "posthog",
     "quickbar",
     "reactflow",
+    "RUSTUP",
     "tanstack",
     "tauri",
     "thiserror"
@@ -53,5 +55,7 @@
     "**/bower_components": true,
     "**/node_modules": true
   },
+  "turbo.path": "node_modules/turbo/bin/turbo",
+  "turbo.useLocalTurbo": true,
   "typescript.tsdk": "node_modules/typescript/lib"
 }

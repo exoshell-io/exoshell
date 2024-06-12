@@ -4,7 +4,7 @@ import '@mantine/core/styles.layer.css';
 import '@mantine/notifications/styles.layer.css';
 import './layout.css';
 
-import { CSPostHogProvider } from '@/_analytics';
+import { CSPostHogProvider } from '#/_analytics';
 import { ColorSchemeScript, MantineProvider, createTheme } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
 import type { Metadata } from 'next';
