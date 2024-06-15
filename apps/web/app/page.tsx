@@ -8,11 +8,17 @@ import {
   ActionIcon,
   Box,
   Button,
+  Card,
   Container,
   Group,
   Title as MantineTitle,
-  Skeleton,
+  SimpleGrid,
+  Stack,
   Table,
+  Tabs,
+  TabsList,
+  TabsPanel,
+  TabsTab,
   Text,
   TextInput,
   Tooltip,
@@ -24,12 +30,21 @@ import { useMemo } from 'react';
 import { FaCheck as IconCheck } from 'react-icons/fa';
 import Markdown from 'react-markdown';
 import { registerEmail } from './_db/registerEmail';
-import { IconQuestionCircle } from './_ui/icons';
+import { ConditionalWrapper } from './_ui/ConditionalWrapper';
+import { CodeHighlight } from '@mantine/code-highlight';
+import {
+  IconApple,
+  IconDownload,
+  IconLinux,
+  IconQuestionCircle,
+  IconWindows,
+} from './_ui/icons';
 
 const FAQ: { question: string; answer: string }[] = [
   {
     question: 'What does ExoShell provide?',
     answer: `
+ExoShell provides a set of free and open-source tools:
 - Desktop applications for Windows, Macos and Linux
 - Mobile applications for iOS and Android
 - Browser extensions for Firefox and Chromium based browsers`,
@@ -52,7 +67,7 @@ You can start to schedule scripts, which we call bots. For example, you can:
   },
   {
     question: 'Do I need to code?',
-    answer: `Not a all because developers can share their scripts through our official hub at https://exoshell.dev/hub.`,
+    answer: `Not a all because developers can share their scripts through our official hub at https://exoshell.io/hub.`,
   },
   {
     question:
@@ -66,39 +81,39 @@ You can start to schedule scripts, which we call bots. For example, you can:
   },
 ];
 
-const PRICING: {
+const FEATURES: {
   title: string;
   tooltip?: string;
-  freePlan: React.ReactNode;
-  proPlan: React.ReactNode;
+  freePlan?: React.ReactNode;
+  proPlan?: React.ReactNode;
 }[] = [
   {
     title: 'Desktop apps',
     tooltip: `Windows, Macos and Linux`,
-    freePlan: <IconCheck className='text-emerald-400' />,
-    proPlan: <IconCheck className='text-emerald-400' />,
   },
   {
     title: 'Mobile apps',
     tooltip: `Android and iOS`,
-    freePlan: <IconCheck className='text-emerald-400' />,
-    proPlan: <IconCheck className='text-emerald-400' />,
   },
   {
     title: 'Browser extensions',
     tooltip: `Webkit, Firefox and Chromium based browsers`,
-    freePlan: <IconCheck className='text-emerald-400' />,
-    proPlan: <IconCheck className='text-emerald-400' />,
   },
   {
     title: 'Docker images',
     tooltip: `Run anywhere with Docker`,
-    freePlan: <IconCheck className='text-emerald-400' />,
-    proPlan: <IconCheck className='text-emerald-400' />,
   },
   {
-    title: 'Cloud hosting',
-    tooltip: 'Automate your scripts in ExoShell cloud',
+    title: 'IDE extensions',
+    tooltip: 'VSCode and maybe others',
+  },
+  {
+    title: 'ExoHub',
+    tooltip: 'Share, sell and buy scripts with the community',
+  },
+  {
+    title: 'ExoCloud',
+    tooltip: 'Automate your scripts in our official hosted cloud',
     freePlan: 'Free tier',
     proPlan: 'Pay as you use',
   },
@@ -115,14 +130,131 @@ export default function Page() {
   );
 }
 
+const DOWNLOAD_BASEURL =
+  'https://github.com/exoshell-dev/exoshell/releases/latest/download';
+
+const DOWNLOADS = [
+  {
+    icon: <IconWindows />,
+    os: 'Windows',
+    buttons: [
+      {
+        text: 'x86_64 Exe',
+        url: `${DOWNLOAD_BASEURL}/ExoShell_windows_x86_64.exe`,
+      },
+      {
+        text: 'x86_64 Msi',
+        url: `${DOWNLOAD_BASEURL}/ExoShell_windows_x86_64.msi`,
+      },
+    ],
+  },
+  {
+    os: 'MacOS',
+    icon: <IconApple />,
+    buttons: [
+      {
+        text: 'x86_64 (Intel)',
+        url: `${DOWNLOAD_BASEURL}/ExoShell_darwin_x86_64.dmg`,
+      },
+      {
+        text: 'aarch64 (Apple Silicon)',
+        url: `${DOWNLOAD_BASEURL}/ExoShell_darwin_aarch64.dmg`,
+      },
+    ],
+  },
+  {
+    os: 'Linux',
+    icon: <IconLinux />,
+    buttons: [
+      {
+        text: 'x86_64 AppImage',
+        url: `${DOWNLOAD_BASEURL}/ExoShell_linux_x86_64.AppImage`,
+      },
+      {
+        text: 'x86_64 Deb',
+        url: `${DOWNLOAD_BASEURL}/ExoShell_linux_x86_64.deb`,
+      },
+    ],
+  },
+];
+
 const Hero: React.FC = () => {
   return (
-    <Box h={600} ta='center' pt={30} pb={60}>
+    <Box pt={120}>
       <Container size='md'>
         <h1 className='mx-auto max-w-screen-sm text-3xl font-extrabold lg:text-5xl'>
           Use your computers like never before
         </h1>
-        <Skeleton height={300} width='100%' mx='auto' mt={60} />
+        <Tabs defaultValue='MacOS' variant='default' my={100}>
+          <TabsList grow>
+            {DOWNLOADS.map((dll) => (
+              <ConditionalWrapper
+                key={dll.os}
+                condition={dll.buttons === undefined}
+                wrapper={(children) => (
+                  <Tooltip label='Available soon'>{children}</Tooltip>
+                )}
+              >
+                <TabsTab
+                  value={dll.os}
+                  leftSection={dll.icon}
+                  disabled={dll.buttons === undefined}
+                >
+                  {dll.os}
+                </TabsTab>
+              </ConditionalWrapper>
+            ))}
+          </TabsList>
+          {DOWNLOADS.map((dll) => (
+            <TabsPanel key={dll.os} value={dll.os} py='xl'>
+              {dll.os === 'MacOS' && (
+                <>
+                  <h3>
+                    Install with{' '}
+                    <a
+                      href='https://brew.sh/'
+                      referrerPolicy='no-referrer'
+                      target='_blank'
+                      className='!text-blue-600 hover:underline'
+                    >
+                      Brew
+                    </a>
+                  </h3>
+                  <CodeHighlight
+                    code='brew install exoshell-dev/exoshell/exoshell'
+                    lang='sh'
+                    withCopyButton={false}
+                  />
+                </>
+              )}
+              <h3>Manual install</h3>
+              <SimpleGrid cols={{ base: 1, xs: 2 }}>
+                {dll.buttons?.map((btn) => (
+                  <Card
+                    key={btn.text}
+                    withBorder
+                    shadow='md'
+                    padding='lg'
+                    radius='sm'
+                  >
+                    <Stack>
+                      <Text ta='center'>{btn.text}</Text>
+                      <Button
+                        component='a'
+                        href={btn.url}
+                        color='blue.4'
+                        c='white'
+                        leftSection={<IconDownload />}
+                      >
+                        Download
+                      </Button>
+                    </Stack>
+                  </Card>
+                ))}
+              </SimpleGrid>
+            </TabsPanel>
+          ))}
+        </Tabs>
       </Container>
     </Box>
   );
@@ -131,18 +263,19 @@ const Hero: React.FC = () => {
 const Faq: React.FC = () => {
   return (
     <Box
+      id='faq'
       bg='#fafafa'
       className='border-0 border-t border-solid border-gray-200'
     >
-      <Container pt={8} pb={100} size='md'>
-        <h2 className='text-center text-5xl font-bold'>FAQs</h2>
+      <Container pt={60} pb={120} size='md'>
+        <h2 className='text-center text-5xl font-bold'>FAQ</h2>
         <Accordion multiple={true} chevronPosition='left' mt={36}>
           {FAQ.map((e) => (
             <AccordionItem key={e.question} value={e.question}>
               <AccordionControl>
                 <Text fw='bold'>{e.question}</Text>
               </AccordionControl>
-              <AccordionPanel>
+              <AccordionPanel pl={32}>
                 <TypographyStylesProvider>
                   <Markdown>{e.answer}</Markdown>
                 </TypographyStylesProvider>
@@ -157,13 +290,15 @@ const Faq: React.FC = () => {
 
 const Features: React.FC = () => {
   return (
-    <Box className='border-0 border-t border-solid border-gray-200'>
-      <Container pt={8} pb={100}>
+    <Box
+      id='features'
+      className='border-0 border-t border-solid border-gray-200'
+    >
+      <Container py={60} pb={120}>
         <h2 className='text-center text-5xl'>Features</h2>
         <Table
           mx='auto'
           mt={60}
-          highlightOnHover
           horizontalSpacing='lg'
           withRowBorders={false}
           classNames={{
@@ -180,7 +315,7 @@ const Features: React.FC = () => {
                 Pro
               </p>,
             ],
-            body: PRICING.map((feature) => [
+            body: FEATURES.map((feature) => [
               <Group key={feature.title} gap='sm' align='center'>
                 <span className='font-semibold text-[#000000]'>
                   {feature.title}
@@ -196,10 +331,14 @@ const Features: React.FC = () => {
                 </Tooltip>
               </Group>,
               <div key={feature.title} className='text-center capitalize'>
-                {feature.freePlan}
+                {(feature.freePlan !== undefined && feature.freePlan) || (
+                  <IconCheck className='text-emerald-400' />
+                )}
               </div>,
               <div key={feature.title} className='text-center capitalize'>
-                {feature.proPlan}
+                {(feature.proPlan !== undefined && feature.proPlan) || (
+                  <IconCheck className='text-emerald-400' />
+                )}
               </div>,
             ]),
           }}
@@ -222,7 +361,7 @@ const Newsletter: React.FC = () => {
     () =>
       form.onSubmit(async ({ email }) => {
         const notificationId = notifications.show({
-          title: 'Registering to waitlist',
+          title: 'Registering to the newsletter',
           message: email,
           loading: true,
           withCloseButton: false,
@@ -232,7 +371,7 @@ const Newsletter: React.FC = () => {
         await registerEmail(email);
         notifications.update({
           id: notificationId,
-          title: 'Successfully registered to waitlist!',
+          title: 'Successfully registered to the newsletter!',
           message: email,
           icon: <IconCheck className='text-emerald-400' />,
           loading: false,
@@ -244,13 +383,14 @@ const Newsletter: React.FC = () => {
   );
   return (
     <Box
+      id='newsletter'
       ta='center'
-      py={100}
+      py={120}
       className='border-0 border-t border-solid border-gray-200'
       bg='#fafafa'
     >
       <Container>
-        <Title>Subscribe to the waitlist</Title>
+        <Title>Subscribe to the newsletter</Title>
         <form onSubmit={onSubmit}>
           <Group mx='auto' maw={600} mt={50} justify='stretch' align='stretch'>
             <TextInput

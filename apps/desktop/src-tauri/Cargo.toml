@@ -3,6 +3,10 @@ name = "app"
 default-run = "app"
 version.workspace = true
 edition.workspace = true
+publish = false
+
+[lints]
+workspace = true
 
 [features]
 # this feature is used for production builds or when `devPath` points to the filesystem and the built-in dev server is disabled.
@@ -21,7 +25,6 @@ anyhow.workspace = true
 thiserror.workspace = true
 chrono.workspace = true
 derive_builder.workspace = true
-io-mux.workspace = true
 tap.workspace = true
 
 # Serialization
@@ -42,4 +45,5 @@ surrealdb.workspace = true
 # Async
 tokio.workspace = true
 tokio-util.workspace = true
+tokio-stream.workspace = true
 futures.workspace = true

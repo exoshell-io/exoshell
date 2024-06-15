@@ -3,6 +3,8 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "cSpell.words": [
+    "aarch",
+    "clippy",
     "clsx",
     "contextmenu",
     "exoshell",
@@ -13,33 +15,10 @@
     "posthog",
     "quickbar",
     "reactflow",
+    "RUSTUP",
     "tanstack",
     "tauri",
     "thiserror"
-  ],
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit"
-  },
-  "editor.formatOnSave": true,
-  "editor.tabSize": 2,
-  "files.associations": {
-    "**/*.json": "jsonc",
-    "**/package.json": "json"
-  },
-  "search.exclude": {
-    "**/node_modules": true,
-    "**/bower_components": true,
-    "**/*.code-search": true,
-    "**/_next": true
-  },
-  "files.eol": "\n",
-  "files.insertFinalNewline": true,
-  "typescript.tsdk": "node_modules/typescript/lib",
-  "json.schemas": [
-    {
-      "fileMatch": ["manifest.json"],
-      "url": "https://json.schemastore.org/chrome-manifest"
-    }
   ],
   "cssVariables.lookupFiles": [
     "**/*.css",
@@ -47,5 +26,36 @@
     "**/*.sass",
     "**/*.less",
     "node_modules/@mantine/core/styles.css"
-  ]
+  ],
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "editor.formatOnSave": true,
+  "editor.quickSuggestions": {
+    "strings": "on"
+  },
+  "editor.tabSize": 2,
+  "files.associations": {
+    "**/*.json": "jsonc",
+    "**/package.json": "json",
+    "*.css": "tailwindcss"
+  },
+  "files.eol": "\n",
+  "files.insertFinalNewline": true,
+  "json.schemas": [
+    {
+      "fileMatch": ["manifest.json"],
+      "url": "https://json.schemastore.org/chrome-manifest"
+    }
+  ],
+  "rust-analyzer.check.command": "clippy",
+  "search.exclude": {
+    "**/*.code-search": true,
+    "**/_next": true,
+    "**/bower_components": true,
+    "**/node_modules": true
+  },
+  "turbo.path": "node_modules/turbo/bin/turbo",
+  "turbo.useLocalTurbo": true,
+  "typescript.tsdk": "node_modules/typescript/lib"
 }

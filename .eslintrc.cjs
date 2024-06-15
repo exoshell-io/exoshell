@@ -1,7 +1,7 @@
 /* eslint-env node */
 module.exports = {
   root: true,
-  extends: ['eslint:recommended'],
+  extends: ['eslint:recommended', 'turbo'],
   parserOptions: {
     sourceType: 'module',
   },
@@ -21,5 +21,5 @@ module.exports = {
       plugins: ['@typescript-eslint'],
     },
   ],
-  ignorePatterns: ['!.github/', '!.lintstagedrc.mjs', 'apps/*/dist/'],
+  ignorePatterns: ['!.lintstagedrc.mjs', '!.github/', 'apps/*/dist/'],
 };

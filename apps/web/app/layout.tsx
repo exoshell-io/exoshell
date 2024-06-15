@@ -1,31 +1,26 @@
-import '@mantine/core/styles.css';
-import '@mantine/notifications/styles.css';
-import './globals.css';
+import '@mantine/core/styles/global.layer.css';
+import '@mantine/code-highlight/styles.layer.css';
+import '@mantine/core/styles.layer.css';
+import '@mantine/notifications/styles.layer.css';
+import './layout.css';
 
-import { Logo } from '@/_ui/Logo';
-import {
-  ActionIcon,
-  Box,
-  ColorSchemeScript,
-  Container,
-  Group,
-  MantineProvider,
-  createTheme,
-} from '@mantine/core';
+import { CSPostHogProvider } from '#/_analytics';
+import { ColorSchemeScript, MantineProvider, createTheme } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
 import type { Metadata } from 'next';
-import { Noto_Sans, Signika } from 'next/font/google';
-import { MdNotificationsNone as IconNotification } from 'react-icons/md';
-import { Brand } from './_ui/Brand';
-import { CSPostHogProvider } from '@/_analytics';
+import { Signika, Sora } from 'next/font/google';
+import { FrontLayout } from './FrontLayout';
+
+const font = Sora({
+  subsets: ['latin'],
+  display: 'swap',
+});
 
 const logoFont = Signika({
   display: 'swap',
   variable: '--font-logo',
   subsets: ['latin'],
 });
-
-const font = Noto_Sans({ subsets: ['latin'], display: 'swap' });
 
 export const metadata: Metadata = {
   title: {
@@ -43,52 +38,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='en'>
+    <html
+      lang='en'
+      className={`${font.className} ${logoFont.variable} text-zinc-900`}
+    >
       <head>
         <ColorSchemeScript />
       </head>
       <CSPostHogProvider>
-        <body
-          className={`${font.className} ${logoFont.variable} text-zinc-900`}
-        >
+        <body>
           <MantineProvider theme={theme}>
             <Notifications />
-            <Box component='header'>
-              <Container
-                size='xl'
-                h={70}
-                px={16}
-                className='flex items-center justify-between'
-              >
-                <Brand />
-                <Group>
-                  <ActionIcon variant='subtle' color='black' radius='xl'>
-                    <IconNotification />
-                  </ActionIcon>
-                </Group>
-              </Container>
-            </Box>
-            <Box component='main'>{children}</Box>
-            <Box
-              component='footer'
-              className='border-t border-solid border-gray-200 py-2'
-            >
-              <Container
-                size='xl'
-                h={70}
-                px={16}
-                className='flex items-center justify-between '
-              >
-                <Group align='end'>
-                  <>
-                    <Logo />
-                    <span className='text-xs'>
-                      @ {new Date().getFullYear()}
-                    </span>
-                  </>
-                </Group>
-              </Container>
-            </Box>
+            <FrontLayout>{children}</FrontLayout>
           </MantineProvider>
         </body>
       </CSPostHogProvider>

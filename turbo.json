@@ -1,10 +1,19 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": ["bun.lockb", "tsconfig.json", "scripts/**"],
-  "pipeline": {
+  // cSpell:ignore bun.lockb
+  "globalDependencies": [
+    "bun.lockb",
+    "tsconfig.json",
+    "scripts/**",
+    ".mise.toml",
+    ".mise.local.toml"
+  ],
+  "globalEnv": ["NODE_ENV"],
+  "tasks": {
+    "//gen:types": {},
     "build:": {
       "dependsOn": ["^build:"],
-      "dotEnv": [".env.local", ".env"],
+      "inputs": ["$TURBO_DEFAULT$", ".env", ".env.local"],
       "outputs": ["dist/**"]
     },
     "clean": { "cache": false },
