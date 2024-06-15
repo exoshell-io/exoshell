@@ -1,5 +1,5 @@
 ARG DEVCONTAINER_BASE_DOCKER_IMAGE
-FROM ${DEVCONTAINER_BASE_DOCKER_IMAGE}
+FROM "${DEVCONTAINER_BASE_DOCKER_IMAGE}"
 
 # Secure shell
 SHELL [ "/bin/bash", "--norc", "--noprofile", "-euxo", "pipefail", "-O", "nullglob", "-c" ]
@@ -45,57 +45,57 @@ ARG DEVCONTAINER_HOST_GROUPNAME
 ARG DEVCONTAINER_HOST_GID
 
 # Set UID same as host if necessary
-RUN CURRENT_UID=$(id -u) \
+RUN CURRENT_UID="$(id -u)" \
   && if [ "${CURRENT_UID}" != "${DEVCONTAINER_HOST_UID}" ]; then \
   OLD_USERNAME="$(getent passwd ${DEVCONTAINER_HOST_UID} | cut -d: -f1)" \
   && if [ -n "${OLD_USERNAME}" ]; then \
-  usermod -l ${DEVCONTAINER_HOST_USERNAME} ${OLD_USERNAME} \
-  && usermod -d /home/${DEVCONTAINER_HOST_USERNAME} -m ${DEVCONTAINER_HOST_USERNAME}; \
+  usermod -l "${DEVCONTAINER_HOST_USERNAME}" "${OLD_USERNAME}" \
+  && usermod -d /home/"${DEVCONTAINER_HOST_USERNAME}" -m "${DEVCONTAINER_HOST_USERNAME}"; \
   else \
-  useradd -u ${DEVCONTAINER_HOST_UID} -m -s /bin/bash ${DEVCONTAINER_HOST_USERNAME}; \
+  useradd -u "${DEVCONTAINER_HOST_UID}" -m -s /bin/bash "${DEVCONTAINER_HOST_USERNAME}"; \
   fi; \
   fi
 
 # Set GID same as host if necessary
-RUN CURRENT_GID=$(id -g) \
+RUN CURRENT_GID="$(id -g)" \
   && if [ "${CURRENT_GID}" != "${DEVCONTAINER_HOST_GID}" ]; then \
   OLD_GROUPNAME="$(getent group ${DEVCONTAINER_HOST_GID} | cut -d: -f1)" \
   && if [ -n "${OLD_GROUPNAME}" ]; then \
-  groupmod -n ${DEVCONTAINER_HOST_GROUPNAME} ${OLD_GROUPNAME}; \
+  groupmod -n "${DEVCONTAINER_HOST_GROUPNAME}" "${OLD_GROUPNAME}"; \
   else \
-  groupadd -g ${DEVCONTAINER_HOST_GID} ${DEVCONTAINER_HOST_GROUPNAME}; \
+  groupadd -g "${DEVCONTAINER_HOST_GID}" "${DEVCONTAINER_HOST_GROUPNAME}"; \
   fi \
-  && usermod -g ${DEVCONTAINER_HOST_GROUPNAME} ${DEVCONTAINER_HOST_USERNAME}; \
+  && usermod -g "${DEVCONTAINER_HOST_GROUPNAME}" "${DEVCONTAINER_HOST_USERNAME}"; \
   fi
 
 # Ensure the user is in the correct group and home directory exists
-RUN CURRENT_UID=$(id -u) && \
-  CURRENT_GID=$(id -g) && \
+RUN CURRENT_UID="$(id -u)" && \
+  CURRENT_GID="$(id -g)" && \
   if [ "${CURRENT_UID}" != "${DEVCONTAINER_HOST_UID}" ] || [ "${CURRENT_GID}" != "${DEVCONTAINER_HOST_GID}" ]; then \
-  if [ ! -d $(eval echo ~${DEVCONTAINER_HOST_USERNAME}) ]; then \
-  mkdir -p $(eval echo ~${DEVCONTAINER_HOST_USERNAME}) && \
-  chown ${DEVCONTAINER_HOST_USERNAME}:${DEVCONTAINER_HOST_GROUPNAME} $(eval echo ~${DEVCONTAINER_HOST_USERNAME}); \
+  if [ ! -d "$(eval echo ~${DEVCONTAINER_HOST_USERNAME})" ]; then \
+  mkdir -p "$(eval echo ~${DEVCONTAINER_HOST_USERNAME})" && \
+  chown "${DEVCONTAINER_HOST_USERNAME}":"${DEVCONTAINER_HOST_GROUPNAME}" "$(eval echo ~${DEVCONTAINER_HOST_USERNAME})"; \
   fi && \
-  chown -R ${DEVCONTAINER_HOST_USERNAME}:${DEVCONTAINER_HOST_GROUPNAME} $(eval echo ~${DEVCONTAINER_HOST_USERNAME}); \
+  chown -R "${DEVCONTAINER_HOST_USERNAME}":"${DEVCONTAINER_HOST_GROUPNAME}" "$(eval echo ~${DEVCONTAINER_HOST_USERNAME})"; \
   fi
 
 # Switch to user
-USER ${DEVCONTAINER_HOST_USERNAME}
+USER "${DEVCONTAINER_HOST_USERNAME}"
 
 # Set workdir
 WORKDIR /workspaces/exoshell
 
 # Set user shells in .bashrc
-RUN echo "export MISE_DATA_DIR=${HOME}/.local/share/mise" | tee -a ${HOME}/.bashrc \
-  && echo "export MISE_TRUSTED_CONFIG_PATHS=/workspaces/exoshell/.mise.toml" | tee -a ${HOME}/.bashrc \
-  && echo "export PATH=${HOME}/.local/share/mise/shims:${PATH}" | tee -a ${HOME}/.bashrc \
-  && echo 'eval "$(mise activate bash)"' | tee -a ${HOME}/.bashrc
+RUN echo "export MISE_DATA_DIR=${HOME}/.local/share/mise" | tee -a "${HOME}"/.bashrc \
+  && echo "export MISE_TRUSTED_CONFIG_PATHS=/workspaces/exoshell/.mise.toml" | tee -a "${HOME}"/.bashrc \
+  && echo "export PATH=${HOME}/.local/share/mise/shims:${PATH}" | tee -a "${HOME}"/.bashrc \
+  && echo 'eval "$(mise activate bash)"' | tee -a "${HOME}"/.bashrc
 
 # Set user shells in .profile
-RUN echo "export MISE_DATA_DIR=${HOME}/.local/share/mise" | tee -a ${HOME}/.profile \
-  && echo "export MISE_TRUSTED_CONFIG_PATHS=/workspaces/exoshell/.mise.toml" | tee -a ${HOME}/.profile \
-  && echo "export PATH=${HOME}/.local/share/mise/shims:${PATH}" | tee -a ${HOME}/.profile \
-  && echo 'eval "$(mise activate bash)"' | tee -a ${HOME}/.profile
+RUN echo "export MISE_DATA_DIR=${HOME}/.local/share/mise" | tee -a "${HOME}"/.profile \
+  && echo "export MISE_TRUSTED_CONFIG_PATHS=/workspaces/exoshell/.mise.toml" | tee -a "${HOME}"/.profile \
+  && echo "export PATH=${HOME}/.local/share/mise/shims:${PATH}" | tee -a "${HOME}"/.profile \
+  && echo 'eval "$(mise activate bash)"' | tee -a "${HOME}"/.profile
 
 # Setup dependencies
 COPY .mise.toml .mise.toml
