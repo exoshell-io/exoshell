@@ -17,6 +17,7 @@
         }
       },
       "extensions": [
+        // cSpell:disable
         "bierner.github-markdown-preview",
         "bradlc.vscode-tailwindcss",
         "dbaeumer.vscode-eslint",
@@ -26,7 +27,6 @@
         "formulahendry.auto-rename-tag",
         "foxundermoon.shell-format",
         "GitHub.copilot-chat",
-        "GitHub.copilot-labs",
         "GitHub.copilot",
         "github.vscode-github-actions",
         "GitHub.vscode-pull-request-github",
