@@ -13,7 +13,6 @@ RUN apt-get update && \
   wget \
   gpg \
   ca-certificates
-# RUN install -dm 755 /etc/apt/keyrings
 RUN echo "deb [trusted=yes] http://gb.archive.ubuntu.com/ubuntu jammy main" | tee /etc/apt/sources.list.d/jammy.list
 RUN echo "deb [trusted=yes] https://mise.jdx.dev/deb stable main" | tee /etc/apt/sources.list.d/mise.list
 RUN apt-get update && \
