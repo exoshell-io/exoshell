@@ -46,8 +46,8 @@
         "Vercel.turbo-vsc",
         "vunguyentuan.vscode-css-variables",
         "vunguyentuan.vscode-postcss",
-        "yatki.vscode-surround",
-        "tauri-apps.tauri-vscode"
+        "yatki.vscode-surround"
+        // cSpell:enable
       ]
     }
   }

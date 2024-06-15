@@ -12,7 +12,9 @@ RUN apt-get update && \
   apt-get install -y --no-install-recommends \
   wget \
   gpg \
-  ca-certificates
+  ca-certificates && \
+  apt-get clean && \
+  rm -rf /var/lib/apt/lists/*
 RUN echo "deb [trusted=yes] http://gb.archive.ubuntu.com/ubuntu jammy main" | tee /etc/apt/sources.list.d/jammy.list
 RUN echo "deb [trusted=yes] https://mise.jdx.dev/deb stable main" | tee /etc/apt/sources.list.d/mise.list
 RUN apt-get update && \
@@ -33,8 +35,8 @@ RUN apt-get update && \
   librsvg2-dev \
   openssh-client \
   mise \
-  gosu
-RUN apt-get clean && \
+  gosu && \
+  apt-get clean && \
   rm -rf /var/lib/apt/lists/*
 
 # Fetch env variables
