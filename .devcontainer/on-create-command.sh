@@ -3,5 +3,6 @@
 # Set error handling and debug
 set -eux
 
-# Install dependencies
+# Setup dependencies
+mise install -y
 mise exec -- bun install

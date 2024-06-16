@@ -6,8 +6,8 @@
     "source=${localWorkspaceFolder},target=/workspaces/exoshell,type=bind"
   ],
   "workspaceFolder": "/workspaces/exoshell",
-  "initializeCommand": ".devcontainer/initialize-command.sh",
-  "onCreateCommand": ".devcontainer/on-create-command.sh",
+  "initializeCommand": [".devcontainer/initialize-command.sh"],
+  "onCreateCommand": [".devcontainer/on-create-command.sh"],
   "customizations": {
     "vscode": {
       "settings": {
@@ -17,7 +17,6 @@
         }
       },
       "extensions": [
-        // cSpell:disable
         "bierner.github-markdown-preview",
         "bradlc.vscode-tailwindcss",
         "dbaeumer.vscode-eslint",
@@ -47,7 +46,6 @@
         "vunguyentuan.vscode-css-variables",
         "vunguyentuan.vscode-postcss",
         "yatki.vscode-surround"
-        // cSpell:enable
       ]
     }
   }
