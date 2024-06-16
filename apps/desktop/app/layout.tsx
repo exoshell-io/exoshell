@@ -1,9 +1,11 @@
 import '@mantine/code-highlight/styles.layer.css';
 import '@mantine/core/styles.layer.css';
+import '@mantine/dropzone/styles.layer.css';
 import '@mantine/notifications/styles.layer.css';
 import '@mantine/spotlight/styles.layer.css';
-import 'allotment/dist/style.css';
 import 'mantine-contextmenu/styles.layer.css';
+
+import 'allotment/dist/style.css';
 import 'reactflow/dist/style.css';
 import './layout.css';
 

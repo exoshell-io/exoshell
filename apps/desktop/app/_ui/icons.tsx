@@ -3,6 +3,7 @@ export {
   FaTerminal as IconTerminal,
   FaRegTrashAlt as IconTrash,
 } from 'react-icons/fa';
+export { FiFilePlus as IconCreateFile } from 'react-icons/fi';
 export { HiBolt as IconBolt } from 'react-icons/hi2';
 export {
   IoMdAdd as IconAdd,
@@ -14,6 +15,7 @@ export { IoClose as IconClose } from 'react-icons/io5';
 export { LuWorkflow as IconWorkflow } from 'react-icons/lu';
 export {
   MdDashboard as IconDashboard,
+  MdFileOpen as IconFileOpen,
   MdOutlineSettings as IconSettings,
 } from 'react-icons/md';
 export { PiCompassToolBold as IconCompass } from 'react-icons/pi';
