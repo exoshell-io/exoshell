@@ -52,6 +52,7 @@ jobs:
     timeout-minutes: 60
     needs: [ci]
     strategy:
+      fail-fast: false
       matrix:
         platform:
           - release_for: FreeBSD-x86_64
