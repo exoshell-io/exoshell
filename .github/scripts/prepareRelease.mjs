@@ -84,7 +84,6 @@ export default async function (context, releaseVersion) {
             ...['tar.gz', 'zip'].map(
               (ext) => `desktop/${artifact}/**/*.${ext}`,
             ),
-            // cSpell:ignore nsis
             `!desktop/${artifact}/**/*.nsis.zip`,
           ].join('\n'),
         );

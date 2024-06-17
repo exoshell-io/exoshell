@@ -1,10 +1,11 @@
-version: '3'
-
 services:
   dev:
     build:
-      context: ..
+      context: ../
       dockerfile: .devcontainer/Dockerfile
-    command: sleep inf
-    volumes:
-      - ..:/exoshell
+      args:
+        DEVCONTAINER_BASE_DOCKER_IMAGE: '${DEVCONTAINER_BASE_DOCKER_IMAGE}'
+        DEVCONTAINER_HOST_USERNAME: '${DEVCONTAINER_HOST_USERNAME}'
+        DEVCONTAINER_HOST_UID: '${DEVCONTAINER_HOST_UID}'
+        DEVCONTAINER_HOST_GROUPNAME: '${DEVCONTAINER_HOST_GROUPNAME}'
+        DEVCONTAINER_HOST_GID: '${DEVCONTAINER_HOST_GID}'

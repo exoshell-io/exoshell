@@ -1,11 +1,22 @@
 {
   "dockerComposeFile": "docker-compose.yml",
   "service": "dev",
-  "workspaceFolder": "/exoshell/",
+  "name": "exoshell",
+  "mounts": [
+    "source=${localWorkspaceFolder},target=/workspaces/exoshell,type=bind"
+  ],
+  "workspaceFolder": "/workspaces/exoshell",
+  "initializeCommand": [".devcontainer/initialize-command.sh"],
+  "onCreateCommand": [".devcontainer/on-create-command.sh"],
   "customizations": {
     "vscode": {
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "terminal.integrated.profiles.linux": {
+          "bash": { "path": "/usr/bin/bash" }
+        }
+      },
       "extensions": [
-        // cSpell:disable
         "bierner.github-markdown-preview",
         "bradlc.vscode-tailwindcss",
         "dbaeumer.vscode-eslint",
@@ -15,7 +26,6 @@
         "formulahendry.auto-rename-tag",
         "foxundermoon.shell-format",
         "GitHub.copilot-chat",
-        "GitHub.copilot-labs",
         "GitHub.copilot",
         "github.vscode-github-actions",
         "GitHub.vscode-pull-request-github",
@@ -36,7 +46,6 @@
         "vunguyentuan.vscode-css-variables",
         "vunguyentuan.vscode-postcss",
         "yatki.vscode-surround"
-        // cSpell:enable
       ]
     }
   }
