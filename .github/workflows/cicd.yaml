@@ -85,6 +85,7 @@ jobs:
         with:
           bun-version: latest
       - name: Override version
+        shell: bash
         run: |
           if "$(uname -s)" = "Darwin"; then
             SED="sed -i ''"
@@ -111,7 +112,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           if-no-files-found: error
-          name: cli-${{ matrix.os }}
+          name: cli-${{ matrix.platform.target }}
           path: tmp/
 
   cd-tauri:
