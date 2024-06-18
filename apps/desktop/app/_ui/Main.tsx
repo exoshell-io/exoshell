@@ -1,25 +1,19 @@
 import {
   useActiveTabIndex,
   useCloseTab,
-  useDashboards,
   useScripts,
   useSetActiveTab,
   useTabs,
-  useWorkflows,
 } from '@/_state';
 import { ActionIcon, Group, Tabs } from '@mantine/core';
-import { RendererDashboard } from './RendererDashboard';
 import { RendererSettings } from './RendererSettings';
 import { RendererTerminal } from './RendererTerminal';
-import { RendererWorkflow } from './RendererWorkflow';
 import {
   IconClose,
   IconCompass,
-  IconDashboard,
   IconSettings,
   IconSurreal,
   IconTerminal,
-  IconWorkflow,
 } from './icons';
 import { RendererSurreal } from './RendererSurreal';
 import { RendererDevModeOnly } from './RendererDevModeOnly';
@@ -28,8 +22,6 @@ export const Main: React.FC = () => {
   const tabs = useTabs();
   const activeTab = useActiveTabIndex();
   const scripts = useScripts();
-  const workflows = useWorkflows();
-  const dashboards = useDashboards();
   const closeTab = useCloseTab();
   const setActiveTab = useSetActiveTab();
 
@@ -49,22 +41,7 @@ export const Main: React.FC = () => {
           {tabs.map((tab, index) => {
             let tabLabel: string;
             let tabIcon: React.ReactNode;
-            if (tab.href.startsWith('workflow://')) {
-              tabLabel = workflows.isSuccess
-                ? workflows.data[tab.href.substring('workflow://'.length)]?.name
-                : workflows.isError
-                  ? `Error: ${workflows.error}`
-                  : `Loading`;
-              tabIcon = <IconWorkflow />;
-            } else if (tab.href.startsWith('dashboard://')) {
-              tabLabel = dashboards.isSuccess
-                ? dashboards.data[tab.href.substring('dashboard://'.length)]
-                    ?.name
-                : dashboards.isError
-                  ? `Error: ${dashboards.error}`
-                  : `Loading`;
-              tabIcon = <IconDashboard />;
-            } else if (tab.href.startsWith('terminal://')) {
+            if (tab.href.startsWith('terminal://')) {
               tabLabel = scripts.isSuccess
                 ? scripts.data[tab.href.substring('terminal://'.length)]?.name
                 : scripts.isError
@@ -126,15 +103,7 @@ export const Main: React.FC = () => {
               flex='1 0 10%'
               className='overflow-hidden'
             >
-              {tab.href.startsWith('workflow://') ? (
-                <RendererWorkflow
-                  id={tab.href.substring('workflow://'.length)}
-                />
-              ) : tab.href.startsWith('dashboard://') ? (
-                <RendererDashboard
-                  id={tab.href.substring('dashboard://'.length)}
-                />
-              ) : tab.href.startsWith('terminal://') ? (
+              {tab.href.startsWith('terminal://') ? (
                 <RendererTerminal
                   id={tab.href.substring('terminal://'.length)}
                 />
