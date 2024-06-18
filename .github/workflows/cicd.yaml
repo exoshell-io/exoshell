@@ -100,7 +100,6 @@ jobs:
           command: ${{ matrix.platform.command }}
           target: ${{ matrix.platform.target }}
           args: '--locked --release'
-          strip: true
           working-directory: ./apps/cli/
       - name: Build cross platforms
         run: |
