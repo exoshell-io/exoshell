@@ -13,7 +13,7 @@
     "clean": "turbo run clean",
     "format": "prettier -w . ; sort-package-json",
     "format:check": "prettier --check . && sort-package-json --check && cargo fmt --check",
-    "gen:types": "cargo test -p model export_bindings",
+    "gen:types": "rm -rf libs/model/types/ && cargo test -p model export_bindings",
     "lint": "turbo run lint: && cargo clippy",
     "prepare": "husky install",
     "test": "turbo run test && cargo test --locked",
