@@ -18,6 +18,7 @@ import {
   AccordionPanel,
   Button,
   Code,
+  FileButton,
   Group,
   Loader,
   ScrollArea,
@@ -27,10 +28,13 @@ import {
   TabsPanel,
   TabsTab,
   TextInput,
+  TreeNodeData,
 } from '@mantine/core';
 import { isNotEmpty, useForm } from '@mantine/form';
+import { useListState } from '@mantine/hooks';
 import { useQueryClient } from '@tanstack/react-query';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { OciLayoutBuilder } from './OciLayoutBuilder';
 import {
   IconBolt,
   IconCircle,
@@ -91,6 +95,44 @@ export const RendererTerminal: React.FC<{ id: string }> = ({ id }) => {
 
   const deleteScriptRuns = useDeleteScriptRuns();
 
+  const [treeNodeDataArray, { append: addTreeNodeDataArray }] =
+    useListState<TreeNodeData>([]);
+
+  const fileExplorerTreeNodes = useMemo(() => {
+    return treeNodeDataArray.concat([
+      {
+        label: (
+          <FileButton
+            onChange={(files) => console.log(files)}
+            accept='image/png,image/jpeg'
+            multiple
+          >
+            {(props) => <Button {...props}>Open file(s)</Button>}
+          </FileButton>
+        ),
+        value: 'openFiles',
+      },
+      {
+        label: (
+          <Button
+            onClick={() =>
+              addTreeNodeDataArray({ label: 'Untitled', value: '/Untitled' })
+            }
+          >
+            Add file
+          </Button>
+        ),
+        value: 'addFile',
+      },
+    ]);
+  }, [addTreeNodeDataArray, treeNodeDataArray]);
+
+  const [editorFiles, setEditorFiles] = useState(
+    {} as { [key: string]: string },
+  );
+
+  const [activeEditorFile, setActiveEditorFile] = useState('');
+
   return (
     <ScrollArea h='100%'>
       <form onSubmit={onSubmit} className='max-h-full'>
@@ -106,6 +148,7 @@ export const RendererTerminal: React.FC<{ id: string }> = ({ id }) => {
             label='Working Directory'
             {...form.getInputProps('workingDir')}
           />
+          <OciLayoutBuilder />
           <Group>
             {form.isDirty() ? (
               <Button

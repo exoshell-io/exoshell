@@ -1,10 +1,8 @@
 mod prelude;
 use self::prelude::*;
 
-mod dashboards;
 mod db;
 mod scripts;
-mod workflows;
 
 use tauri::plugin::{Builder, TauriPlugin};
 
@@ -89,12 +87,6 @@ pub fn init<R: Runtime>() -> TauriPlugin<R> {
       scripts::delete_script_runs,
       scripts::drop_script_runs,
       scripts::list_script_runs_by_script,
-      workflows::list_workflows,
-      workflows::upsert_workflow,
-      workflows::delete_workflow,
-      dashboards::list_dashboards,
-      dashboards::upsert_dashboard,
-      dashboards::delete_dashboard,
       db::query,
     ])
     .setup(|app_handle| {

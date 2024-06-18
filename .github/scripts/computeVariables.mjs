@@ -9,7 +9,7 @@ const defaultOutputs = {
   /** @type {false | 'draft' | 'prerelease' | 'stable'} */
   shouldRelease: false,
   appVersion: '0.0.0',
-  releaseVersion: 'v0.0.0',
+  releaseVersion: '0.0.0',
   cdTauriMatrix: '{}',
   rustVersion: '',
 };
@@ -66,10 +66,10 @@ export default async function (context, core) {
 
     if (channel === undefined) {
       outputs.shouldRelease = 'stable';
-      outputs.releaseVersion = `v${major}.${minor}.${patch}`;
+      outputs.releaseVersion = `${major}.${minor}.${patch}`;
     } else {
       outputs.shouldRelease = 'prerelease';
-      outputs.releaseVersion = `v${major}.${minor}.${patch}-${channel}.${channelPatch}`;
+      outputs.releaseVersion = `${major}.${minor}.${patch}-${channel}.${channelPatch}`;
     }
     outputs.appVersion = computeAppVersion(
       major,
@@ -83,7 +83,7 @@ export default async function (context, core) {
     getVariableFromPullRequestBody(context, 'test-release') === 'true'
   ) {
     outputs.shouldRelease = 'draft';
-    outputs.releaseVersion = `v0.0.0-pr.${context.payload.pull_request?.number}`;
+    outputs.releaseVersion = `0.0.0-pr.${context.payload.pull_request?.number}`;
     outputs.appVersion = computeAppVersion(
       0,
       0,
@@ -97,6 +97,7 @@ export default async function (context, core) {
 
   // #region Extract the tools version from `.mise.toml`
   const miseToml = readFileSync(
+    // eslint-disable-next-line turbo/no-undeclared-env-vars
     `${process.env['GITHUB_WORKSPACE']}/.mise.toml`,
   ).toString();
   outputs.rustVersion = castNonNull(

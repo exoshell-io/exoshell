@@ -1,0 +1,8 @@
+{
+  "name": "@exoshell/cli",
+  "private": true,
+  "scripts": {
+    "build": "turbo run build:",
+    "build:": "cargo build --release --bins -F bin --frozen"
+  }
+}

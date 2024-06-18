@@ -1,3 +1,6 @@
+// TODO: https://github.com/TedDriggs/darling/issues/293
+#![allow(clippy::manual_unwrap_or_default)]
+
 use darling::FromMeta;
 use heck::ToSnakeCase;
 use proc_macro::TokenStream;

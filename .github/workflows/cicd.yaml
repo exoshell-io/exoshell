@@ -48,6 +48,61 @@ jobs:
       #     rust-version: ${{ format('{0}.0', steps.compute_variables.outputs.rustVersion) }}
       #     command: check bans licenses sources
 
+  cd-cli:
+    timeout-minutes: 60
+    needs: [ci]
+    strategy:
+      fail-fast: false
+      matrix:
+        platform:
+          - release_for: Windows-x86_64
+            os: windows-latest
+            target: x86_64-pc-windows-msvc
+            bin: exoshell.exe
+            name: cli-exoshell-Windows-x86_64.exe
+            command: both
+          - release_for: macOS-x86_64
+            os: macOS-latest
+            target: x86_64-apple-darwin
+            bin: exoshell
+            name: cli-exoshell-Darwin-x86_64
+            command: both
+          - release_for: macOS-arm64
+            os: macOS-latest
+            target: aarch64-apple-darwin
+            bin: exoshell
+            name: cli-exoshell-Darwin-aarch64
+            command: both
+    runs-on: ${{ matrix.platform.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+      - name: Override version
+        shell: bash
+        run: |
+          if "$(uname -s)" = "Darwin"; then
+            SED="sed -i ''"
+          else
+            SED="sed -i"
+          fi
+          $SED -E 's/^version = ".+"$/version = "${{ needs.ci.outputs.releaseVersion }}"/' Cargo.toml
+      - name: Build binary
+        uses: houseabsolute/actions-rust-cross@v0
+        with:
+          command: ${{ matrix.platform.command }}
+          target: ${{ matrix.platform.target }}
+          args: '--locked --release'
+          working-directory: ./apps/cli/
+      - run: |
+          mv 'target/${{ matrix.platform.target }}/release/${{ matrix.platform.bin }}' '${{ matrix.platform.name }}'
+      - uses: actions/upload-artifact@v4
+        with:
+          if-no-files-found: error
+          name: cli-${{ matrix.platform.target }}
+          path: ${{ matrix.platform.name }}
+
   cd-tauri:
     strategy:
       fail-fast: false
@@ -111,13 +166,17 @@ jobs:
         with:
           path: desktop/
           pattern: desktop-**
+      - uses: actions/download-artifact@v4
+        with:
+          path: cli/
+          pattern: cli-**
       - name: Prepare release
         uses: actions/github-script@v7
         with:
-          script: (await import('${{ github.workspace }}/.github/scripts/prepareRelease.mjs')).default(context, '${{ needs.ci.outputs.releaseVersion }}')
+          script: (await import('${{ github.workspace }}/.github/scripts/prepareRelease.mjs')).default(context, 'v${{ needs.ci.outputs.releaseVersion }}')
       - uses: softprops/action-gh-release@v2
         with:
-          name: ExoShell ${{ needs.ci.outputs.releaseVersion }}
+          name: ExoShell v${{ needs.ci.outputs.releaseVersion }}
           draft: ${{ needs.ci.outputs.shouldRelease == 'draft' }}
           prerelease: ${{ needs.ci.outputs.shouldRelease == 'prerelease' || needs.ci.outputs.shouldRelease == 'draft' }}
           files: |
@@ -131,6 +190,7 @@ jobs:
             desktop/**/*.exe
             desktop/**/*.zip
             desktop/**/*.zip.sig
+            cli/**/*
           fail_on_unmatched_files: true
           generate_release_notes: true
           make_latest: ${{ needs.ci.outputs.shouldRelease == 'stable' && 'true' || 'false' }}

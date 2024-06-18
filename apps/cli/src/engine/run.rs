@@ -47,7 +47,7 @@ impl super::Engine {
       let id = id.clone();
       let db = self.db.clone();
 
-      tokio::spawn(async move {
+      self.task_tracker.spawn(async move {
         loop {
           tokio::select! {
             Some((key, line)) = mux.next() => {
@@ -182,7 +182,7 @@ mod tests {
 
   #[tokio::test]
   async fn test_run_script() -> Result<()> {
-    let _engine = Engine::new_test_engine().await?;
+    let _engine = super::super::Engine::new_test_engine().await?;
 
     Ok(())
   }

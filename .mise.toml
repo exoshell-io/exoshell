@@ -1,6 +1,6 @@
 [tools]
 bun = '1'
-rust = '1.78'
+rust = '1.79'
 node = 'lts'
 
 [settings]
