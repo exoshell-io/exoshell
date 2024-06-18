@@ -55,29 +55,23 @@ jobs:
       fail-fast: false
       matrix:
         platform:
-          - release_for: FreeBSD-x86_64
-            os: ubuntu-22.04
-            target: x86_64-unknown-freebsd
-            bin: exoshell
-            name: cli-exoshell-FreeBSD-x86_64.tar.gz
-            command: both
           - release_for: Windows-x86_64
             os: windows-latest
             target: x86_64-pc-windows-msvc
             bin: exoshell.exe
-            name: cli-exoshell-Windows-x86_64.zip
+            name: cli-exoshell-Windows-x86_64.exe
             command: both
           - release_for: macOS-x86_64
             os: macOS-latest
             target: x86_64-apple-darwin
             bin: exoshell
-            name: cli-exoshell-Darwin-x86_64.tar.gz
+            name: cli-exoshell-Darwin-x86_64
             command: both
           - release_for: macOS-arm64
             os: macOS-latest
             target: aarch64-apple-darwin
             bin: exoshell
-            name: cli-exoshell-Darwin-arm64.tar.gz
+            name: cli-exoshell-Darwin-aarch64
             command: both
     runs-on: ${{ matrix.platform.os }}
     steps:
@@ -101,19 +95,13 @@ jobs:
           target: ${{ matrix.platform.target }}
           args: '--locked --release'
           working-directory: ./apps/cli/
-      - name: Build cross platforms
-        run: |
-          mkdir tmp/
-          mv ./target/aarch64-unknown-linux-gnu/release/base-converter ./tmp/base-converter-aarch64-unknown-linux-gnu
-          mv ./target/aarch64-unknown-linux-musl/release/base-converter ./tmp/base-converter-aarch64-unknown-linux-musl
-          mv ./target/x86_64-unknown-linux-gnu/release/base-converter ./tmp/base-converter-x86_64-unknown-linux-gnu
-          mv ./target/x86_64-unknown-linux-musl/release/base-converter ./tmp/base-converter-x86_64-unknown-linux-musl
-          mv ./target/x86_64-pc-windows-gnu/release/base-converter.exe ./tmp/base-converter-x86_64-pc-windows-gnu.exe
+      - run: |
+          mv 'target/${{ matrix.platform.target }}/release/${{ matrix.platform.bin }}' '${{ matrix.platform.name }}'
       - uses: actions/upload-artifact@v4
         with:
           if-no-files-found: error
           name: cli-${{ matrix.platform.target }}
-          path: tmp/
+          path: ${{ matrix.platform.name }}
 
   cd-tauri:
     strategy:
@@ -178,6 +166,10 @@ jobs:
         with:
           path: desktop/
           pattern: desktop-**
+      - uses: actions/download-artifact@v4
+        with:
+          path: cli/
+          pattern: cli-**
       - name: Prepare release
         uses: actions/github-script@v7
         with:
@@ -198,6 +190,7 @@ jobs:
             desktop/**/*.exe
             desktop/**/*.zip
             desktop/**/*.zip.sig
+            cli/**/*
           fail_on_unmatched_files: true
           generate_release_notes: true
           make_latest: ${{ needs.ci.outputs.shouldRelease == 'stable' && 'true' || 'false' }}
