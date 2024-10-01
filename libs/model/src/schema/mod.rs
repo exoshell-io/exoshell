@@ -4,4 +4,4 @@ mod script_run;
 use crate::prelude::*;
 pub use {script::*, script_run::*};
 
-type Id = Option<surrealdb::sql::Thing>;
+type Id = Option<surrealdb::RecordId>;

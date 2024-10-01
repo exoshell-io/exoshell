@@ -13,26 +13,26 @@ version = "0.0.0"
 
 [workspace.dependencies]
 # Helpers
-anyhow = { version = "1.0.86" }
-thiserror = { version = "1.0.61" }
-clap = { version = "4.5.4", features = ["derive"] }
+anyhow = { version = "1.0.89" }
+thiserror = { version = "1.0.64" }
+clap = { version = "4.5.18", features = ["derive"] }
 chrono = { version = "0.4.38" }
-derive_builder = { version = "0.20.0" }
+derive_builder = { version = "0.20.1" }
 tap = { version = "1.0.1" }
 directories = { version = "5.0.1" }
 
 # Serialization
-serde = { version = "1.0.203", features = ["derive"] }
-serde_json = { version = "1.0.117" }
-serde_yml = { version = "0.0.10" }
-serde_with = { version = "3.8.1" }
+serde = { version = "1.0.210", features = ["derive"] }
+serde_json = { version = "1.0.128" }
+serde_yml = { version = "0.0.12" }
+serde_with = { version = "3.9.0" }
 heck = { version = "0.5.0" }
 shell-words = { version = "1.1.0" }
-ts-rs = { version = "8.1.0", features = ["chrono-impl"] }
+ts-rs = { version = "10.0.0", features = ["chrono-impl"] }
 config = { version = "0.14.0" }
 
 # OCI
-oci-spec = { version = "0.6.5" }
+oci-spec = { version = "0.7.0" }
 
 # Tracing
 tracing = { version = "0.1.40" }
@@ -42,22 +42,22 @@ tracing-subscriber = { version = "0.3.18", features = [
 ] }
 
 # Database
-surrealdb = { version = "1.5.1", features = ["kv-rocksdb", "kv-mem"] }
+surrealdb = { version = "2.0.2", features = ["kv-rocksdb", "kv-mem"] }
 
 # Async
-tokio = { version = "1.38.0", features = ["process", "sync"] }
-tokio-util = { version = "0.7.11", features = ["io", "rt"] }
-tokio-stream = { version = "0.1.15", features = ["io-util"] }
+tokio = { version = "1.40.0", features = ["process", "sync"] }
+tokio-util = { version = "0.7.12", features = ["io", "rt"] }
+tokio-stream = { version = "0.1.16", features = ["io-util"] }
 futures = { version = "0.3.30" }
 
 # Macro helpers
-syn = { version = "2.0.66" }
-quote = { version = "1.0.36" }
-proc-macro2 = { version = "1.0.85" }
-darling = { version = "0.20.9" }
+syn = { version = "2.0.79" }
+quote = { version = "1.0.37" }
+proc-macro2 = { version = "1.0.86" }
+darling = { version = "0.20.10" }
 
 # Tauri
-tauri = { version = "1.6.8", features = [
+tauri = { version = "1.8.0", features = [
   "window-start-dragging",
   "window-hide",
   "global-shortcut",
@@ -65,7 +65,7 @@ tauri = { version = "1.6.8", features = [
   "system-tray",
   "updater",
 ] }
-tauri-build = { version = "1.5.2", features = [] }
+tauri-build = { version = "1.5.5", features = [] }
 
 [workspace.lints.clippy]
 type_complexity = 'allow'

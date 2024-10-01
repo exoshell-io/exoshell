@@ -60,7 +60,7 @@ pub mod commands {
 impl Cli {
   pub async fn get_ng(&mut self) -> Result<Engine> {
     let db_dir = PathBuf::from(format!(
-      "file://{}/state.db",
+      "rocksdb://{}/state.db",
       directories::ProjectDirs::from("io", "exoshell", "exoshell")
         .unwrap()
         .config_dir()

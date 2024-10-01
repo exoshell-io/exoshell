@@ -68,7 +68,7 @@ pub fn model(args: TokenStream, item: TokenStream) -> TokenStream {
         impl #builder_name {
           pub fn id(&mut self, id: impl AsRef<str>) -> &mut Self {
             self.id = Some(Some(
-              surrealdb::sql::thing(&format!("{}:{}", stringify!(#name_snake_case), id.as_ref())).unwrap(),
+              surrealdb::RecordId::from_table_key(stringify!(#name_snake_case), id.as_ref()),
             ));
             self
           }
@@ -102,13 +102,11 @@ pub fn model(args: TokenStream, item: TokenStream) -> TokenStream {
       let method_name = quote::format_ident!("upsert_{}", &name_snake_case);
       implementations.extend(quote::quote!{
         impl crate::Database {
-          pub async fn #method_name(&self, #name_snake_case: &#name) -> Result<#name> {
+          pub async fn #method_name(&self, #name_snake_case: #name) -> Result<#name> {
             if let Some(ref id) = #name_snake_case.id {
-              let #name_snake_case: Option<#name> = self.db.update((stringify!(#name_snake_case), id.id.clone())).content(#name_snake_case).await?;
-              return Ok(#name_snake_case.unwrap());
+              return Ok(self.db.upsert((stringify!(#name_snake_case), id.key().to_string())).content(#name_snake_case).await?.unwrap());
             }
-            let #name_snake_case: Vec<#name> = self.db.create(stringify!(#name_snake_case)).content(#name_snake_case).await?;
-            Ok(#name_snake_case.into_iter().next().unwrap())
+            Ok(self.db.create(stringify!(#name_snake_case)).content(#name_snake_case).await?.unwrap())
           }
         }
       });

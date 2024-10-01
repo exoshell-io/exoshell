@@ -13,14 +13,14 @@ impl super::Engine {
     let script_run = self
       .db
       .upsert_script_run(
-        &ScriptRun::builder()
+        ScriptRun::builder()
           .script(script)
           .spawned_at(Utc::now())
           .build()?,
       )
       .await?;
 
-    let id = &script_run.id.as_ref().unwrap().id;
+    let id = &script_run.id.as_ref().unwrap().key();
 
     let (tx, mut rx) = mpsc::unbounded_channel::<ChildCommand>();
 
@@ -44,7 +44,7 @@ impl super::Engine {
     mux.insert(ChildStdOutputs::Stderr, stderr);
 
     {
-      let id = id.clone();
+      let id = id.to_string();
       let db = self.db.clone();
 
       self.task_tracker.spawn(async move {
@@ -56,19 +56,19 @@ impl super::Engine {
             exit_status = child.wait() => {
               debug!("Exit status: {:#?}", exit_status);
               let mut q = db.db.query("UPDATE type::thing('script_run', $id) SET finishedAt = $finishedAt RETURN NONE")
-              .bind(("id", id.to_raw()))
+              .bind(("id", id.to_string()))
               .bind(("finishedAt", Utc::now()));
               match exit_status {
                 Ok(status) => {
                   if let Some(exit_code) = status.code() {
                     q = q.query("UPDATE type::thing('script_run', $id) SET exitStatus = $exitStatus RETURN NONE")
-                     .bind(("id", id.to_raw()))
+                     .bind(("id", id.to_string()))
                      .bind(("exitStatus", ExitStatus::ExitCode(exit_code)));
                   } else {
                   #[cfg(target_family = "unix")]
                   if let Some(signal) = status.signal() {
                     q = q.query("UPDATE type::thing('script_run', $id) SET exitStatus = $exitStatus RETURN NONE")
-                      .bind(("id", id.to_raw()))
+                      .bind(("id", id.to_string()))
                       .bind(("exitStatus", ExitStatus::Signal(signal)));
                   }
                 }
@@ -104,7 +104,7 @@ impl super::Engine {
       .children
       .write()
       .await
-      .insert(id.clone().to_string(), Arc::new(Mutex::new(tx)));
+      .insert(id.to_string(), Arc::new(Mutex::new(tx)));
 
     Ok(script_run)
   }
@@ -123,18 +123,19 @@ impl super::Engine {
 }
 
 async fn handle_child_outputs(
-  id: &surrealdb::sql::Id,
+  id: impl Into<String>,
   db: &Arc<Database>,
   key: &ChildStdOutputs,
   line: std::result::Result<String, std::io::Error>,
 ) {
+  let id = id.into();
   match key {
     ChildStdOutputs::Stdout => match line {
       Ok(line) => {
         if let Err(err) = db
           .append_script_run_log(
             id,
-            &ScriptRunLog::Stdout {
+            ScriptRunLog::Stdout {
               txt: line,
               ts: Utc::now(),
             },
@@ -153,7 +154,7 @@ async fn handle_child_outputs(
         if let Err(err) = db
           .append_script_run_log(
             id,
-            &ScriptRunLog::Stderr {
+            ScriptRunLog::Stderr {
               txt: line,
               ts: Utc::now(),
             },

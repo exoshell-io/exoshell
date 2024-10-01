@@ -37,7 +37,7 @@ mod tests {
     assert_eq!(scripts.len(), 0);
 
     db.upsert_script(
-      &Script::builder()
+      Script::builder()
         .id("test")
         .name("test")
         .command("echo")
