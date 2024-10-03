@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { invoke } from '@tauri-apps/api/tauri';
+import { invoke } from '@tauri-apps/api/core';
 
 export function useQuerySurreal() {
   return useMutation({

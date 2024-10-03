@@ -5,7 +5,7 @@ import {
   type DefaultError,
   type UseQueryOptions,
 } from '@tanstack/react-query';
-import { invoke } from '@tauri-apps/api/tauri';
+import { invoke } from '@tauri-apps/api/core';
 import { queryKeys, type ScriptRun } from '.';
 
 export const useScriptRuns = <T = ScriptRun[]>(

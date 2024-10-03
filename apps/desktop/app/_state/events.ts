@@ -1,6 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { listen, type UnlistenFn } from '@tauri-apps/api/event';
-import { invoke } from '@tauri-apps/api/tauri';
+import { invoke } from '@tauri-apps/api/core';
 import { useEffect } from 'react';
 import { queryKeys } from '.';
 

@@ -5,7 +5,7 @@ import {
   useQuery,
   useQueryClient,
 } from '@tanstack/react-query';
-import { invoke } from '@tauri-apps/api/tauri';
+import { invoke } from '@tauri-apps/api/core';
 import { useCallback } from 'react';
 import type { Script, ScriptRun } from '.';
 import { queryKeys, useCloseTab, useOpenTab } from '.';

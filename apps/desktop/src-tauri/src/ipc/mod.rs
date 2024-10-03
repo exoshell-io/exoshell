@@ -4,7 +4,10 @@ use self::prelude::*;
 mod db;
 mod scripts;
 
-use tauri::plugin::{Builder, TauriPlugin};
+use tauri::{
+  plugin::{Builder, TauriPlugin},
+  Emitter,
+};
 
 #[derive(Debug)]
 pub struct IpcState {
@@ -64,7 +67,7 @@ fn emit_script_run<R: Runtime>(
 ) -> Result<()> {
   let notification = result?;
   info!("{:?}", notification);
-  app_handle.emit_all("plugin_ipc:script_run", notification.data)?;
+  app_handle.emit("plugin_ipc:script_run", notification.data)?;
   Ok(())
 }
 
@@ -89,17 +92,13 @@ pub fn init<R: Runtime>() -> TauriPlugin<R> {
       scripts::list_script_runs_by_script,
       db::query,
     ])
-    .setup(|app_handle| {
+    .setup(|app_handle, _plugin| {
       app_handle.manage(IpcState::new(
         format!(
           "file://{}/state.db",
-          app_handle
-            .path_resolver()
-            .app_data_dir()
-            .unwrap()
-            .to_string_lossy()
+          app_handle.path().app_data_dir().unwrap().to_string_lossy()
         ),
-        app_handle.app_handle(),
+        app_handle.clone(),
       )?);
       Ok(())
     })

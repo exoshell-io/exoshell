@@ -1,9 +1,13 @@
 [package]
 name = "app"
-default-run = "app"
-version.workspace = true
+version = "0.1.0"
+# version.workspace = true
 edition.workspace = true
 publish = false
+
+[lib]
+name = "app_lib"
+crate-type = ["staticlib", "cdylib", "rlib", "lib"]
 
 [lints]
 workspace = true
@@ -48,3 +52,7 @@ tokio.workspace = true
 tokio-util.workspace = true
 tokio-stream.workspace = true
 futures.workspace = true
+
+[target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
+tauri-plugin-updater = "2"
+tauri-plugin-global-shortcut = "2"

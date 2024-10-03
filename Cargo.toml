@@ -57,15 +57,8 @@ proc-macro2 = { version = "1.0.86" }
 darling = { version = "0.20.10" }
 
 # Tauri
-tauri = { version = "1.8.0", features = [
-  "window-start-dragging",
-  "window-hide",
-  "global-shortcut",
-  "macos-private-api",
-  "system-tray",
-  "updater",
-] }
-tauri-build = { version = "1.5.5", features = [] }
+tauri = { version = "2.0.0", features = ["macos-private-api", "tray-icon"] }
+tauri-build = { version = "2.0.0", features = [] }
 
 [workspace.lints.clippy]
 type_complexity = 'allow'
