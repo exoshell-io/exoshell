@@ -21,7 +21,7 @@ export const useScripts = <T = State>(
   return useQuery({
     queryKey: queryKeys['scripts'],
     queryFn: async () => {
-      const scripts = await invoke<Script[]>('plugin:ipc|list_scripts');
+      const scripts = await invoke<Script[]>('list_scripts');
       return scripts.reduce((acc, script) => {
         acc[script.id!.id.String] = script;
         return acc;
@@ -49,7 +49,7 @@ export const useUpsertScript = () => {
       script: Script;
       focus?: boolean;
     }) => {
-      const _script = await invoke<Script>('plugin:ipc|upsert_script', {
+      const _script = await invoke<Script>('upsert_script', {
         script,
       });
       const id = _script.id!.id.String;
@@ -71,7 +71,7 @@ export const useDeleteScript = () => {
   return useMutation({
     mutationKey: ['deleteScript'],
     mutationFn: async ({ id }: { id: string }) => {
-      await invoke('plugin:ipc|delete_script', { id });
+      await invoke('delete_script', { id });
       closeTab(`terminal://${id}`);
       queryClient.setQueryData(['scripts'], (prevData: State) => {
         delete prevData[id];
@@ -86,7 +86,7 @@ export const useRunScript = () => {
   return useMutation({
     mutationKey: ['runScript'],
     mutationFn: async ({ script }: { script: Script }) => {
-      const scriptRun = await invoke<ScriptRun>('plugin:ipc|run_script', {
+      const scriptRun = await invoke<ScriptRun>('run_script', {
         script,
       });
       queryClient.invalidateQueries({

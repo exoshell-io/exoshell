@@ -8,7 +8,7 @@ export function useQuerySurreal() {
       query: string;
       vars: { [key: string]: unknown };
     }) => {
-      return invoke<string>('plugin:ipc|query', args);
+      return invoke<string>('query', args);
     },
   });
 }

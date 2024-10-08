@@ -19,7 +19,7 @@ export const useScriptRuns = <T = ScriptRun[]>(
     queryKey: [...queryKeys['scriptRuns'], scriptId],
     queryFn: async () => {
       const scriptRuns = await invoke<ScriptRun[]>(
-        'plugin:ipc|list_script_runs_by_script',
+        'list_script_runs_by_script',
         { scriptId },
       );
       return scriptRuns;
@@ -33,7 +33,7 @@ export const useDeleteScriptRun = () => {
   return useMutation({
     mutationKey: ['deleteScriptRun'],
     mutationFn: async ({ scriptId, id }: { scriptId?: string; id: string }) => {
-      await invoke('plugin:ipc|delete_script_run', { id });
+      await invoke('delete_script_run', { id });
       queryClient.invalidateQueries({
         queryKey: [...queryKeys['scriptRuns'], scriptId],
       });
@@ -46,7 +46,7 @@ export const useDeleteScriptRuns = () => {
   return useMutation({
     mutationKey: ['deleteScriptRuns'],
     mutationFn: async ({ scriptId }: { scriptId: string }) => {
-      await invoke('plugin:ipc|delete_script_runs', { scriptId });
+      await invoke('delete_script_runs', { scriptId });
       queryClient.invalidateQueries({
         queryKey: [...queryKeys['scriptRuns'], scriptId],
       });
@@ -59,7 +59,7 @@ export const useDropScriptRuns = () => {
   return useMutation({
     mutationKey: ['dropScriptRuns'],
     mutationFn: async () => {
-      await invoke('plugin:ipc|drop_script_runs');
+      await invoke('drop_script_runs');
       queryClient.invalidateQueries({ queryKey: queryKeys['scriptRuns'] });
     },
   });
@@ -76,7 +76,7 @@ export const useKillScriptRun = () => {
       scriptId: string;
       scriptRunId: string;
     }) => {
-      await invoke('plugin:ipc|kill_script', { id: scriptRunId });
+      await invoke('kill_script', { id: scriptRunId });
       queryClient.invalidateQueries({
         queryKey: [...queryKeys['scriptRuns'], scriptId],
       });

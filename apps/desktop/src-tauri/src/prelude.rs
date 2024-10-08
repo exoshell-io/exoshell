@@ -8,7 +8,7 @@ pub use {
   std::collections::HashMap,
   std::path::{Path, PathBuf},
   std::sync::Arc,
-  tap::Tap,
+  tap::{Pipe, Tap},
   tokio::{
     io::{AsyncBufReadExt, AsyncReadExt},
     sync::{mpsc, OnceCell, RwLock},

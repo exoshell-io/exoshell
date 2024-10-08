@@ -10,11 +10,11 @@ export const useBackendEvents = () => {
     let isMounted = true;
     let unlisten: UnlistenFn | undefined = undefined;
     async function handleDatabaseEvents() {
-      unlisten = await listen('plugin_ipc:script_run', (_event) => {
+      unlisten = await listen('exoshell:script_run', (_event) => {
         if (isMounted)
           queryClient.invalidateQueries({ queryKey: queryKeys.scriptRuns });
       });
-      await invoke('plugin:ipc|initialize');
+      await invoke('initialize');
     }
     handleDatabaseEvents();
     return () => {

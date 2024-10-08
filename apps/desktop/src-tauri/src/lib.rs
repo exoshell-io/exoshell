@@ -152,8 +152,8 @@ fn _run() -> Result<()> {
       }
       Ok(())
     })
-    .plugin(ipc::init())
+    .pipe(ipc::configure)
     .run(tauri::generate_context!())
-    .expect("error while running tauri application");
+    .expect("failed to run tauri app");
   Ok(())
 }
