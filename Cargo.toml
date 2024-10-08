@@ -15,7 +15,7 @@ version = "0.0.0"
 # Helpers
 anyhow = { version = "1.0.89" }
 thiserror = { version = "1.0.64" }
-clap = { version = "4.5.18", features = ["derive"] }
+clap = { version = "4.5.20", features = ["derive"] }
 chrono = { version = "0.4.38" }
 derive_builder = { version = "0.20.1" }
 tap = { version = "1.0.1" }
@@ -25,7 +25,7 @@ directories = { version = "5.0.1" }
 serde = { version = "1.0.210", features = ["derive"] }
 serde_json = { version = "1.0.128" }
 serde_yml = { version = "0.0.12" }
-serde_with = { version = "3.9.0" }
+serde_with = { version = "3.11.0" }
 heck = { version = "0.5.0" }
 shell-words = { version = "1.1.0" }
 ts-rs = { version = "10.0.0", features = ["chrono-impl"] }
@@ -42,23 +42,23 @@ tracing-subscriber = { version = "0.3.18", features = [
 ] }
 
 # Database
-surrealdb = { version = "2.0.2", features = ["kv-rocksdb", "kv-mem"] }
+surrealdb = { version = "2.0.3", features = ["kv-rocksdb", "kv-mem"] }
 
 # Async
 tokio = { version = "1.40.0", features = ["process", "sync"] }
 tokio-util = { version = "0.7.12", features = ["io", "rt"] }
 tokio-stream = { version = "0.1.16", features = ["io-util"] }
-futures = { version = "0.3.30" }
+futures = { version = "0.3.31" }
 
 # Macro helpers
 syn = { version = "2.0.79" }
 quote = { version = "1.0.37" }
-proc-macro2 = { version = "1.0.86" }
+proc-macro2 = { version = "1.0.87" }
 darling = { version = "0.20.10" }
 
 # Tauri
-tauri = { version = "2.0.0", features = ["macos-private-api", "tray-icon"] }
-tauri-build = { version = "2.0.0", features = [] }
+tauri = { version = "2.0.2", features = ["macos-private-api", "tray-icon"] }
+tauri-build = { version = "2.0.1", features = [] }
 
 [workspace.lints.clippy]
 type_complexity = 'allow'
