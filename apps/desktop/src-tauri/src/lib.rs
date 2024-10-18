@@ -28,6 +28,9 @@ fn _run() -> Result<()> {
     builder = builder.plugin(
       tauri_plugin_global_shortcut::Builder::new()
         .with_handler(|app, _shortcut, _event| {
+          if let Err(err) = app.get_webview_window("quickbar").unwrap().show() {
+            error!("Failed to focus quickbar: {:?}", err);
+          }
           if let Err(err) = app.get_webview_window("quickbar").unwrap().set_focus() {
             error!("Failed to focus quickbar: {:?}", err);
           }
@@ -68,85 +71,89 @@ fn _run() -> Result<()> {
                 true,
                 None::<&str>,
               )?)
-              .item(
-                &SubmenuBuilder::new(app, "Scripts")
-                  .item(&MenuItem::with_id(
-                    app,
-                    "no_scripts",
-                    "Empty",
-                    false,
-                    None::<&str>,
-                  )?)
-                  .build()?,
-              )
+              // .item(
+              //   &SubmenuBuilder::new(app, "Scripts")
+              //     .item(&MenuItem::with_id(
+              //       app,
+              //       "no_scripts",
+              //       "Empty",
+              //       false,
+              //       None::<&str>,
+              //     )?)
+              //     .build()?,
+              // )
               .separator()
-              .item(&MenuItem::with_id(
-                app,
-                "quickbar",
-                "Open QuickBar",
-                true,
-                Some("CommandOrControl+Escape"),
-              )?)
-              .item(&MenuItem::with_id(
-                app,
-                "quit",
-                "⏻  Quit",
-                true,
-                None::<&str>,
-              )?)
+              // .item(&MenuItem::with_id(
+              //   app,
+              //   "quickbar",
+              //   "Open QuickBar",
+              //   true,
+              //   Some("CommandOrControl+Escape"),
+              // )?)
+              // .item(&MenuItem::with_id(
+              //   app,
+              //   "quit",
+              //   "⏻  Quit",
+              //   true,
+              //   None::<&str>,
+              // )?)
               .build()?,
           )
-          .on_tray_icon_event(move |tray_icon, event| {
-            let app = tray_icon.app_handle();
-            match event {
-              TrayIconEvent::Click {
-                id,
-                position: _,
-                rect: _,
-                button: _,
-                button_state: _,
-              } => match id.0.as_str() {
-                "open" => {
-                  if let Some(main_window) = app.get_webview_window("main") {
-                    if let Err(err) = main_window.show() {
-                      error!("Failed to show main window: {:?}", err);
-                    }
-                    if let Err(err) = main_window.set_focus() {
-                      error!("Failed to focus main window: {:?}", err);
-                    }
-                  } else {
-                    match tauri::WebviewWindowBuilder::from_config(
-                      app,
-                      &app
-                        .config()
-                        .app
-                        .windows
-                        .iter()
-                        .find(|window| window.label == "main")
-                        .unwrap()
-                        .clone(),
-                    ) {
-                      Err(err) => error!("Failed to build main window: {:?}", err),
-                      Ok(builder) => match builder.build() {
-                        Err(err) => error!("Failed to build main window: {:?}", err),
-                        Ok(_window) => {}
-                      },
-                    }
-                  }
-                }
-                "quickbar" => {
-                  if let Err(err) = app.get_webview_window("quickbar").unwrap().set_focus() {
-                    error!("Failed to focus quickbar: {:?}", err);
-                  }
-                }
-                "quit" => {
-                  app.exit(0);
-                }
-                _ => {}
-              },
-              _ => {}
-            }
-          })
+          // .on_tray_icon_event(move |tray_icon, event| {
+          //   debug!("Tray icon event: {:?}", event);
+          //   let app = tray_icon.app_handle();
+          //   match event {
+          //     TrayIconEvent::Click {
+          //       id,
+          //       position: _,
+          //       rect: _,
+          //       button: _,
+          //       button_state: _,
+          //     } => match id.0.as_str() {
+          //       "open" => {
+          //         if let Some(main_window) = app.get_webview_window("main") {
+          //           if let Err(err) = main_window.show() {
+          //             error!("Failed to show main window: {:?}", err);
+          //           }
+          //           if let Err(err) = main_window.set_focus() {
+          //             error!("Failed to focus main window: {:?}", err);
+          //           }
+          //         } else {
+          //           match tauri::WebviewWindowBuilder::from_config(
+          //             app,
+          //             &app
+          //               .config()
+          //               .app
+          //               .windows
+          //               .iter()
+          //               .find(|window| window.label == "main")
+          //               .unwrap()
+          //               .clone(),
+          //           ) {
+          //             Err(err) => error!("Failed to build main window: {:?}", err),
+          //             Ok(builder) => match builder.build() {
+          //               Err(err) => error!("Failed to build main window: {:?}", err),
+          //               Ok(_window) => {}
+          //             },
+          //           }
+          //         }
+          //       }
+          //       "quickbar" => {
+          //         if let Err(err) = app.get_webview_window("quickbar").unwrap().show() {
+          //           error!("Failed to focus quickbar: {:?}", err);
+          //         }
+          //         if let Err(err) = app.get_webview_window("quickbar").unwrap().set_focus() {
+          //           error!("Failed to focus quickbar: {:?}", err);
+          //         }
+          //       }
+          //       "quit" => {
+          //         app.exit(0);
+          //       }
+          //       _ => {}
+          //     },
+          //     _ => {}
+          //   }
+          // })
           .build(app)
           .with_context(|| "Failed to build system tray")?;
       }

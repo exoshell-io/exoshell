@@ -40,6 +40,10 @@ pub enum Commands {
 
   #[command(subcommand)]
   ScriptRun(commands::ScriptRun),
+
+  Run {
+    commands: Vec<String>,
+  },
 }
 
 pub mod commands {

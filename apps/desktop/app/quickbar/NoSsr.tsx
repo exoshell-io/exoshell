@@ -3,7 +3,7 @@
 import { useScripts } from '@/_state';
 import { useHotkeys } from '@mantine/hooks';
 import { Spotlight, SpotlightActionData } from '@mantine/spotlight';
-import { UnlistenFn, listen } from '@tauri-apps/api/event';
+import { TauriEvent, UnlistenFn } from '@tauri-apps/api/event';
 import { getCurrentWebviewWindow } from '@tauri-apps/api/webviewWindow';
 import { useEffect, useMemo } from 'react';
 const appWindow = getCurrentWebviewWindow();
@@ -13,10 +13,8 @@ export const NoSsr: React.FC = () => {
     let mounted = true;
     let unlisten: UnlistenFn | null = null;
     async function listenEvents() {
-      unlisten = await listen('tauri://blur', async (e) => {
-        if (e.windowLabel === 'quickbar') {
-          hideWindow();
-        }
+      unlisten = await appWindow.listen(TauriEvent.WINDOW_BLUR, async () => {
+        hideWindow();
       });
     }
     listenEvents();
@@ -59,6 +57,7 @@ export const NoSsr: React.FC = () => {
   );
 };
 
-function hideWindow() {
-  appWindow.hide();
+async function hideWindow() {
+  console.log('Hiding window');
+  await appWindow.hide();
 }

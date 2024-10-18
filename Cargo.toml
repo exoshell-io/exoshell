@@ -17,7 +17,7 @@ anyhow = { version = "1.0.89" }
 thiserror = { version = "1.0.64" }
 clap = { version = "4.5.20", features = ["derive"] }
 chrono = { version = "0.4.38" }
-derive_builder = { version = "0.20.1" }
+derive_builder = { version = "0.20.2" }
 tap = { version = "1.0.1" }
 directories = { version = "5.0.1" }
 
@@ -42,7 +42,7 @@ tracing-subscriber = { version = "0.3.18", features = [
 ] }
 
 # Database
-surrealdb = { version = "2.0.3", features = ["kv-rocksdb", "kv-mem"] }
+surrealdb = { version = "2.0.4", features = ["kv-rocksdb", "kv-mem"] }
 
 # Async
 tokio = { version = "1.40.0", features = ["process", "sync"] }

@@ -14,6 +14,7 @@ pub struct Script {
   #[builder(default)]
   pub args: Vec<String>,
   #[builder(default)]
+  #[serde(default)]
   pub env: HashMap<String, String>,
   #[builder(default)]
   pub working_dir: Option<String>,

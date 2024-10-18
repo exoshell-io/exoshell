@@ -2,6 +2,7 @@ mod cli;
 use {cli::*, exoshell::prelude::*};
 
 use config::{File, FileFormat};
+use tracing::info;
 
 #[tokio::main]
 async fn main() -> Result<()> {
@@ -10,7 +11,31 @@ async fn main() -> Result<()> {
   let mut args = Cli::parse();
 
   let engine = args.get_ng().await?;
+
   match args.commands.clone() {
+    Commands::Run { commands } => {
+      info!("Running commands: {commands:#?}");
+      let manifest = exoshell::manifest::Manifest::find()?;
+      if commands.is_empty() {
+        println!("Available commands:");
+        for name in manifest.scripts.keys() {
+          println!("  {name}");
+        }
+      } else {
+        info!("Running script: {}", commands[0]);
+        let script = manifest
+          .get_script(&commands[0])
+          .context("Script not found")?;
+        let db = engine.db.clone();
+        tokio::spawn(async move {
+          let mut stream = db.db.select("script_run").live().await.unwrap();
+          while let Some(result) = stream.next().await {
+            handle_script_output(result).unwrap();
+          }
+        });
+        engine.run_script(script.clone()).await?;
+      }
+    }
     Commands::Script(command_script) => match &command_script {
       commands::Script::List => {
         let scripts = engine.db.list_script().await?;
@@ -40,5 +65,13 @@ async fn main() -> Result<()> {
     },
   }
   engine.quit().await?;
+  Ok(())
+}
+
+fn handle_script_output(
+  result: surrealdb::Result<surrealdb::Notification<ScriptRun>>,
+) -> Result<()> {
+  let notification = result?;
+  info!("{:?}", notification.data);
   Ok(())
 }

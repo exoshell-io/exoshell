@@ -3,6 +3,7 @@ pub use {
   chrono::Utc,
   futures::stream::StreamExt,
   model::*,
+  serde::{Deserialize, Serialize},
   std::collections::HashMap,
   std::path::Path,
   std::sync::Arc,

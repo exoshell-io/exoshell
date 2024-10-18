@@ -1,6 +1,7 @@
 mod prelude;
-mod run;
 use self::prelude::*;
+
+mod run;
 
 #[derive(Debug)]
 pub struct Engine {
