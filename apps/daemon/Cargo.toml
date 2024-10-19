@@ -1,0 +1,38 @@
+[package]
+name = "daemon"
+edition.workspace = true
+version.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+anyhow.workspace = true
+clap.workspace = true
+directories.workspace = true
+
+# Serialization
+config.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+serde_yml.workspace = true
+shell-words.workspace = true
+
+# Database
+model = { path = "../../libs/model" }
+surrealdb.workspace = true
+
+# Tracing
+tracing.workspace = true
+tracing-subscriber.workspace = true
+
+# Tokio
+tokio.workspace = true
+tokio-stream.workspace = true
+tokio-util.workspace = true
+futures.workspace = true
+chrono.workspace = true
+
+# HTTP
+axum.workspace = true

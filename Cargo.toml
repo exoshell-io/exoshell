@@ -1,6 +1,7 @@
 [workspace]
 members = [
   "apps/cli",
+  "apps/daemon",
   "apps/desktop/src-tauri/",
   "libs/model/macro",
   "libs/model",
@@ -13,7 +14,7 @@ version = "0.0.0"
 
 [workspace.dependencies]
 # Helpers
-anyhow = { version = "1.0.89" }
+anyhow = { version = "1.0.90" }
 thiserror = { version = "1.0.64" }
 clap = { version = "4.5.20", features = ["derive"] }
 chrono = { version = "0.4.38" }
@@ -23,7 +24,7 @@ directories = { version = "5.0.1" }
 
 # Serialization
 serde = { version = "1.0.210", features = ["derive"] }
-serde_json = { version = "1.0.128" }
+serde_json = { version = "1.0.131" }
 serde_yml = { version = "0.0.12" }
 serde_with = { version = "3.11.0" }
 heck = { version = "0.5.0" }
@@ -53,12 +54,15 @@ futures = { version = "0.3.31" }
 # Macro helpers
 syn = { version = "2.0.79" }
 quote = { version = "1.0.37" }
-proc-macro2 = { version = "1.0.87" }
+proc-macro2 = { version = "1.0.88" }
 darling = { version = "0.20.10" }
 
 # Tauri
-tauri = { version = "2.0.2", features = ["macos-private-api", "tray-icon"] }
+tauri = { version = "2.0.4", features = ["macos-private-api", "tray-icon"] }
 tauri-build = { version = "2.0.1", features = [] }
+
+# API
+axum = { version = "0.7.5" }
 
 [workspace.lints.clippy]
 type_complexity = 'allow'
