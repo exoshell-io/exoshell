@@ -1,7 +1,6 @@
 [workspace]
 members = [
   "apps/cli",
-  "apps/daemon",
   "apps/desktop/src-tauri/",
   "libs/model/macro",
   "libs/model",
@@ -14,8 +13,8 @@ version = "0.0.0"
 
 [workspace.dependencies]
 # Helpers
-anyhow = { version = "1.0.90" }
-thiserror = { version = "1.0.64" }
+anyhow = { version = "1.0.91" }
+thiserror = { version = "1.0.65" }
 clap = { version = "4.5.20", features = ["derive"] }
 chrono = { version = "0.4.38" }
 derive_builder = { version = "0.20.2" }
@@ -23,8 +22,8 @@ tap = { version = "1.0.1" }
 directories = { version = "5.0.1" }
 
 # Serialization
-serde = { version = "1.0.210", features = ["derive"] }
-serde_json = { version = "1.0.131" }
+serde = { version = "1.0.213", features = ["derive"] }
+serde_json = { version = "1.0.132" }
 serde_yml = { version = "0.0.12" }
 serde_with = { version = "3.11.0" }
 heck = { version = "0.5.0" }
@@ -46,20 +45,20 @@ tracing-subscriber = { version = "0.3.18", features = [
 surrealdb = { version = "2.0.4", features = ["kv-rocksdb", "kv-mem"] }
 
 # Async
-tokio = { version = "1.40.0", features = ["process", "sync"] }
+tokio = { version = "1.41.0", features = ["process", "sync"] }
 tokio-util = { version = "0.7.12", features = ["io", "rt"] }
 tokio-stream = { version = "0.1.16", features = ["io-util"] }
 futures = { version = "0.3.31" }
 
 # Macro helpers
-syn = { version = "2.0.79" }
+syn = { version = "2.0.82" }
 quote = { version = "1.0.37" }
-proc-macro2 = { version = "1.0.88" }
+proc-macro2 = { version = "1.0.89" }
 darling = { version = "0.20.10" }
 
 # Tauri
-tauri = { version = "2.0.4", features = ["macos-private-api", "tray-icon"] }
-tauri-build = { version = "2.0.1", features = [] }
+tauri = { version = "2.0.6", features = ["macos-private-api", "tray-icon"] }
+tauri-build = { version = "2.0.2", features = [] }
 
 # API
 axum = { version = "0.7.5" }

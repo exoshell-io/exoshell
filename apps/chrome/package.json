@@ -10,6 +10,7 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@types/chrome": "0.0.278"
+    "@types/chrome": "0.0.279",
+    "web-ext": "8.3.0"
   }
 }
