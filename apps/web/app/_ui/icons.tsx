@@ -6,3 +6,4 @@ export {
   FaWindows as IconWindows,
 } from 'react-icons/fa';
 export { TbCloudDownload as IconDownload } from 'react-icons/tb';
+export { LuSearch as IconSearch } from 'react-icons/lu';

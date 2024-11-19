@@ -48,7 +48,7 @@ export const NavBar: React.FC = () => {
             {
               key: 'Refresh',
               icon: <IconRefresh size={16} />,
-              onClick: () => scripts.refetch(),
+              onClick: () => void scripts.refetch(),
             },
           ])}
         >
@@ -64,13 +64,15 @@ export const NavBar: React.FC = () => {
                 {
                   key: 'Refresh',
                   icon: <IconRefresh size={16} />,
-                  onClick: () => scripts.refetch(),
+                  onClick: () => void scripts.refetch(),
                 },
                 {
                   key: 'Delete',
                   color: 'red',
                   icon: <IconTrash size={16} />,
-                  onClick: () => deleteScript.mutate({ id: terminal.id }),
+                  onClick: () => {
+                    deleteScript.mutate({ id: terminal.id });
+                  },
                 },
               ])}
             />
@@ -102,19 +104,25 @@ export const NavBar: React.FC = () => {
           <NavLink
             label='Add'
             leftSection={<IconAdd />}
-            onClick={() => openTab('surreal')}
+            onClick={() => {
+              openTab('surreal');
+            }}
           />
         </NavLink>
         <NavLink
           label='Settings'
           leftSection={<IconSettings />}
-          onClick={() => openTab('settings')}
+          onClick={() => {
+            openTab('settings');
+          }}
         />
         {process.env.NODE_ENV === 'development' && (
           <NavLink
             label='DevModeOnly'
             leftSection={<IconCompass />}
-            onClick={() => openTab('devMode')}
+            onClick={() => {
+              openTab('devMode');
+            }}
           />
         )}
       </ScrollArea>

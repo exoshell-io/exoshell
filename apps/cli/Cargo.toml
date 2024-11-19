@@ -11,6 +11,7 @@ workspace = true
 anyhow.workspace = true
 clap.workspace = true
 directories.workspace = true
+sysinfo.workspace = true
 
 # Serialization
 config.workspace = true
@@ -33,3 +34,10 @@ tokio-stream.workspace = true
 tokio-util.workspace = true
 futures.workspace = true
 chrono.workspace = true
+
+# API
+prost.workspace = true
+tonic.workspace = true
+
+[build-dependencies]
+tonic-build.workspace = true

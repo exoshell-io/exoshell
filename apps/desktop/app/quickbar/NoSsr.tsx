@@ -10,16 +10,14 @@ const appWindow = getCurrentWebviewWindow();
 
 export const NoSsr: React.FC = () => {
   useEffect(() => {
-    let mounted = true;
     let unlisten: UnlistenFn | null = null;
     async function listenEvents() {
-      unlisten = await appWindow.listen(TauriEvent.WINDOW_BLUR, async () => {
-        hideWindow();
+      unlisten = await appWindow.listen(TauriEvent.WINDOW_BLUR, () => {
+        void hideWindow();
       });
     }
-    listenEvents();
+    void listenEvents();
     return () => {
-      mounted = false;
       unlisten?.();
     };
   });
@@ -32,7 +30,7 @@ export const NoSsr: React.FC = () => {
         : Object.values(scripts.data).map<SpotlightActionData>((script) => ({
             id: script.id!.id.String,
             label: script.name,
-            description: `${script.command}`,
+            description: script.command,
             onClick: console.log,
           })),
     [scripts.data, scripts.isSuccess],

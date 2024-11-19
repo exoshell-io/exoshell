@@ -13,26 +13,27 @@ version = "0.0.0"
 
 [workspace.dependencies]
 # Helpers
-anyhow = { version = "1.0.91" }
-thiserror = { version = "1.0.65" }
-clap = { version = "4.5.20", features = ["derive"] }
+anyhow = { version = "1.0.93" }
+thiserror = { version = "2.0.3" }
+clap = { version = "4.5.21", features = ["derive"] }
 chrono = { version = "0.4.38" }
 derive_builder = { version = "0.20.2" }
 tap = { version = "1.0.1" }
 directories = { version = "5.0.1" }
+sysinfo = { version = "0.32.0" }
 
 # Serialization
-serde = { version = "1.0.213", features = ["derive"] }
-serde_json = { version = "1.0.132" }
+serde = { version = "1.0.215", features = ["derive"] }
+serde_json = { version = "1.0.133" }
 serde_yml = { version = "0.0.12" }
 serde_with = { version = "3.11.0" }
 heck = { version = "0.5.0" }
 shell-words = { version = "1.1.0" }
 ts-rs = { version = "10.0.0", features = ["chrono-impl"] }
-config = { version = "0.14.0" }
+config = { version = "0.14.1" }
 
 # OCI
-oci-spec = { version = "0.7.0" }
+oci-spec = { version = "0.7.1" }
 
 # Tracing
 tracing = { version = "0.1.40" }
@@ -45,23 +46,27 @@ tracing-subscriber = { version = "0.3.18", features = [
 surrealdb = { version = "2.0.4", features = ["kv-rocksdb", "kv-mem"] }
 
 # Async
-tokio = { version = "1.41.0", features = ["process", "sync"] }
+tokio = { version = "1.41.1", features = ["process", "sync", "signal"] }
 tokio-util = { version = "0.7.12", features = ["io", "rt"] }
 tokio-stream = { version = "0.1.16", features = ["io-util"] }
 futures = { version = "0.3.31" }
 
 # Macro helpers
-syn = { version = "2.0.82" }
+syn = { version = "2.0.87" }
 quote = { version = "1.0.37" }
 proc-macro2 = { version = "1.0.89" }
 darling = { version = "0.20.10" }
 
 # Tauri
-tauri = { version = "2.0.6", features = ["macos-private-api", "tray-icon"] }
-tauri-build = { version = "2.0.2", features = [] }
+tauri = { version = "2.1.1", features = ["macos-private-api", "tray-icon"] }
+tauri-build = { version = "2.0.3", features = [] }
 
 # API
-axum = { version = "0.7.5" }
+axum = { version = "0.7.9" }
+tonic = { version = "0.12.3" }
+tonic-build = { version = "0.12.3" }
+prost = { version = "0.13.3" }
+
 
 [workspace.lints.clippy]
 type_complexity = 'allow'

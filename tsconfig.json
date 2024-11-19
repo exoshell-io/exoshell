@@ -55,7 +55,6 @@
   "include": [
     "node_modules/bun-types/*.d.ts",
     ".lintstagedrc.mjs",
-    ".eslintrc.cjs",
     ".github/scripts/*",
     "apps/*/src/**/*",
     "apps/*/scripts/**/*",

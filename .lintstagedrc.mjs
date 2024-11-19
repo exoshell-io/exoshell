@@ -8,6 +8,8 @@ export default {
     `cargo clippy`,
   ],
   '*.{(j|t)s?(x),(c|m)js}': (filenames) => [
-    ...filenames.map((filename) => `eslint --max-warnings=0 '${filename}'`),
+    ...filenames.map(
+      (filename) => `eslint --max-warnings=0 --no-warn-ignored '${filename}'`,
+    ),
   ],
 };

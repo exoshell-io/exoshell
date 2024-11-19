@@ -12,11 +12,13 @@ export const useBackendEvents = () => {
     async function handleDatabaseEvents() {
       unlisten = await listen('exoshell:script_run', (_event) => {
         if (isMounted)
-          queryClient.invalidateQueries({ queryKey: queryKeys.scriptRuns });
+          void queryClient.invalidateQueries({
+            queryKey: queryKeys.scriptRuns,
+          });
       });
       await invoke('initialize');
     }
-    handleDatabaseEvents();
+    void handleDatabaseEvents();
     return () => {
       isMounted = false;
       unlisten?.();

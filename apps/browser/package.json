@@ -1,0 +1,23 @@
+{
+  "name": "@exoshell/browser",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "wxt build",
+    "build:firefox": "wxt build -b firefox",
+    "compile": "tsc --noEmit",
+    "dev": "wxt",
+    "dev:firefox": "wxt -b firefox",
+    "postinstall": "wxt prepare",
+    "lint": "turbo run lint:",
+    "lint:": "eslint --max-warnings=0",
+    "zip": "wxt zip",
+    "zip:firefox": "wxt zip -b firefox"
+  },
+  "devDependencies": {
+    "@wxt-dev/auto-icons": "1.0.2",
+    "@wxt-dev/module-react": "1.1.2",
+    "wxt": "0.19.16"
+  }
+}

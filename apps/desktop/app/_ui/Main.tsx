@@ -28,10 +28,10 @@ export const Main: React.FC = () => {
   return (
     <>
       <Tabs
-        value={`${activeTab}`}
-        onChange={(newTab) =>
-          setActiveTab(newTab !== null ? parseInt(newTab) : null)
-        }
+        value={activeTab !== undefined ? `${activeTab}` : undefined}
+        onChange={(newTab) => {
+          setActiveTab(newTab !== null ? parseInt(newTab) : null);
+        }}
         activateTabWithKeyboard={false}
         display='flex'
         style={{ flexDirection: 'column' }}
@@ -43,7 +43,7 @@ export const Main: React.FC = () => {
             let tabIcon: React.ReactNode;
             if (tab.href.startsWith('terminal://')) {
               tabLabel = scripts.isSuccess
-                ? scripts.data[tab.href.substring('terminal://'.length)]?.name
+                ? scripts.data[tab.href.substring('terminal://'.length)].name
                 : scripts.isError
                   ? `Error: ${scripts.error}`
                   : `Loading`;
@@ -62,7 +62,7 @@ export const Main: React.FC = () => {
             }
             return (
               <Tabs.Tab
-                key={`${tab.href}`}
+                key={tab.href}
                 value={`${index}`}
                 px={8}
                 component='div' // Fix "forbidden button in button" warning
@@ -98,7 +98,7 @@ export const Main: React.FC = () => {
         {tabs.map((tab, index) => {
           return (
             <Tabs.Panel
-              key={`${tab.href}`}
+              key={tab.href}
               value={`${index}`}
               flex='1 0 10%'
               className='overflow-hidden'

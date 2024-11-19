@@ -78,7 +78,9 @@ export const Header: React.FC = () => {
         <ActionIcon
           variant='subtle'
           color='gray'
-          onClick={() => setLeftBarVisibility(!leftBarVisibility)}
+          onClick={() => {
+            setLeftBarVisibility(!leftBarVisibility);
+          }}
           size={20}
         >
           {leftBarVisibility ? (

@@ -13,10 +13,11 @@ export const RendererDevModeOnly: React.FC = () => {
           leftSection={<IconReactQuery />}
           onClick={() => {
             const button = document.querySelector<HTMLButtonElement>(
+              // cSpell:ignore tsqd
               'button.tsqd-open-btn',
             );
             if (button !== null) {
-              button?.click();
+              button.click();
             } else {
               const button = document.querySelector<HTMLButtonElement>(
                 'button.tsqd-minimize-btn',
@@ -37,7 +38,7 @@ export const RendererDevModeOnly: React.FC = () => {
               'button.jotai-devtools-trigger-button',
             );
             if (button !== null) {
-              button?.click();
+              button.click();
             } else {
               const button = document.querySelector<HTMLButtonElement>(
                 'button.jotai-devtools-focus[title="Minimize panel"]',

@@ -34,7 +34,7 @@ export const useDeleteScriptRun = () => {
     mutationKey: ['deleteScriptRun'],
     mutationFn: async ({ scriptId, id }: { scriptId?: string; id: string }) => {
       await invoke('delete_script_run', { id });
-      queryClient.invalidateQueries({
+      await queryClient.invalidateQueries({
         queryKey: [...queryKeys['scriptRuns'], scriptId],
       });
     },
@@ -47,7 +47,7 @@ export const useDeleteScriptRuns = () => {
     mutationKey: ['deleteScriptRuns'],
     mutationFn: async ({ scriptId }: { scriptId: string }) => {
       await invoke('delete_script_runs', { scriptId });
-      queryClient.invalidateQueries({
+      await queryClient.invalidateQueries({
         queryKey: [...queryKeys['scriptRuns'], scriptId],
       });
     },
@@ -60,7 +60,9 @@ export const useDropScriptRuns = () => {
     mutationKey: ['dropScriptRuns'],
     mutationFn: async () => {
       await invoke('drop_script_runs');
-      queryClient.invalidateQueries({ queryKey: queryKeys['scriptRuns'] });
+      await queryClient.invalidateQueries({
+        queryKey: queryKeys['scriptRuns'],
+      });
     },
   });
 };
@@ -77,7 +79,7 @@ export const useKillScriptRun = () => {
       scriptRunId: string;
     }) => {
       await invoke('kill_script', { id: scriptRunId });
-      queryClient.invalidateQueries({
+      await queryClient.invalidateQueries({
         queryKey: [...queryKeys['scriptRuns'], scriptId],
       });
     },

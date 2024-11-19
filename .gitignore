@@ -194,3 +194,8 @@ next-env.d.ts
 
 # Generated Models
 /libs/model/types/
+
+*.bin
+
+# Tauri
+/apps/desktop/src-tauri/gen/

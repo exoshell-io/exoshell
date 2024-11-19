@@ -4,10 +4,10 @@ import {
   AppShell,
   AppShellHeader,
   AppShellMain,
-  AppShellNavbar,
   Box,
   Burger,
   Container,
+  Drawer,
   Group,
   MantineSize,
   NavLink,
@@ -15,23 +15,18 @@ import {
 import { useDisclosure, useHeadroom, useWindowScroll } from '@mantine/hooks';
 import { Brand } from './_ui/Brand';
 import { Logo } from './_ui/Logo';
+import { SearchBar } from './_ui/SearchBar';
+import { Auth } from './_ui/auth/Auth';
 
 export const FrontLayout: React.FC<React.PropsWithChildren> = ({
   children,
 }) => {
-  const [burgerOpened, { toggle: toggleBurger }] = useDisclosure();
+  const [navbarOpened, { toggle: toggleNavbar }] = useDisclosure();
   const showHeader = useHeadroom({ fixedAt: 70 });
   const [{ y: scrollY }] = useWindowScroll();
 
   return (
-    <AppShell
-      header={{ height: 70, collapsed: !showHeader, offset: false }}
-      navbar={{
-        width: 300,
-        breakpoint: NAVBAR_BREAKPOINT,
-        collapsed: { desktop: true, mobile: !burgerOpened },
-      }}
-    >
+    <AppShell header={{ height: 70, collapsed: !showHeader, offset: false }}>
       <AppShellHeader withBorder={scrollY > 80}>
         <Container
           size='xl'
@@ -39,13 +34,15 @@ export const FrontLayout: React.FC<React.PropsWithChildren> = ({
           px={16}
           className='flex items-center justify-between'
         >
-          <Brand />
-          <Burger
-            opened={burgerOpened}
-            onClick={toggleBurger}
-            hiddenFrom={NAVBAR_BREAKPOINT}
-            size='sm'
-          />
+          <Group>
+            <Burger
+              opened={navbarOpened}
+              onClick={toggleNavbar}
+              hiddenFrom={NAVBAR_BREAKPOINT}
+              size='sm'
+            />
+            <Brand />
+          </Group>
           <Group gap='xl' visibleFrom={NAVBAR_BREAKPOINT}>
             {HEADER_MENU.map((link) => (
               <a
@@ -57,13 +54,27 @@ export const FrontLayout: React.FC<React.PropsWithChildren> = ({
               </a>
             ))}
           </Group>
+          <Group gap='xs'>
+            <SearchBar />
+            <Auth />
+          </Group>
         </Container>
       </AppShellHeader>
-      <AppShellNavbar>
+      <Drawer
+        opened={navbarOpened}
+        onClose={toggleNavbar}
+        size='xs'
+        title={<Brand />}
+      >
         {HEADER_MENU.map((link) => (
-          <NavLink key={link.href} href={link.href} label={link.label} />
+          <NavLink
+            key={link.href}
+            href={link.href}
+            label={link.label}
+            onClick={toggleNavbar}
+          />
         ))}
-      </AppShellNavbar>
+      </Drawer>
       <AppShellMain>{children}</AppShellMain>
       <Box
         component='footer'

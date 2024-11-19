@@ -22,10 +22,10 @@ export const useScripts = <T = State>(
     queryKey: queryKeys['scripts'],
     queryFn: async () => {
       const scripts = await invoke<Script[]>('list_scripts');
-      return scripts.reduce((acc, script) => {
+      return scripts.reduce<State>((acc, script) => {
         acc[script.id!.id.String] = script;
         return acc;
-      }, {} as State);
+      }, {});
     },
     ...options,
   });
@@ -74,6 +74,7 @@ export const useDeleteScript = () => {
       await invoke('delete_script', { id });
       closeTab(`terminal://${id}`);
       queryClient.setQueryData(['scripts'], (prevData: State) => {
+        // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
         delete prevData[id];
         return { ...prevData };
       });
@@ -89,7 +90,7 @@ export const useRunScript = () => {
       const scriptRun = await invoke<ScriptRun>('run_script', {
         script,
       });
-      queryClient.invalidateQueries({
+      await queryClient.invalidateQueries({
         queryKey: [...queryKeys['scriptRuns'], script.id!.id.String],
       });
       return scriptRun;

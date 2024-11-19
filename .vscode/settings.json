@@ -4,6 +4,7 @@
   },
   "cSpell.words": [
     "aarch",
+    "appimage",
     "appindicator",
     "azuretools",
     "bierner",
@@ -17,8 +18,10 @@
     "esbenp",
     "euxo",
     "exoshell",
+    "exoshelld",
     "formulahendry",
     "foxundermoon",
+    "fttemplates",
     "getent",
     "gosu",
     "GROUPNAME",
@@ -41,13 +44,19 @@
     "nullglob",
     "pangea",
     "patchelf",
+    "pidlock",
     "pipefail",
     "posthog",
+    "proto",
+    "protos",
     "quickbar",
     "reactflow",
-    "RUSTUP",
+    "rsplit",
+    "rustc",
+    "rustup",
     "serayuzgur",
     "shellcheck",
+    "sysinfo",
     "tailwindcss",
     "tamasfe",
     "tanstack",
@@ -100,5 +109,7 @@
   "[dockerfile]": {
     "editor.defaultFormatter": "foxundermoon.shell-format"
   },
-  "cSpell.enableFiletypes": ["dockerfile"]
+  "cSpell.enabledFileTypes": {
+    "Dockerfile": true
+  }
 }

@@ -1,6 +1,5 @@
 import {
   ActionIcon,
-  ActionIconGroup,
   Box,
   FileButton,
   Group,
@@ -66,7 +65,7 @@ export const OciLayoutBuilder: React.FC = () => {
           <Allotment.Pane preferredSize={200} minSize={100} maxSize={500}>
             <Stack gap={0}>
               <Group gap='xs' px='xs'>
-                <FileButton onChange={openFile}>
+                <FileButton onChange={(file) => void openFile(file)}>
                   {(props) => (
                     <Tooltip label='Open file from file system'>
                       <ActionIcon variant='subtle' color='gray' {...props}>
@@ -109,7 +108,7 @@ export const OciLayoutBuilder: React.FC = () => {
           </Allotment.Pane>
           <Allotment.Pane className='p-1'>
             <Editor
-              height='200px'
+              height='100%'
               defaultLanguage=''
               defaultValue={activeEditor ?? ''}
               onChange={changeActiveEditorValue}
