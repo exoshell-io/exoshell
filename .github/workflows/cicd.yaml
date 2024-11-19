@@ -40,8 +40,7 @@ jobs:
       - name: Install Tauri system dependencies
         uses: ./.github/actions/tauri-install-system-deps
       - name: Lint & Test
-        run: |
-          bun run ci
+        run: bun run ci
       # - uses: EmbarkStudios/cargo-deny-action@v1
       #   with:
       #     rust-version: ${{ format('{0}.0', steps.compute_variables.outputs.rustVersion) }}
