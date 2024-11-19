@@ -42,7 +42,6 @@ jobs:
       - name: Lint & Test
         run: |
           bun run ci
-          cargo test --locked ${{ github.workspace }}
       # - uses: EmbarkStudios/cargo-deny-action@v1
       #   with:
       #     rust-version: ${{ format('{0}.0', steps.compute_variables.outputs.rustVersion) }}

@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "build": "turbo run build:",
-    "ci": "bun run format:check && bun run lint && bun run test",
+    "ci": "bun run format:check && bun run gen:types && bun run lint && bun run test",
     "clean": "turbo run clean",
     "format": "prettier -w . ; sort-package-json",
     "format:check": "prettier --check . && sort-package-json --check && cargo fmt --check",

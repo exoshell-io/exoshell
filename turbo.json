@@ -9,6 +9,7 @@
   ],
   "globalEnv": ["NODE_ENV"],
   "tasks": {
+    "//#gen:types": {},
     "build:": {
       "dependsOn": ["^build:"],
       "inputs": ["$TURBO_DEFAULT$", ".env", ".env.local"],
