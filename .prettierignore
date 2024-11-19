@@ -2,3 +2,5 @@ node_modules/
 /x/
 /data/
 .fttemplates/
+.wxt/
+.output/
