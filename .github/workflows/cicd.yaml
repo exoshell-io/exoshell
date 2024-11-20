@@ -28,6 +28,11 @@ jobs:
       SCCACHE_GHA_ENABLED: true
       RUSTC_WRAPPER: sccache
     steps:
+      - name: Free Disk Space (Ubuntu)
+        run: |
+          # https://github.com/jlumbroso/free-disk-space/blob/main/README.md#typical-output
+          sudo rm -rf /usr/local/lib/android
+          sudo rm -rf /usr/share/dotnet
       - uses: actions/checkout@v4
       - uses: jdx/mise-action@v2
       - uses: Mozilla-Actions/sccache-action@v0.0.4
