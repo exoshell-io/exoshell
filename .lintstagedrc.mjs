@@ -9,7 +9,8 @@ export default {
   ],
   '*.{(j|t)s?(x),(c|m)js}': (filenames) => [
     ...filenames.map(
-      (filename) => `eslint --max-warnings=0 --no-warn-ignored '${filename}'`,
+      (filename) =>
+        `eslint --max-warnings=0 --no-warn-ignored --flag unstable_config_lookup_from_file '${filename}'`,
     ),
   ],
 };

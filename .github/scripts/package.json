@@ -2,7 +2,7 @@
   "name": "@exoshell/github-actions",
   "private": true,
   "scripts": {
-    "lint": "eslint --ext js,cjs,mjs,ts --max-warnings=0 ."
+    "lint": "eslint --max-warnings=0"
   },
   "devDependencies": {
     "@actions/core": "1.11.1",

@@ -31,6 +31,7 @@
     "libgtk",
     "librsvg",
     "libwebkit",
+    "lintstargedrc",
     "lockb",
     "mantine",
     "meganrogge",
@@ -108,7 +109,7 @@
   "typescript.tsdk": "node_modules/typescript/lib",
   "github.copilot.editor.enableAutoCompletions": true,
   "[dockerfile]": {
-    "editor.defaultFormatter": "foxundermoon.shell-format"
+    "editor.defaultFormatter": "ms-azuretools.vscode-docker"
   },
   "cSpell.enabledFileTypes": {
     "Dockerfile": true

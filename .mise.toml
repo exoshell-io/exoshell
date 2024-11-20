@@ -3,13 +3,13 @@
 [tools]
 bun = '1'
 rust = '1'
-node = 'lts'
 protoc = 'latest'
 
 [settings]
 status.show_env = true
 status.show_tools = true
+legacy_version_file = true
 
 [env]
 # _.file = '.env.local'
-# DEBUG = 'eslint:eslint'
+DEBUG = 'eslint:eslint'

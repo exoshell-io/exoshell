@@ -14,6 +14,8 @@ concurrency:
 
 permissions: {}
 
+# cSpell:words sccache dtolnay houseabsolute softprops msvc
+
 jobs:
   ci:
     runs-on: ubuntu-22.04
@@ -79,9 +81,9 @@ jobs:
     runs-on: ${{ matrix.platform.os }}
     steps:
       - uses: actions/checkout@v4
-      - uses: oven-sh/setup-bun@v1
+      - uses: jdx/mise-action@v2
         with:
-          bun-version: latest
+          install_args: bun protoc
       - name: Override version
         shell: bash
         run: |
@@ -118,9 +120,9 @@ jobs:
       RUSTC_WRAPPER: sccache
     steps:
       - uses: actions/checkout@v4
-      - uses: oven-sh/setup-bun@v1
+      - uses: jdx/mise-action@v2
         with:
-          bun-version: latest
+          install_args: bun protoc
       - uses: dtolnay/rust-toolchain@stable
         with:
           toolchain: ${{ needs.ci.outputs.rustVersion }}

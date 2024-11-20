@@ -97,12 +97,14 @@ export default async function (context, core) {
 
   // #region Extract the tools version from `.mise.toml`
   const miseToml = readFileSync(
-    // eslint-disable-next-line turbo/no-undeclared-env-vars
     `${process.env['GITHUB_WORKSPACE']}/.mise.toml`,
   ).toString();
   outputs.rustVersion = castNonNull(
     castNonNull(miseToml.match(/^rust = '(.+)'$/m))[1],
   );
+  if (outputs.rustVersion === '1') {
+    outputs.rustVersion = 'stable';
+  }
   // #endregion
 
   core.summary.addHeading('Computed variables', 2);
