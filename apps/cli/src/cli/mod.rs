@@ -216,7 +216,9 @@ fn setup_browser_native_manifest(browser_type: BrowserType, global: bool) -> Res
           .parse()
           .unwrap());
         #[cfg(target_os = "linux")]
-        (path = format!("/etc/opt/chrome/native-messaging-hosts/{app_id}.json"));
+        (path = format!("/etc/opt/chrome/native-messaging-hosts/{app_id}.json")
+          .parse()
+          .unwrap());
       },
       BrowserType::Chromium => {
         #[cfg(target_os = "macos")]
@@ -225,7 +227,9 @@ fn setup_browser_native_manifest(browser_type: BrowserType, global: bool) -> Res
             .parse()
             .unwrap());
         #[cfg(target_os = "linux")]
-        (path = format!("/etc/chromium/native-messaging-hosts/{app_id}.json"));
+        (path = format!("/etc/chromium/native-messaging-hosts/{app_id}.json")
+          .parse()
+          .unwrap());
       },
       BrowserType::Firefox => {
         #[cfg(target_os = "macos")]
