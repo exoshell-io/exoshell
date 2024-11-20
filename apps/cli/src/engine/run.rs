@@ -144,10 +144,10 @@ async fn handle_child_outputs(
         {
           error!("Failed to append script run log: {err}");
         }
-      }
+      },
       Err(err) => {
         error!("Failed to read line from stdout: {err}");
-      }
+      },
     },
     ChildStdOutputs::Stderr => match line {
       Ok(line) => {
@@ -163,10 +163,10 @@ async fn handle_child_outputs(
         {
           error!("Failed to append script run log: {err}");
         }
-      }
+      },
       Err(err) => {
         error!("Failed to read line from stderr: {err}");
-      }
+      },
     },
   }
 }

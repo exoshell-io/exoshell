@@ -110,22 +110,22 @@ impl Cli {
       Commands::Daemon(command_daemon) => match &command_daemon {
         commands::Daemon::Start { foreground: _ } => {
           crate::daemon::server::start(None).await?;
-        }
+        },
         commands::Daemon::Stop => {
           todo!("Daemon stop");
-        }
+        },
         commands::Daemon::Status => {
           let status = crate::daemon::client::DaemonClient::new().status().await?;
           self.format_output(status)?;
-        }
+        },
         _ => {
           todo!("Daemon command not implemented (yet)");
-        }
+        },
       },
       Commands::Browser(command_browser) => match &command_browser {
         commands::Browser::Setup { global } => {
           setup_browser_native_manifest(BrowserType::Firefox, global.to_owned())?;
-        }
+        },
         commands::Browser::Chrome {
           origin,
           #[cfg(target_os = "windows")]
@@ -133,7 +133,7 @@ impl Cli {
         } => {
           info!("Starting Chrome browser extension server with origin: {origin}");
           listen_browser().await?;
-        }
+        },
         commands::Browser::Firefox {
           manifest_path,
           addon_id,
@@ -143,9 +143,9 @@ impl Cli {
             json!({"manifest_path": manifest_path, "addon_id": addon_id})
           );
           listen_browser().await?;
-        }
+        },
       },
-      _ => {}
+      _ => {},
     }
     Ok(())
   }
@@ -170,13 +170,13 @@ impl Cli {
       Format::Yaml => {
         let output = serde_yml::to_string(&output)?;
         print!("{}", output)
-      }
+      },
       Format::Json => {
         println!("{}", serde_json::to_string(&output)?);
-      }
+      },
       Format::JsonPretty => {
         println!("{}", serde_json::to_string_pretty(&output)?);
-      }
+      },
     }
     Ok(())
   }
@@ -217,7 +217,7 @@ fn setup_browser_native_manifest(browser_type: BrowserType, global: bool) -> Res
           .unwrap());
         #[cfg(target_os = "linux")]
         (path = format!("/etc/opt/chrome/native-messaging-hosts/{app_id}.json"));
-      }
+      },
       BrowserType::Chromium => {
         #[cfg(target_os = "macos")]
         (path =
@@ -226,7 +226,7 @@ fn setup_browser_native_manifest(browser_type: BrowserType, global: bool) -> Res
             .unwrap());
         #[cfg(target_os = "linux")]
         (path = format!("/etc/chromium/native-messaging-hosts/{app_id}.json"));
-      }
+      },
       BrowserType::Firefox => {
         #[cfg(target_os = "macos")]
         (path =
@@ -237,7 +237,7 @@ fn setup_browser_native_manifest(browser_type: BrowserType, global: bool) -> Res
         (path = format!("/usr/lib/mozilla/native-messaging-hosts/{app_name}.json")
           .parse()
           .unwrap());
-      }
+      },
     }
   } else {
     path = directories::UserDirs::new()
@@ -254,7 +254,7 @@ fn setup_browser_native_manifest(browser_type: BrowserType, global: bool) -> Res
         (path = path.join(format!(
           ".config/google-chrome/NativeMessagingHosts/{app_id}.json"
         )));
-      }
+      },
       BrowserType::Chromium => {
         #[cfg(target_os = "macos")]
         (path = path.join(format!(
@@ -264,7 +264,7 @@ fn setup_browser_native_manifest(browser_type: BrowserType, global: bool) -> Res
         (path = path.join(format!(
           ".config/chromium/NativeMessagingHosts/{app_id}.json"
         )));
-      }
+      },
       BrowserType::Firefox => {
         #[cfg(target_os = "macos")]
         (path = path.join(format!(
@@ -272,7 +272,7 @@ fn setup_browser_native_manifest(browser_type: BrowserType, global: bool) -> Res
         )));
         #[cfg(target_os = "linux")]
         (path = path.join(format!(".mozilla/native-messaging-hosts/{app_name}.json")));
-      }
+      },
     }
   }
 
@@ -288,10 +288,10 @@ fn setup_browser_native_manifest(browser_type: BrowserType, global: bool) -> Res
   match browser_type {
     BrowserType::Firefox => {
       payload["allowed_extensions"] = json!(["browser@exoshell.io"]);
-    }
+    },
     BrowserType::Chrome | BrowserType::Chromium => {
       payload["allowed_origins"] = json!(["chrome-extension://<extensionId>/"]);
-    }
+    },
   }
 
   std::fs::write(&path, payload.to_string())?;

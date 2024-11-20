@@ -57,7 +57,7 @@ impl Manifest {
           env: Default::default(),
           working_dir: None,
         })
-      }
+      },
     }
   }
 }
