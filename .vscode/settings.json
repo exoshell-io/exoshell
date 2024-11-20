@@ -48,6 +48,7 @@
     "pipefail",
     "posthog",
     "proto",
+    "protoc",
     "protos",
     "quickbar",
     "reactflow",
