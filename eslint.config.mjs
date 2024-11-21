@@ -59,6 +59,14 @@ export default ts.config(
     },
   },
   { extends: [/** @type {InfiniteDepthConfigWithExtends} */ (autoImports)] },
-  { ignores: ['target/**', '**/.*/**', 'apps/desktop/out/**', 'x/**'] },
-  { files: ['.github/scripts/**'] },
+  {
+    ignores: [
+      'target/**',
+      '**/.*/',
+      '!.github/',
+      '.github/**/.*/',
+      'apps/desktop/out/**',
+      'x/**',
+    ],
+  },
 );

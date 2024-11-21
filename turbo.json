@@ -16,7 +16,7 @@
       "outputs": ["dist/**"]
     },
     "clean": { "cache": false },
-    "lint:": {},
+    "lint:": { "cache": false },
     "test": {}
   }
 }
