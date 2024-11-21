@@ -9,10 +9,10 @@ import {
   SiNpm as IconNpm,
   SiTypescript as IconTypescript,
 } from 'react-icons/si';
-import { useActiveTab, useFiles } from '~/hooks/storage';
+import { useActiveTab, useFiles } from '@/hooks/storage';
 import classes from './FileTree.module.css';
 import { NewFile } from './NewFile';
-import { openTab } from '~/utils/storage';
+import { openTab } from '@/utils/storage';
 
 export const FileTree: React.FC = () => {
   const files = useFiles();
@@ -62,7 +62,11 @@ interface FileIconProps {
   expanded: boolean;
 }
 
-function FileIcon({ name, isFolder, expanded }: FileIconProps) {
+const FileIcon: React.FC<Readonly<FileIconProps>> = ({
+  name,
+  isFolder,
+  expanded,
+}) => {
   if (name.endsWith('package.json')) {
     return <IconNpm size={14} />;
   }
@@ -88,14 +92,14 @@ function FileIcon({ name, isFolder, expanded }: FileIconProps) {
   }
 
   return null;
-}
+};
 
-function Leaf({
+const Leaf: React.FC<Readonly<RenderTreeNodePayload>> = ({
   node,
   expanded,
   hasChildren,
   elementProps,
-}: RenderTreeNodePayload) {
+}) => {
   const [, setActiveTab] = useActiveTab();
   return (
     <Group
@@ -113,4 +117,4 @@ function Leaf({
       <span>{node.label}</span>
     </Group>
   );
-}
+};

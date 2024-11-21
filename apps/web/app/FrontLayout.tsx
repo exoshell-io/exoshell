@@ -18,7 +18,7 @@ import { Logo } from './_ui/Logo';
 import { SearchBar } from './_ui/SearchBar';
 import { Auth } from './_ui/auth/Auth';
 
-export const FrontLayout: React.FC<React.PropsWithChildren> = ({
+export const FrontLayout: React.FC<Readonly<React.PropsWithChildren>> = ({
   children,
 }) => {
   const [navbarOpened, { toggle: toggleNavbar }] = useDisclosure();

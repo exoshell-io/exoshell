@@ -199,3 +199,6 @@ next-env.d.ts
 
 # Tauri
 /apps/desktop/src-tauri/gen/
+
+# Sandbox
+/x/

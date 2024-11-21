@@ -12,7 +12,7 @@ if (
       process.env.NEXT_PUBLIC_POSTHOG_HOST ?? 'https://eu.i.posthog.com',
   });
 }
-export const CSPostHogProvider: React.FC<React.PropsWithChildren> = ({
+export const CSPostHogProvider: React.FC<Readonly<React.PropsWithChildren>> = ({
   children,
 }) => {
   return <PostHogProvider client={posthog}>{children}</PostHogProvider>;

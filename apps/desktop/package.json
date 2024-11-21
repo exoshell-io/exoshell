@@ -10,7 +10,7 @@
     "dev": "RUST_BACKTRACE=1 RUST_LOG=debug tauri dev",
     "dev:web": "next dev -p 3333",
     "lint": "turbo run lint:",
-    "lint:": "next lint"
+    "lint:": "next lint --max-warnings=0"
   },
   "dependencies": {
     "@exoshell/model": "workspace:*",

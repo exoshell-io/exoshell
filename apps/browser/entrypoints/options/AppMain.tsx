@@ -17,7 +17,7 @@ import { FaCode as IconCode, FaCog as IconSettings } from 'react-icons/fa';
 import { FileEditor } from './FileEditor';
 import { FileSettingsEditor } from './FileSettingsEditor';
 import { Settings } from './Settings';
-import { IconSave, IconDiff } from '~/utils/icons';
+import { IconSave, IconDiff } from '@/utils/icons';
 import { updateFile } from '@/utils/storage';
 
 export const AppMain: React.FC = () => {
@@ -41,10 +41,13 @@ export const AppMain: React.FC = () => {
                 </Tabs.Tab>
               );
             }
+            return null;
           })}
         </Tabs.List>
       </Tabs>
-      {((activeTab === 'settings' || activeTab === null) && <Settings />) || (
+      {activeTab === 'settings' || activeTab === null ? (
+        <Settings />
+      ) : (
         <Inner tab={activeTabWithContent} />
       )}
     </Stack>
@@ -55,7 +58,7 @@ interface InnerProps {
   tab: TabWithContentV1;
 }
 
-const Inner: React.FC<InnerProps> = ({ tab }) => {
+const Inner: React.FC<Readonly<InnerProps>> = ({ tab }) => {
   const [isCodeVisible, toggleCodeVisible] = useToggle([true, false]);
   const [isSettingsVisible, toggleSettingsVisible] = useToggle([true, false]);
 

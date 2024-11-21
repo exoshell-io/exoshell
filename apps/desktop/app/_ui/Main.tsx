@@ -43,7 +43,7 @@ export const Main: React.FC = () => {
             let tabIcon: React.ReactNode;
             if (tab.href.startsWith('terminal://')) {
               tabLabel = scripts.isSuccess
-                ? scripts.data[tab.href.substring('terminal://'.length)].name
+                ? scripts.data[tab.href.substring('terminal://'.length)]!.name
                 : scripts.isError
                   ? `Error: ${scripts.error}`
                   : `Loading`;

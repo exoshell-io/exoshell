@@ -1,7 +1,7 @@
 import '@mantine/core/styles.css';
 
 import { Button, MantineProvider, ScrollArea, Stack } from '@mantine/core';
-import { useFiles } from '~/hooks/storage';
+import { useFiles } from '@/hooks/storage';
 
 export const App: React.FC = () => {
   return (

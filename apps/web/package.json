@@ -1,7 +1,6 @@
 {
   "name": "@exoshell/web",
   "private": true,
-  "type": "module",
   "scripts": {
     "build": "turbo run build:",
     "build:": "NODE_ENV=production next build",
@@ -11,5 +10,10 @@
     "lint:": "next lint --max-warnings=0",
     "pg:migrate": "drizzle-kit generate:pg",
     "pg:push": "drizzle-kit push:pg"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "3.9.2",
+    "@next/eslint-plugin-next": "15.0.3",
+    "eslint-plugin-react": "7.37.2"
   }
 }

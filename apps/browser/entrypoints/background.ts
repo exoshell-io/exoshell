@@ -1,3 +1,6 @@
+import { browser } from 'wxt/browser';
+import { defineBackground } from 'wxt/sandbox';
+
 export default defineBackground(() => {
   browser.contextMenus.create({
     id: 'exoshell',
@@ -9,7 +12,7 @@ export default defineBackground(() => {
     import.meta.env.FIREFOX ? 'exoshell' : 'io.exoshell.exoshell',
   );
 
-  port.onMessage.addListener((msg: string) => {
-    console.info(`Native message received: ${msg}`);
+  port.onMessage.addListener((msg: unknown) => {
+    console.info(`Native message received: ${msg as string}`);
   });
 });

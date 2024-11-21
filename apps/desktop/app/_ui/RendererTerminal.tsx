@@ -18,7 +18,6 @@ import {
   AccordionPanel,
   Button,
   Code,
-  FileButton,
   Group,
   Loader,
   ScrollArea,
@@ -28,10 +27,8 @@ import {
   TabsPanel,
   TabsTab,
   TextInput,
-  TreeNodeData,
 } from '@mantine/core';
 import { isNotEmpty, useForm } from '@mantine/form';
-import { useListState } from '@mantine/hooks';
 import { useQueryClient } from '@tanstack/react-query';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { OciLayoutBuilder } from './OciLayoutBuilder';
@@ -44,7 +41,9 @@ import {
   IconTrash,
 } from './icons';
 
-export const RendererTerminal: React.FC<{ id: string }> = ({ id }) => {
+export const RendererTerminal: React.FC<Readonly<{ id: string }>> = ({
+  id,
+}) => {
   const script = useScript(id);
 
   const form = useForm<Script>({
@@ -60,8 +59,7 @@ export const RendererTerminal: React.FC<{ id: string }> = ({ id }) => {
     form.setValues(script.data);
     form.resetDirty();
     setInitialized(true);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [script]);
+  }, [script, form, initialized]);
 
   const upsertScript = useUpsertScript();
   const runScript = useRunScript();
@@ -80,7 +78,7 @@ export const RendererTerminal: React.FC<{ id: string }> = ({ id }) => {
 
   useEffect(() => {
     if (tab === null && scriptRuns.isSuccess && scriptRuns.data.length > 0) {
-      setTab(scriptRuns.data[0].id?.id.String ?? null);
+      setTab(scriptRuns.data[0]!.id?.id.String ?? null);
     }
   }, [scriptRuns.data, scriptRuns.isSuccess, tab]);
 
@@ -94,40 +92,6 @@ export const RendererTerminal: React.FC<{ id: string }> = ({ id }) => {
   const deleteScript = useDeleteScript();
 
   const deleteScriptRuns = useDeleteScriptRuns();
-
-  const [treeNodeDataArray, { append: addTreeNodeDataArray }] =
-    useListState<TreeNodeData>([]);
-
-  const _fileExplorerTreeNodes = useMemo(() => {
-    return treeNodeDataArray.concat([
-      {
-        label: (
-          <FileButton
-            onChange={(files) => {
-              console.log(files);
-            }}
-            accept='image/png,image/jpeg'
-            multiple
-          >
-            {(props) => <Button {...props}>Open file(s)</Button>}
-          </FileButton>
-        ),
-        value: 'openFiles',
-      },
-      {
-        label: (
-          <Button
-            onClick={() => {
-              addTreeNodeDataArray({ label: 'Untitled', value: '/Untitled' });
-            }}
-          >
-            Add file
-          </Button>
-        ),
-        value: 'addFile',
-      },
-    ]);
-  }, [addTreeNodeDataArray, treeNodeDataArray]);
 
   return (
     <ScrollArea h='100%'>
@@ -197,11 +161,13 @@ export const RendererTerminal: React.FC<{ id: string }> = ({ id }) => {
   );
 };
 
-const RendererScriptRuns: React.FC<{
-  scriptId: string;
-  tab: string | null;
-  setTab: (value: string | null) => void;
-}> = ({ scriptId, tab, setTab }) => {
+const RendererScriptRuns: React.FC<
+  Readonly<{
+    scriptId: string;
+    tab: string | null;
+    setTab: (value: string | null) => void;
+  }>
+> = ({ scriptId, tab, setTab }) => {
   const scriptRuns = useScriptRuns(scriptId);
 
   return (
@@ -272,7 +238,7 @@ const RendererScriptRuns: React.FC<{
   );
 };
 
-const RendererScriptRun: React.FC<{ scriptRun: ScriptRun }> = ({
+const RendererScriptRun: React.FC<Readonly<{ scriptRun: ScriptRun }>> = ({
   scriptRun,
 }) => {
   const logs = useMemo(
@@ -283,6 +249,8 @@ const RendererScriptRun: React.FC<{ scriptRun: ScriptRun }> = ({
             return log.stdout.txt;
           } else if ('stderr' in log) {
             return log.stderr.txt;
+          } else {
+            return '';
           }
         })
         .join(''),

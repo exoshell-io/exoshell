@@ -36,7 +36,7 @@ export interface FileEditorsProps {
 
 export const FileEditor = forwardRef<
   Parameters<NonNullable<EditorProps['onMount']>>[0],
-  FileEditorsProps
+  Readonly<FileEditorsProps>
 >(({ path }, editorRef) => {
   const monacoRef =
     useRef<Parameters<NonNullable<EditorProps['onMount']>>[1]>();

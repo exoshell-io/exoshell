@@ -7,7 +7,8 @@ import {
   tabsV1,
   TabsV1,
   TabV1,
-} from '~/utils/storage';
+} from '@/utils/storage';
+import { useState, useEffect, useCallback } from 'react';
 
 export const useFiles = () => {
   const [files, setFiles] = useState<FilesV1>([]);
@@ -66,7 +67,7 @@ export const useTabsWithContent = () => {
         }
       }, []);
     },
-    [],
+    [files],
   );
   useEffect(() => {
     const unwatch = tabsV1.watch((tabs) => {
@@ -84,7 +85,7 @@ export const useTabsWithContent = () => {
     return () => {
       unwatch();
     };
-  }, []);
+  }, [computeTabsWithContent]);
   return tabsWithContent;
 };
 

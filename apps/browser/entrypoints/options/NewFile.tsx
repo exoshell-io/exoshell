@@ -7,7 +7,7 @@ import {
   TextInput,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { createFile, FileV1 } from '~/utils/storage';
+import { createFile, FileV1 } from '@/utils/storage';
 
 export interface NewFileProps {
   opened: boolean;
@@ -16,7 +16,10 @@ export interface NewFileProps {
 
 type NewFileForm = FileV1 & { type: 'js' | 'css' | 'folder' };
 
-export const NewFile: React.FC<NewFileProps> = ({ opened, close }) => {
+export const NewFile: React.FC<Readonly<NewFileProps>> = ({
+  opened,
+  close,
+}) => {
   const form = useForm<NewFileForm>({
     mode: 'controlled',
     initialValues: {

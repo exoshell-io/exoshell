@@ -53,14 +53,8 @@
     "skipLibCheck": true
   },
   "include": [
-    "node_modules/bun-types/*.d.ts",
+    "eslint.config.mjs",
     ".lintstagedrc.mjs",
-    ".github/scripts/*",
-    "apps/*/src/**/*",
-    "apps/*/scripts/**/*",
-    "libs/*/src/**/*",
-    "libs/*/index.ts",
-    "libs/*/types/**/*",
-    "scripts/**/*"
+    "./apps/browser/.wxt/eslint-auto-imports.mjs"
   ]
 }

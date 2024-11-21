@@ -1,4 +1,4 @@
-import { defineConfig } from 'wxt';
+import { defineConfig, type UserConfig } from 'wxt';
 // import { TanStackRouterVite } from '@tanstack/router-plugin/vite';
 
 // See https://wxt.dev/api/config.html
@@ -14,7 +14,7 @@ export default defineConfig({
   // vite: () => ({
   //   plugins: [TanStackRouterVite()],
   // }),
-  manifest: ({}) => ({
+  manifest: () => ({
     name: 'Exoshell',
     permissions: ['storage', 'nativeMessaging', 'activeTab'],
     // default_locale: 'en',
@@ -29,4 +29,4 @@ export default defineConfig({
       show_matches: ['*://*/*'],
     },
   }),
-});
+} as UserConfig);

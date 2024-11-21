@@ -118,7 +118,7 @@ const channelToNumber = { pr: 0, alpha: 1, beta: 2, rc: 3, undefined: 4 };
  * @param {number} major
  * @param {number} minor
  * @param {number} patch
- * @param {keyof typeof channelToNumber} channel
+ * @param {keyof typeof channelToNumber | undefined} channel
  * @param {number | undefined} channelPatch
  * @returns {string}
  */
@@ -127,7 +127,9 @@ function computeAppVersion(major, minor, patch, channel, channelPatch) {
     `computeAppVersion(${major}, ${minor}, ${patch}, ${channel}, ${channelPatch})`,
   );
   const encodedPatch =
-    patch * 2048 + (channelToNumber[channel] ?? 0) * 32 + (channelPatch ?? 0);
+    patch * 2048 +
+    (channel === undefined ? 0 : channelToNumber[channel]) * 32 +
+    (channelPatch ?? 0);
   return `${major}.${minor}.${encodedPatch}`;
 }
 

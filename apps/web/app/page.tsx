@@ -190,16 +190,12 @@ const Hero: React.FC = () => {
             {DOWNLOADS.map((dll) => (
               <ConditionalWrapper
                 key={dll.os}
-                condition={dll.buttons === undefined}
+                condition={true}
                 wrapper={(children) => (
                   <Tooltip label='Available soon'>{children}</Tooltip>
                 )}
               >
-                <TabsTab
-                  value={dll.os}
-                  leftSection={dll.icon}
-                  disabled={dll.buttons === undefined}
-                >
+                <TabsTab value={dll.os} leftSection={dll.icon} disabled={true}>
                   {dll.os}
                 </TabsTab>
               </ConditionalWrapper>
@@ -213,6 +209,7 @@ const Hero: React.FC = () => {
                     Install with{' '}
                     <a
                       href='https://brew.sh/'
+                      rel='noreferrer'
                       referrerPolicy='no-referrer'
                       target='_blank'
                       className='!text-blue-600 hover:underline'
@@ -229,7 +226,7 @@ const Hero: React.FC = () => {
               )}
               <h3>Manual install</h3>
               <SimpleGrid cols={{ base: 1, xs: 2 }}>
-                {dll.buttons?.map((btn) => (
+                {dll.buttons.map((btn) => (
                   <Card
                     key={btn.text}
                     withBorder
@@ -359,6 +356,7 @@ const Newsletter: React.FC = () => {
   });
   const onSubmit = useMemo(
     () =>
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises
       form.onSubmit(async ({ email }) => {
         const notificationId = notifications.show({
           title: 'Registering to the newsletter',
@@ -409,7 +407,7 @@ const Newsletter: React.FC = () => {
   );
 };
 
-const Title: React.FC<React.PropsWithChildren> = ({ children }) => {
+const Title: React.FC<Readonly<React.PropsWithChildren>> = ({ children }) => {
   return (
     <MantineTitle ta='center' size={42}>
       {children}
