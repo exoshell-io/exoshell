@@ -1,5 +1,5 @@
 {
-  "extends": ["../../tsconfig.json", "./.wxt/wxt.d.ts"],
+  "extends": ["../../tsconfig.json", "./.wxt/tsconfig.json"],
   "compilerOptions": {
     "jsx": "react-jsx",
     "lib": ["DOM"],
