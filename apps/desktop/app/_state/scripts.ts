@@ -1,6 +1,6 @@
 import {
-  DefaultError,
-  UseQueryOptions,
+  type DefaultError,
+  type UseQueryOptions,
   useMutation,
   useQuery,
   useQueryClient,

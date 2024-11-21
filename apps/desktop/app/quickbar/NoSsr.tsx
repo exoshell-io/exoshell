@@ -2,8 +2,8 @@
 
 import { useScripts } from '@/_state';
 import { useHotkeys } from '@mantine/hooks';
-import { Spotlight, SpotlightActionData } from '@mantine/spotlight';
-import { TauriEvent, UnlistenFn } from '@tauri-apps/api/event';
+import { Spotlight, type SpotlightActionData } from '@mantine/spotlight';
+import { TauriEvent, type UnlistenFn } from '@tauri-apps/api/event';
 import { getCurrentWebviewWindow } from '@tauri-apps/api/webviewWindow';
 import { useEffect, useMemo } from 'react';
 const appWindow = getCurrentWebviewWindow();

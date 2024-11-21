@@ -7,11 +7,11 @@ import {
   Stack,
   Tooltip,
   Tree,
-  TreeNodeData,
+  type TreeNodeData,
   useTree,
 } from '@mantine/core';
 import { useListState, useMap } from '@mantine/hooks';
-import { Editor, OnChange } from '@monaco-editor/react';
+import { Editor, type OnChange } from '@monaco-editor/react';
 import { Allotment } from 'allotment';
 import { useCallback, useMemo, useState } from 'react';
 import { IconCreateFile, IconFileOpen } from './icons';

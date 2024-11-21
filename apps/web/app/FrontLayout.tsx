@@ -9,7 +9,7 @@ import {
   Container,
   Drawer,
   Group,
-  MantineSize,
+  type MantineSize,
   NavLink,
 } from '@mantine/core';
 import { useDisclosure, useHeadroom, useWindowScroll } from '@mantine/hooks';

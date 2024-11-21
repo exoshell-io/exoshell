@@ -9,7 +9,7 @@ import {
   useUpsertScript,
   type ScriptRun,
 } from '@/_state';
-import { Script } from '@exoshell/model';
+import type { Script } from '@exoshell/model';
 import { CodeHighlight } from '@mantine/code-highlight';
 import {
   Accordion,

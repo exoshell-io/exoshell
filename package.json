@@ -4,8 +4,8 @@
   "type": "module",
   "workspaces": [
     ".github/scripts",
-    "apps/*",
-    "libs/*"
+    "libs/*",
+    "apps/*"
   ],
   "scripts": {
     "build": "turbo run build:",
