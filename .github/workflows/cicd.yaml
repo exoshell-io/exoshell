@@ -23,6 +23,7 @@ jobs:
     outputs:
       shouldRelease: ${{ steps.compute_variables.outputs.shouldRelease }}
       appVersion: ${{ steps.compute_variables.outputs.appVersion }}
+      cdCliMatrix: ${{ steps.compute_variables.outputs.cdCliMatrix }}
       cdTauriMatrix: ${{ steps.compute_variables.outputs.cdTauriMatrix }}
       rustVersion: ${{ steps.compute_variables.outputs.rustVersion }}
       releaseVersion: ${{ steps.compute_variables.outputs.releaseVersion }}
@@ -58,27 +59,8 @@ jobs:
     needs: [ci]
     strategy:
       fail-fast: false
-      matrix:
-        platform:
-          - release_for: Windows-x86_64
-            os: windows-latest
-            target: x86_64-pc-windows-msvc
-            bin: exoshell.exe
-            name: cli-exoshell-Windows-x86_64.exe
-            command: both
-          - release_for: macOS-x86_64
-            os: macos-latest
-            target: x86_64-apple-darwin
-            bin: exoshell
-            name: cli-exoshell-Darwin-x86_64
-            command: both
-          - release_for: macOS-arm64
-            os: macos-latest
-            target: aarch64-apple-darwin
-            bin: exoshell
-            name: cli-exoshell-Darwin-aarch64
-            command: both
-    runs-on: ${{ matrix.platform.os }}
+      matrix: ${{ fromJson(needs.ci.outputs.cdCliMatrix) }}
+    runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@v4
       - uses: jdx/mise-action@v2
@@ -96,17 +78,22 @@ jobs:
       - name: Build binary
         uses: houseabsolute/actions-rust-cross@v0
         with:
-          command: ${{ matrix.platform.command }}
-          target: ${{ matrix.platform.target }}
+          target: ${{ matrix.target }}
           args: '--locked --release'
           working-directory: ./apps/cli/
       - run: |
-          mv 'target/${{ matrix.platform.target }}/release/${{ matrix.platform.bin }}' '${{ matrix.platform.name }}'
+          if [[ '${{ matrix.platform }}' == windows* ]]; then
+            mv 'target/${{ matrix.target }}/release/exoshell.exe' 'cli-${{ matrix.target }}.exe'
+          else
+            mv 'target/${{ matrix.target }}/release/exoshell' 'cli-${{ matrix.target }}'
+          fi
       - uses: actions/upload-artifact@v4
         with:
           if-no-files-found: error
-          name: cli-${{ matrix.platform.target }}
-          path: ${{ matrix.platform.name }}
+          name: 'cli-${{ matrix.target }}'
+          path: |
+            cli-${{ matrix.target }}.exe
+            cli-${{ matrix.target }}
 
   cd-tauri:
     strategy:
