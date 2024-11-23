@@ -66,6 +66,9 @@ jobs:
       - uses: jdx/mise-action@v2
         with:
           install_args: bun protoc
+      - name: Install Linux protoc dependencies
+        if: startsWith(matrix.platform, 'ubuntu-')
+        run: apt-get update && apt-get install -y libclang-dev
       - name: Override version
         shell: bash
         run: |

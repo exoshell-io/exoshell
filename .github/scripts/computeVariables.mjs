@@ -17,21 +17,25 @@ const defaultOutputs = {
 
 const defaultCdCli = {
   include: [
-    { platform: 'ubuntu-latest', target: 'x86_64-unknown-linux-gnu' },
-    { platform: 'ubuntu-latest', target: 'aarch64-unknown-linux-gnu' },
+    // { platform: 'ubuntu-latest', target: 'x86_64-unknown-linux-gnu' },
+    // { platform: 'ubuntu-latest', target: 'aarch64-unknown-linux-gnu' },
+    // { platform: 'macos-latest', target: 'x86_64-apple-darwin' },
     { platform: 'macos-latest', target: 'aarch64-apple-darwin' },
-    { platform: 'macos-latest', target: 'x86_64-apple-darwin' },
-    { platform: 'windows-latest', target: 'x86_64-pc-windows-msvc' },
+    // { platform: 'windows-latest', target: 'x86_64-pc-windows-msvc' },
     // { platform: 'windows-latest', target: 'aarch64-pc-windows-msvc' },
   ],
 };
 
 const defaultCdTauriMatrix = {
   include: [
-    { platform: 'ubuntu-latest', tauriBuildTarget: 'x86_64-unknown-linux-gnu' },
+    // { platform: 'ubuntu-latest', tauriBuildTarget: 'x86_64-unknown-linux-gnu' },
+    // {
+    //   platform: 'ubuntu-latest',
+    //   tauriBuildTarget: 'aarch64-unknown-linux-gnu',
+    // },
+    // { platform: 'macos-latest', tauriBuildTarget: 'x86_64-apple-darwin' },
     { platform: 'macos-latest', tauriBuildTarget: 'aarch64-apple-darwin' },
-    { platform: 'macos-latest', tauriBuildTarget: 'x86_64-apple-darwin' },
-    { platform: 'windows-latest', tauriBuildTarget: 'x86_64-pc-windows-msvc' },
+    // { platform: 'windows-latest', tauriBuildTarget: 'x86_64-pc-windows-msvc' },
     // { platform: 'macos-latest', tauriBuildArgs: '--target universal-apple-darwin', rustTargets: 'x86_64-apple-darwin,aarch64-apple-darwin' },
   ],
 };
