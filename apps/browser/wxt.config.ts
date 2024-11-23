@@ -4,7 +4,6 @@ import { defineConfig, type UserConfig } from 'wxt';
 // See https://wxt.dev/api/config.html
 export default defineConfig({
   manifestVersion: 2,
-  // extensionApi: 'chrome',
   imports: {
     eslintrc: { enabled: 9 },
   },
@@ -27,6 +26,8 @@ export default defineConfig({
         id: 'browser@exoshell.io',
       },
     },
+    version: process.env['npm_package_version'],
+    version_name: process.env['VERSION_NAME'],
   }),
   zip: {
     name: 'exoshell',

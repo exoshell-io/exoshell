@@ -156,13 +156,18 @@ jobs:
       - run: bun install --frozen-lockfile
       - working-directory: apps/browser
         run: |
-          jq '.version = "${{ needs.ci.outputs.appVersion }}"'
+          J="$(jq '.version = "${{ needs.ci.outputs.appVersion }}"' package.json)"
+          echo "$J" > package.json
           bun run build
+        env:
+          VERSION_NAME: ${{ needs.ci.outputs.releaseVersion }}
       - uses: actions/upload-artifact@v4
         with:
           name: browser-extension
-          path: apps/browser/.output/*.zip
+          path: |
+            apps/browser/.output/exoshell-*.zip
           if-no-files-found: error
+          include-hidden-files: true
 
   release:
     if: needs.ci.outputs.shouldRelease != 'false'
