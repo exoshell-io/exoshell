@@ -1,5 +1,5 @@
 import { assignRef } from '@mantine/hooks';
-import Editor, { EditorProps, loader } from '@monaco-editor/react';
+import Editor, { type EditorProps, loader } from '@monaco-editor/react';
 
 import * as monaco from 'monaco-editor';
 import editorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker';
@@ -28,7 +28,7 @@ self.MonacoEnvironment = {
 };
 
 loader.config({ monaco });
-await loader.init();
+void loader.init();
 
 export interface FileEditorsProps {
   path: string;

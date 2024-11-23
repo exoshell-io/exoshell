@@ -144,18 +144,38 @@ jobs:
             ') }}
           if-no-files-found: error
 
+  cd-browser-extension:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    needs: [ci]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: jdx/mise-action@v2
+        with:
+          install_args: bun
+      - run: bun install --frozen-lockfile
+      - working-directory: apps/browser
+        run: |
+          jq '.version = "${{ needs.ci.outputs.appVersion }}"'
+          bun run build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: browser-extension
+          path: apps/browser/.output/*.zip
+          if-no-files-found: error
+
   release:
     if: needs.ci.outputs.shouldRelease != 'false'
-    needs: [ci, cd-tauri]
+    needs: [ci, cd-cli, cd-tauri, cd-browser-extension]
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
       contents: write
     steps:
       - uses: actions/checkout@v4
-      - uses: oven-sh/setup-bun@v1
+      - uses: jdx/mise-action@v2
         with:
-          bun-version: latest
+          install_args: bun
       - run: bun install --frozen-lockfile
       - uses: actions/download-artifact@v4
         with:
@@ -165,6 +185,10 @@ jobs:
         with:
           path: cli/
           pattern: cli-**
+      - uses: actions/download-artifact@v4
+        with:
+          path: apss/browser/.output/
+          pattern: exoshell-*.zip
       - name: Prepare release
         uses: actions/github-script@v7
         with:
@@ -186,6 +210,19 @@ jobs:
             desktop/**/*.zip
             desktop/**/*.zip.sig
             cli/**/*
+            apps/browser/.output/*.zip
           fail_on_unmatched_files: true
           generate_release_notes: true
           make_latest: ${{ needs.ci.outputs.shouldRelease == 'stable' && 'true' || 'false' }}
+      - name: Publish browser extensions
+        working-directory: apps/browser
+        run: bun run release
+        env:
+          CHROME_EXTENSION_ID: ${{ secrets.CHROME_EXTENSION_ID }}
+          CHROME_CLIENT_ID: ${{ secrets.CHROME_CLIENT_ID }}
+          CHROME_CLIENT_SECRET: ${{ secrets.CHROME_CLIENT_SECRET }}
+          CHROME_PUBLISH_TARGET: ${{ secrets.CHROME_PUBLISH_TARGET }}
+          CHROME_SKIP_SUBMIT_REVIEW: ${{ secrets.CHROME_SKIP_SUBMIT_REVIEW }}
+          FIREFOX_EXTENSION_ID: ${{ secrets.FIREFOX_EXTENSION_ID }}
+          FIREFOX_JWT_ISSUER: ${{ secrets.FIREFOX_JWT_ISSUER }}
+          FIREFOX_JWT_SECRET: ${{ secrets.FIREFOX_JWT_SECRET }}

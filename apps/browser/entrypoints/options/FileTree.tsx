@@ -1,4 +1,4 @@
-import { Button, Group, RenderTreeNodePayload, Tree } from '@mantine/core';
+import { Button, Group, type RenderTreeNodePayload, Tree } from '@mantine/core';
 import { useToggle } from '@mantine/hooks';
 import {
   FaFolder as IconFolder,

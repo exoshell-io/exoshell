@@ -1,5 +1,5 @@
 import {
-  TabWithContentV1,
+  type TabWithContentV1,
   useActiveTab,
   useTabsWithContent,
 } from '@/hooks/storage';

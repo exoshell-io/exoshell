@@ -103,7 +103,10 @@
     "**/*.code-search": true,
     "**/_next": true,
     "**/bower_components": true,
-    "**/node_modules": true
+    "**/node_modules": true,
+    "**/.*": true,
+    ".github": false,
+    "**/*.tsbuildinfo": true
   },
   "turbo.path": "node_modules/turbo/bin/turbo",
   "turbo.useLocalTurbo": true,

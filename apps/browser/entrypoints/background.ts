@@ -8,6 +8,11 @@ export default defineBackground(() => {
     contexts: ['all'],
   });
 
+  browser.contextMenus.onClicked.addListener((info, tab) => {
+    console.log('info: ', info);
+    console.log('tab: ', tab);
+  });
+
   const port = browser.runtime.connectNative(
     import.meta.env.FIREFOX ? 'exoshell' : 'io.exoshell.exoshell',
   );

@@ -7,7 +7,7 @@ import {
   TextInput,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { createFile, FileV1 } from '@/utils/storage';
+import { createFile, type FileV1 } from '@/utils/storage';
 
 export interface NewFileProps {
   opened: boolean;

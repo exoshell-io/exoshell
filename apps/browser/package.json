@@ -1,19 +1,21 @@
 {
   "name": "@exoshell/browser",
-  "version": "0.0.0",
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "wxt build",
-    "build:firefox": "wxt build -b firefox",
-    "compile": "tsc --noEmit",
+    "build": "turbo run build:",
+    "build:": "bun run build:chrome && bun run build:firefox",
+    "build:chrome": "wxt zip -b chrome",
+    "build:firefox": "wxt zip -b firefox",
+    "clean": "rm -rf -- .output/ .wxt/ tsconfig.tsbuildinfo",
     "dev": "wxt",
     "dev:firefox": "wxt -b firefox",
     "postinstall": "wxt prepare",
     "lint": "turbo run lint:",
     "lint:": "eslint --max-warnings=0",
-    "zip": "wxt zip",
-    "zip:firefox": "wxt zip -b firefox"
+    "release": "bun run release:chrome && bun run release:firefox",
+    "release:chrome": "sh _scripts/publish-chrome.sh",
+    "release:firefox": "sh _scripts/publish-firefox.sh"
   },
   "devDependencies": {
     "@wxt-dev/auto-icons": "1.0.2",

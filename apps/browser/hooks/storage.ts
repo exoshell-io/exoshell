@@ -1,12 +1,12 @@
 import {
-  ActiveTabV1,
+  type ActiveTabV1,
   activeTabV1,
-  FilesV1,
+  type FilesV1,
   filesV1,
-  FileV1,
+  type FileV1,
   tabsV1,
-  TabsV1,
-  TabV1,
+  type TabsV1,
+  type TabV1,
 } from '@/utils/storage';
 import { useState, useEffect, useCallback } from 'react';
 

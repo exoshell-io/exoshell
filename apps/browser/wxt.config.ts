@@ -3,7 +3,8 @@ import { defineConfig, type UserConfig } from 'wxt';
 
 // See https://wxt.dev/api/config.html
 export default defineConfig({
-  extensionApi: 'chrome',
+  manifestVersion: 2,
+  // extensionApi: 'chrome',
   imports: {
     eslintrc: { enabled: 9 },
   },
@@ -11,22 +12,23 @@ export default defineConfig({
   autoIcons: {
     grayscaleOnDevelopment: false,
   },
+  runner: {
+    disabled: true,
+  },
   // vite: () => ({
   //   plugins: [TanStackRouterVite()],
   // }),
   manifest: () => ({
     name: 'Exoshell',
-    permissions: ['storage', 'nativeMessaging', 'activeTab'],
+    permissions: ['storage', 'nativeMessaging', 'activeTab', 'contextMenus'],
     // default_locale: 'en',
     browser_specific_settings: {
       gecko: {
         id: 'browser@exoshell.io',
       },
     },
-    page_action: {
-      default_title: 'Exoshell',
-      default_icon: 'icons/48.png',
-      show_matches: ['*://*/*'],
-    },
   }),
+  zip: {
+    name: 'exoshell',
+  },
 } as UserConfig);
