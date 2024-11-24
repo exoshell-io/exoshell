@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "turbo run build:",
-    "build:": "bun run build:chrome && bun run build:firefox",
+    "build:": "rm -rf .output/ && bun run build:chrome && bun run build:firefox",
     "build:chrome": "wxt zip -b chrome",
     "build:firefox": "wxt zip -b firefox",
     "clean": "rm -rf -- .output/ .wxt/ tsconfig.tsbuildinfo",
@@ -20,6 +20,8 @@
   "devDependencies": {
     "@wxt-dev/auto-icons": "1.0.2",
     "@wxt-dev/module-react": "1.1.2",
+    "chrome-webstore-upload-cli": "3.3.1",
+    "web-ext": "8.3.0",
     "wxt": "0.19.16"
   }
 }

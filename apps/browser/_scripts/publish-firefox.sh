@@ -2,6 +2,9 @@
 set -euo pipefail
 shopt -s nullglob
 
-wxt submit \
-  --firefox-zip .output/exoshell-"${npm_package_version:?}"-firefox.zip \
-  --firefox-sources-zip .output/exoshell-"${npm_package_version}"-sources.zip
+web-ext sign \
+  --source-dir .output/firefox-mv3/ \
+  --artifacts-dir .output/ \
+  --api-key "${FIREFOX_API_KEY:?}" \
+  --api-secret "${FIREFOX_API_SECRET:?}" \
+  --channel "${FIREFOX_CHANNEL:?}"

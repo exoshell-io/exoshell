@@ -10,6 +10,8 @@ status.show_env = true
 status.show_tools = true
 legacy_version_file = true
 
-[env]
-# _.file = '.env.local'
+[[env]]
+_.file = '.env'
 DEBUG = 'eslint:eslint'
+# [[env]]
+# _.file = '.env.local'
