@@ -3,18 +3,18 @@
   "private": true,
   "dependencies": {
     "@hello-pangea/dnd": "17.0.0",
-    "@mantine/code-highlight": "7.14.1",
-    "@mantine/core": "7.14.1",
-    "@mantine/dropzone": "7.14.1",
-    "@mantine/form": "7.14.1",
-    "@mantine/hooks": "7.14.1",
-    "@mantine/modals": "7.14.1",
-    "@mantine/notifications": "7.14.1",
-    "@mantine/nprogress": "7.14.1",
-    "@mantine/spotlight": "7.14.1",
+    "@mantine/code-highlight": "7.14.2",
+    "@mantine/core": "7.14.2",
+    "@mantine/dropzone": "7.14.2",
+    "@mantine/form": "7.14.2",
+    "@mantine/hooks": "7.14.2",
+    "@mantine/modals": "7.14.2",
+    "@mantine/notifications": "7.14.2",
+    "@mantine/nprogress": "7.14.2",
+    "@mantine/spotlight": "7.14.2",
     "@monaco-editor/react": "4.6.0",
     "@tanstack/query-core": "5.60.6",
-    "@tanstack/react-query": "5.61.0",
+    "@tanstack/react-query": "5.61.3",
     "@tanstack/react-router": "1.82.2",
     "@tanstack/router-devtools": "1.82.2",
     "@tanstack/router-plugin": "1.81.9",
@@ -28,12 +28,12 @@
     "reactflow": "11.11.4"
   },
   "devDependencies": {
-    "@tanstack/react-query-devtools": "5.61.0",
+    "@tanstack/react-query-devtools": "5.61.3",
     "autoprefixer": "10.4.20",
     "postcss": "8.4.49",
     "postcss-preset-mantine": "1.17.0",
     "postcss-simple-vars": "7.0.1",
-    "posthog-js": "1.187.2",
+    "posthog-js": "1.188.0",
     "tailwindcss": "3.4.15"
   }
 }
