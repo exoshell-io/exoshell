@@ -1,5 +1,4 @@
 import { defineConfig, type UserConfig } from 'wxt';
-// import { TanStackRouterVite } from '@tanstack/router-plugin/vite';
 
 // See https://wxt.dev/api/config.html
 export default defineConfig({
@@ -13,6 +12,7 @@ export default defineConfig({
     grayscaleOnDevelopment: false,
   },
   runner: {
+    // Disable opening the browser on dev start
     disabled: true,
   },
   manifest: () => ({
@@ -25,6 +25,12 @@ export default defineConfig({
     },
     version: process.env['npm_package_version'],
     version_name: process.env['VERSION_NAME'],
+    web_accessible_resources: [
+      {
+        resources: ['quickbar.html'],
+        matches: ['*://*/*'],
+      },
+    ],
   }),
   zip: {
     name: 'exoshell',

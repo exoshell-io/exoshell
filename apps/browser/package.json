@@ -17,6 +17,9 @@
     "release:chrome": "sh _scripts/publish-chrome.sh",
     "release:firefox": "sh _scripts/publish-firefox.sh"
   },
+  "dependencies": {
+    "@webext-core/messaging": "2.1.0"
+  },
   "devDependencies": {
     "@wxt-dev/auto-icons": "1.0.2",
     "@wxt-dev/module-react": "1.1.2",
