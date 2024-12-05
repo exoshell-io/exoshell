@@ -8,8 +8,6 @@ export default defineContentScript({
   matches: ['*://*/*'],
   cssInjectionMode: 'ui',
   async main(ctx) {
-    console.log('ExoShell content script running');
-
     // Setup quickbar
     const ui = await createShadowRootUi(ctx, {
       name: 'exoshell-quickbar',

@@ -20,6 +20,7 @@
     "@tanstack/router-plugin": "1.85.3",
     "@vercel/postgres": "0.10.0",
     "allotment": "1.20.2",
+    "class-variance-authority": "0.7.1",
     "clsx": "2.1.1",
     "jotai": "2.10.3",
     "mantine-contextmenu": "7.14.2",
@@ -35,6 +36,9 @@
     "postcss-preset-mantine": "1.17.0",
     "postcss-simple-vars": "7.0.1",
     "posthog-js": "1.194.3",
-    "tailwindcss": "3.4.16"
+    "shadcn": "2.1.6",
+    "tailwind-merge": "2.5.5",
+    "tailwindcss": "3.4.16",
+    "tailwindcss-animate": "1.0.7"
   }
 }
