@@ -25,12 +25,7 @@ export default defineConfig({
     },
     version: process.env['npm_package_version'],
     version_name: process.env['VERSION_NAME'],
-    web_accessible_resources: [
-      {
-        resources: ['quickbar.html'],
-        matches: ['*://*/*'],
-      },
-    ],
+    action: {},
   }),
   zip: {
     name: 'exoshell',

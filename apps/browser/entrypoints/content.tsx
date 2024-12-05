@@ -16,17 +16,34 @@ export default defineContentScript({
       position: 'modal',
       anchor: 'body',
       zIndex: 999999,
-      onMount: (container) => {
-        const root = ReactDOM.createRoot(container);
+      onMount: (container, _shadow, shadowHost) => {
+        shadowHost.style.display = 'none';
+        const wrapper = document.createElement('div');
+        const root = ReactDOM.createRoot(wrapper);
         root.render(<Quickbar />);
-        return { root, container };
+        container.appendChild(wrapper);
+        return { root, wrapper };
       },
       onRemove: (root) => {
         root?.root.unmount();
-        root?.container.remove();
+        root?.wrapper.remove();
       },
     });
     ui.mount();
+
+    ipc.onMessage('toggleQuickBar', (_message) => {
+      if (ui.mounted === undefined) {
+        // Quickbar is not mounted
+        // TODO: display notification about reloading the page
+        return;
+      }
+      if (_message.data !== undefined) {
+        ui.shadowHost.style.display = _message.data ? 'block' : 'none';
+      } else {
+        ui.shadowHost.style.display =
+          ui.shadowHost.style.display === 'none' ? 'block' : 'none';
+      }
+    });
 
     // Listen for messages from the background script
     ipc.onMessage('runScript', (message) => {
