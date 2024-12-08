@@ -1,5 +1,4 @@
 import { motion, useDragControls } from 'motion/react';
-import { Button } from '@/components/shadcn/Button';
 
 export const Quickbar: React.FC = () => {
   const constraintsRef = useRef(null);
@@ -37,7 +36,6 @@ export const Quickbar: React.FC = () => {
         <div className='h-14'>
           <textarea placeholder='Ask anything...' className='w-full bg-white' />
         </div>
-        <Button variant='outline'>Hello</Button>
       </motion.div>
     </motion.div>
   );

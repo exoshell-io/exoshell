@@ -62,7 +62,7 @@ const Inner: React.FC<Readonly<InnerProps>> = ({ tab }) => {
   const [isCodeVisible, toggleCodeVisible] = useToggle([true, false]);
   const [isSettingsVisible, toggleSettingsVisible] = useToggle([true, false]);
 
-  const editorRef = useRef<React.ElementRef<typeof FileEditor>>(null);
+  const editorRef = useRef<React.ComponentRef<typeof FileEditor>>(null);
 
   const handlePanelVisibilityChange = (index: number, visible: boolean) => {
     if (index === 0) {

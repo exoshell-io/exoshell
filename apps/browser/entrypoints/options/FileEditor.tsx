@@ -7,7 +7,6 @@ import cssWorker from 'monaco-editor/esm/vs/language/css/css.worker?worker';
 import htmlWorker from 'monaco-editor/esm/vs/language/html/html.worker?worker';
 import jsonWorker from 'monaco-editor/esm/vs/language/json/json.worker?worker';
 import tsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker';
-import { forwardRef } from 'react';
 
 self.MonacoEnvironment = {
   getWorker(_, label) {
@@ -32,14 +31,15 @@ void loader.init();
 
 export interface FileEditorsProps {
   path: string;
+  ref?: React.Ref<Parameters<NonNullable<EditorProps['onMount']>>[0]>;
 }
 
-export const FileEditor = forwardRef<
-  Parameters<NonNullable<EditorProps['onMount']>>[0],
-  Readonly<FileEditorsProps>
->(({ path }, editorRef) => {
+export const FileEditor: React.FC<Readonly<FileEditorsProps>> = ({
+  path,
+  ref,
+}) => {
   const monacoRef =
-    useRef<Parameters<NonNullable<EditorProps['onMount']>>[1]>();
+    useRef<Parameters<NonNullable<EditorProps['onMount']>>[1]>(null);
 
   return (
     <Editor
@@ -53,10 +53,10 @@ export const FileEditor = forwardRef<
         );
       }}
       onMount={(editor, monaco) => {
-        assignRef(editorRef, editor);
+        assignRef(ref, editor);
         monacoRef.current = monaco;
       }}
       path={path}
     />
   );
-});
+};

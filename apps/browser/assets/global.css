@@ -57,3 +57,9 @@
     @apply bg-background text-foreground font-sans antialiased;
   }
 }
+
+@layer components {
+  :root {
+    --header-height: 50px;
+  }
+}

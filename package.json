@@ -5,7 +5,8 @@
   "workspaces": [
     ".github/scripts",
     "libs/*",
-    "apps/*"
+    "apps/*",
+    "pkgs/*"
   ],
   "scripts": {
     "build": "turbo run build:",
