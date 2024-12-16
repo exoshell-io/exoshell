@@ -1,0 +1,5 @@
+{
+  "name": "React Polymorphic Component Dir",
+  "omitParentDirectory": true,
+  "openFilesWhenDone": ["[FTName % pascalcase]/[FTName % pascalcase].tsx"]
+}
