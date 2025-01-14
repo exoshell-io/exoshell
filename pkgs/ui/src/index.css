@@ -1,0 +1,20 @@
+@import 'tailwindcss';
+@plugin 'tailwindcss-animate';
+
+@source '.';
+
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--border, currentColor);
+  }
+
+  * {
+    /* Scrollbar */
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+}

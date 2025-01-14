@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "jsx": "preserve",
+    "outDir": "./dist",
+    "composite": true,
+    "emitDeclarationOnly": false,
+    "noEmit": false,
+    "allowImportingTsExtensions": null
+  },
+  "include": ["src/"]
+}

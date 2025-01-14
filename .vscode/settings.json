@@ -6,6 +6,7 @@
     "aarch",
     "appimage",
     "appindicator",
+    "appshell",
     "azuretools",
     "bierner",
     "bradlc",
@@ -43,6 +44,7 @@
     "nprogress",
     "nsis",
     "nullglob",
+    "oklch",
     "pangea",
     "pascalcase",
     "patchelf",
@@ -55,12 +57,15 @@
     "protos",
     "quickbar",
     "reactflow",
+    "rolldown",
     "rsplit",
     "rustc",
     "rustup",
     "serayuzgur",
     "shadcn",
     "shellcheck",
+    "Shiki",
+    "shikijs",
     "sysinfo",
     "tailwindcss",
     "tamasfe",
@@ -68,6 +73,8 @@
     "tauri",
     "thiserror",
     "timonwong",
+    "twoslash",
+    "unocss",
     "usermod",
     "vunguyentuan",
     "webext",
@@ -121,5 +128,8 @@
   },
   "cSpell.enabledFileTypes": {
     "Dockerfile": true
-  }
+  },
+  "tailwindCSS.experimental.classRegex": [
+    ["([\"'`][^\"'`]*.*?[\"'`])", "[\"'`]([^\"'`]*).*?[\"'`]"]
+  ]
 }

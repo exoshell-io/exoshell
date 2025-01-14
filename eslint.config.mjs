@@ -24,7 +24,9 @@ export default ts.config(
     extends: [...ts.configs.strictTypeChecked],
     languageOptions: {
       parserOptions: {
-        projectService: true,
+        projectService: {
+          allowDefaultProject: ['postcss.config.js'],
+        },
       },
       globals: {
         ...globals.browser,
@@ -34,6 +36,7 @@ export default ts.config(
     },
     rules: {
       '@typescript-eslint/no-non-null-assertion': 'off',
+      '@typescript-eslint/no-empty-object-type': 'off',
       '@typescript-eslint/no-unused-vars': [
         'error',
         { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
@@ -45,6 +48,7 @@ export default ts.config(
           allowBoolean: true,
         },
       ],
+      '@typescript-eslint/require-await': 'off',
     },
   },
   {
@@ -55,6 +59,7 @@ export default ts.config(
       compat.extends('plugin:react-hooks/recommended'),
     ],
     rules: {
+      '@eslint-react/hooks-extra/no-redundant-custom-hook': 'off',
       '@eslint-react/hooks-extra/no-direct-set-state-in-use-effect': 'off',
     },
   },

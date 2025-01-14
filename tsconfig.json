@@ -54,6 +54,7 @@
   "include": [
     "eslint.config.mjs",
     ".lintstagedrc.mjs",
-    "./apps/browser/.wxt/eslint-auto-imports.mjs"
+    "./apps/browser/.wxt/eslint-auto-imports.mjs",
+    "./pkgs/ui/postcss.config.js"
   ]
 }
