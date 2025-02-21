@@ -1,8 +1,11 @@
-import { type SlotComponentProps } from '@exoshell/ui';
+'use client'
+
+import { type SlotComponentProps } from '../..';
 import { _tv[FTName % pascalcase], tv[FTName % pascalcase] } from './styles';
 
 // =============================================================================
 // #region [FTName % pascalcase]
+
 export type [FTName % pascalcase]Props =
   SlotComponentProps<typeof _tv[FTName % pascalcase], 'root', React.ComponentPropsWithRef<'div'>>;
 
@@ -17,4 +20,5 @@ export const [FTName % pascalcase]: React.FC<[FTName % pascalcase]Props> = ({
     </div>
   );
 }
-// #endregion
+
+// #endregion [FTName % pascalcase]
