@@ -15,7 +15,7 @@ version = "0.0.0"
 # Helpers
 anyhow = { version = "1.0.96" }
 thiserror = { version = "2.0.11" }
-clap = { version = "4.5.30", features = ["derive"] }
+clap = { version = "4.5.31", features = ["derive"] }
 chrono = { version = "0.4.39" }
 derive_builder = { version = "0.20.2" }
 tap = { version = "1.0.1" }
