@@ -36,9 +36,9 @@
     "prettier": "3.5.2",
     "prettier-plugin-tailwindcss": "0.6.11",
     "sort-package-json": "2.14.0",
-    "turbo": "2.4.2",
+    "turbo": "2.4.4",
     "typescript": "5.7.3",
-    "vercel": "41.2.0"
+    "vercel": "41.2.2"
   },
   "packageManager": "bun@1.2.3",
   "trustedDependencies": [
