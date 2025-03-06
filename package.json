@@ -30,17 +30,17 @@
     "typescript-result": "3.1.1"
   },
   "devDependencies": {
-    "@types/bun": "1.2.3",
+    "@types/bun": "1.2.4",
     "husky": "9.1.7",
     "lint-staged": "15.4.3",
-    "prettier": "3.5.2",
+    "prettier": "3.5.3",
     "prettier-plugin-tailwindcss": "0.6.11",
-    "sort-package-json": "2.14.0",
+    "sort-package-json": "3.0.0",
     "turbo": "2.4.4",
-    "typescript": "5.7.3",
-    "vercel": "41.2.2"
+    "typescript": "5.8.2",
+    "vercel": "41.3.1"
   },
-  "packageManager": "bun@1.2.3",
+  "packageManager": "bun@1.2.4",
   "trustedDependencies": [
     "@exoshell/browser"
   ]
