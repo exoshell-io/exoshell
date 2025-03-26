@@ -1,6 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { listen, type UnlistenFn } from '@tauri-apps/api/event';
-import { invoke } from '@tauri-apps/api/tauri';
+import { invoke } from '@tauri-apps/api/core';
 import { useEffect } from 'react';
 import { queryKeys } from '.';
 
@@ -10,13 +10,15 @@ export const useBackendEvents = () => {
     let isMounted = true;
     let unlisten: UnlistenFn | undefined = undefined;
     async function handleDatabaseEvents() {
-      unlisten = await listen('plugin_ipc:script_run', (_event) => {
+      unlisten = await listen('exoshell:script_run', (_event) => {
         if (isMounted)
-          queryClient.invalidateQueries({ queryKey: queryKeys.scriptRuns });
+          void queryClient.invalidateQueries({
+            queryKey: queryKeys.scriptRuns,
+          });
       });
-      await invoke('plugin:ipc|initialize');
+      await invoke('initialize');
     }
-    handleDatabaseEvents();
+    void handleDatabaseEvents();
     return () => {
       isMounted = false;
       unlisten?.();

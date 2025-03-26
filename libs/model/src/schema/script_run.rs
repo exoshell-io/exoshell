@@ -35,12 +35,15 @@ pub enum ScriptRunLog {
 }
 
 impl crate::Database {
-  pub async fn list_script_runs_by_script(&self, script_id: &str) -> Result<Vec<ScriptRun>> {
+  pub async fn list_script_runs_by_script(
+    &self,
+    script_id: impl Into<String>,
+  ) -> Result<Vec<ScriptRun>> {
     Ok(
       self
         .db
         .query("SELECT * FROM script_run WHERE script.id = type::thing('script', $script_id)")
-        .bind(("script_id", script_id))
+        .bind(("script_id", script_id.into()))
         .await?
         .take(0)?,
     )
@@ -48,24 +51,24 @@ impl crate::Database {
 
   pub async fn append_script_run_log(
     &self,
-    id: &surrealdb::sql::Id,
-    script_run_log: &ScriptRunLog,
+    script_run_id: impl Into<String>,
+    script_run_log: impl Into<ScriptRunLog>,
   ) -> Result<()> {
     self
       .db
       .query("UPDATE type::thing('script_run', $id) SET log += $log RETURN NONE")
-      .bind(("id", id.to_raw()))
-      .bind(("log", script_run_log))
+      .bind(("id", script_run_id.into()))
+      .bind(("log", script_run_log.into()))
       .await?;
     Ok(())
   }
 
-  pub async fn delete_script_runs(&self, script_id: &str) -> Result<()> {
+  pub async fn delete_script_runs_by_script(&self, script_id: impl Into<String>) -> Result<()> {
     println!("deleting all scripts");
     self
       .db
       .query("DELETE script_run WHERE script.id = type::thing('script', $script_id) RETURN NONE")
-      .bind(("script_id", script_id))
+      .bind(("script_id", script_id.into()))
       .await?;
     Ok(())
   }
@@ -80,17 +83,27 @@ impl crate::Database {
 mod tests {
   use super::*;
 
-  #[test]
-  fn test_script_run() -> Result<()> {
-    let script_run = ScriptRun::builder()
-      .script(
-        Script::builder()
-          .name("Test Script")
-          .command("true")
-          .build()?,
-      )
-      .build()?;
-    println!("{:?}", script_run);
+  #[tokio::test]
+  async fn test_script_run() -> Result<()> {
+    let db = crate::Database::memory().await?;
+
+    db.upsert_script_run(
+      ScriptRun::builder()
+        .id("test")
+        .script(
+          Script::builder()
+            .id("test")
+            .name("Test Script")
+            .command("true")
+            .build()?,
+        )
+        .build()?,
+    )
+    .await?;
+
+    assert_eq!(db.list_script_run().await?.len(), 1);
+    assert_eq!(db.list_script_runs_by_script("test").await?.len(), 1);
+
     Ok(())
   }
 }

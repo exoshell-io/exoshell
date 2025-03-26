@@ -8,7 +8,7 @@ pub async fn list_scripts(state: State<'_, IpcState>) -> IpcResult<Vec<Script>> 
 
 #[tauri::command]
 pub async fn upsert_script(script: Script, state: State<'_, IpcState>) -> IpcResult<Script> {
-  let _script = state.get_ng().await?.db.upsert_script(&script).await?;
+  let _script = state.get_ng().await?.db.upsert_script(script).await?;
   Ok(_script)
 }
 
@@ -59,7 +59,7 @@ pub async fn upsert_script_run(
     .get_ng()
     .await?
     .db
-    .upsert_script_run(&script_run)
+    .upsert_script_run(script_run)
     .await?;
   Ok(script_run)
 }
@@ -76,7 +76,7 @@ pub async fn delete_script_runs(script_id: String, state: State<'_, IpcState>) -
     .get_ng()
     .await?
     .db
-    .delete_script_runs(&script_id)
+    .delete_script_runs_by_script(&script_id)
     .await?;
   Ok(())
 }

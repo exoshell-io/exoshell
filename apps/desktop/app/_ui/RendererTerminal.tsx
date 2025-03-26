@@ -9,7 +9,7 @@ import {
   useUpsertScript,
   type ScriptRun,
 } from '@/_state';
-import { Script } from '@exoshell/model';
+import type { Script } from '@exoshell/model';
 import { CodeHighlight } from '@mantine/code-highlight';
 import {
   Accordion,
@@ -31,6 +31,7 @@ import {
 import { isNotEmpty, useForm } from '@mantine/form';
 import { useQueryClient } from '@tanstack/react-query';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { OciLayoutBuilder } from './OciLayoutBuilder';
 import {
   IconBolt,
   IconCircle,
@@ -40,7 +41,9 @@ import {
   IconTrash,
 } from './icons';
 
-export const RendererTerminal: React.FC<{ id: string }> = ({ id }) => {
+export const RendererTerminal: React.FC<Readonly<{ id: string }>> = ({
+  id,
+}) => {
   const script = useScript(id);
 
   const form = useForm<Script>({
@@ -56,8 +59,7 @@ export const RendererTerminal: React.FC<{ id: string }> = ({ id }) => {
     form.setValues(script.data);
     form.resetDirty();
     setInitialized(true);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [script]);
+  }, [script, form, initialized]);
 
   const upsertScript = useUpsertScript();
   const runScript = useRunScript();
@@ -76,7 +78,7 @@ export const RendererTerminal: React.FC<{ id: string }> = ({ id }) => {
 
   useEffect(() => {
     if (tab === null && scriptRuns.isSuccess && scriptRuns.data.length > 0) {
-      setTab(scriptRuns.data[0].id?.id.String ?? null);
+      setTab(scriptRuns.data[0]!.id?.id.String ?? null);
     }
   }, [scriptRuns.data, scriptRuns.isSuccess, tab]);
 
@@ -106,6 +108,7 @@ export const RendererTerminal: React.FC<{ id: string }> = ({ id }) => {
             label='Working Directory'
             {...form.getInputProps('workingDir')}
           />
+          <OciLayoutBuilder />
           <Group>
             {form.isDirty() ? (
               <Button
@@ -117,7 +120,7 @@ export const RendererTerminal: React.FC<{ id: string }> = ({ id }) => {
                 Save
               </Button>
             ) : (
-              <Button onClick={run} leftSection={<IconPlay />}>
+              <Button onClick={() => void run()} leftSection={<IconPlay />}>
                 Run
               </Button>
             )}
@@ -133,7 +136,9 @@ export const RendererTerminal: React.FC<{ id: string }> = ({ id }) => {
             <Button
               color='red'
               loading={deleteScript.isPending}
-              onClick={() => deleteScript.mutate({ id })}
+              onClick={() => {
+                deleteScript.mutate({ id });
+              }}
               leftSection={<IconTrash />}
             >
               Delete
@@ -141,7 +146,9 @@ export const RendererTerminal: React.FC<{ id: string }> = ({ id }) => {
             <Button
               color='red'
               leftSection={<IconTrash />}
-              onClick={() => deleteScriptRuns.mutate({ scriptId: id })}
+              onClick={() => {
+                deleteScriptRuns.mutate({ scriptId: id });
+              }}
               loading={deleteScriptRuns.isPending}
             >
               Delete all script runs
@@ -154,11 +161,13 @@ export const RendererTerminal: React.FC<{ id: string }> = ({ id }) => {
   );
 };
 
-const RendererScriptRuns: React.FC<{
-  scriptId: string;
-  tab: string | null;
-  setTab: (value: string | null) => void;
-}> = ({ scriptId, tab, setTab }) => {
+const RendererScriptRuns: React.FC<
+  Readonly<{
+    scriptId: string;
+    tab: string | null;
+    setTab: (value: string | null) => void;
+  }>
+> = ({ scriptId, tab, setTab }) => {
   const scriptRuns = useScriptRuns(scriptId);
 
   return (
@@ -187,7 +196,9 @@ const RendererScriptRuns: React.FC<{
           variant='outline'
           orientation='vertical'
           value={tab}
-          onChange={(value) => setTab(value)}
+          onChange={(value) => {
+            setTab(value);
+          }}
         >
           <TabsList>
             {scriptRuns.data?.map((scriptRun) => {
@@ -227,17 +238,19 @@ const RendererScriptRuns: React.FC<{
   );
 };
 
-const RendererScriptRun: React.FC<{ scriptRun: ScriptRun }> = ({
+const RendererScriptRun: React.FC<Readonly<{ scriptRun: ScriptRun }>> = ({
   scriptRun,
 }) => {
   const logs = useMemo(
     () =>
       scriptRun.log
         .map((log) => {
-          if ((log as any)['stdout'] !== undefined) {
-            return (log as any)['stdout'].txt;
-          } else if ((log as any)['stderr'] !== undefined) {
-            return (log as any)['stderr'].txt;
+          if ('stdout' in log) {
+            return log.stdout.txt;
+          } else if ('stderr' in log) {
+            return log.stderr.txt;
+          } else {
+            return '';
           }
         })
         .join(''),
@@ -287,7 +300,7 @@ const RendererScriptRun: React.FC<{ scriptRun: ScriptRun }> = ({
         <Button
           leftSection={<IconRefresh />}
           onClick={() =>
-            queryClient.invalidateQueries({ queryKey: ['scriptRuns'] })
+            void queryClient.invalidateQueries({ queryKey: ['scriptRuns'] })
           }
         >
           Refresh
@@ -295,7 +308,9 @@ const RendererScriptRun: React.FC<{ scriptRun: ScriptRun }> = ({
         {status !== 'running' && (
           <Button
             loading={deleteScriptRun.isPending}
-            onClick={() => deleteScriptRun.mutate({ scriptId, id })}
+            onClick={() => {
+              deleteScriptRun.mutate({ scriptId, id });
+            }}
             color='red'
             leftSection={<IconTrash />}
           >
@@ -306,7 +321,9 @@ const RendererScriptRun: React.FC<{ scriptRun: ScriptRun }> = ({
           <Button
             color='Red'
             leftSection={<IconBolt />}
-            onClick={() => killScriptRun.mutate({ scriptId, scriptRunId: id })}
+            onClick={() => {
+              killScriptRun.mutate({ scriptId, scriptRunId: id });
+            }}
             loading={killScriptRun.isPending}
           >
             Kill

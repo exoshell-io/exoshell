@@ -1,0 +1,18 @@
+{
+  "name": "@exoshell/nextjs",
+  "private": true,
+  "dependencies": {
+    "drizzle-orm": "0.40.0",
+    "next": "15.2.1",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
+    "server-only": "0.0.1"
+  },
+  "devDependencies": {
+    "@next/bundle-analyzer": "15.2.1",
+    "@types/node": "22.13.9",
+    "@types/react": "19.0.10",
+    "@types/react-dom": "19.0.4",
+    "drizzle-kit": "0.30.5"
+  }
+}

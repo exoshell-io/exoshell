@@ -1,12 +1,10 @@
 mod prelude;
 use self::prelude::*;
 
-mod dashboards;
 mod db;
 mod scripts;
-mod workflows;
 
-use tauri::plugin::{Builder, TauriPlugin};
+use tauri::Emitter;
 
 #[derive(Debug)]
 pub struct IpcState {
@@ -16,10 +14,7 @@ pub struct IpcState {
 }
 
 impl IpcState {
-  pub fn new<R: Runtime>(
-    filepath: impl AsRef<Path>,
-    _app_handle: tauri::AppHandle<R>,
-  ) -> Result<Self> {
+  pub fn new(filepath: impl AsRef<Path>) -> Result<Self> {
     Ok(Self {
       filepath: filepath.as_ref().to_owned(),
       ng: OnceCell::new(),
@@ -66,14 +61,12 @@ fn emit_script_run<R: Runtime>(
 ) -> Result<()> {
   let notification = result?;
   info!("{:?}", notification);
-  app_handle.emit_all("plugin_ipc:script_run", notification.data)?;
+  app_handle.emit("exoshell:script_run", notification.data)?;
   Ok(())
 }
 
-const PLUGIN_NAME: &str = "ipc";
-
-pub fn init<R: Runtime>() -> TauriPlugin<R> {
-  Builder::new(PLUGIN_NAME)
+pub fn configure(builder: tauri::Builder<tauri::Wry>) -> tauri::Builder<tauri::Wry> {
+  builder
     .invoke_handler(tauri::generate_handler![
       initialize,
       scripts::list_scripts,
@@ -89,29 +82,15 @@ pub fn init<R: Runtime>() -> TauriPlugin<R> {
       scripts::delete_script_runs,
       scripts::drop_script_runs,
       scripts::list_script_runs_by_script,
-      workflows::list_workflows,
-      workflows::upsert_workflow,
-      workflows::delete_workflow,
-      dashboards::list_dashboards,
-      dashboards::upsert_dashboard,
-      dashboards::delete_dashboard,
       db::query,
     ])
-    .setup(|app_handle| {
-      app_handle.manage(IpcState::new(
-        format!(
-          "file://{}/state.db",
-          app_handle
-            .path_resolver()
-            .app_data_dir()
-            .unwrap()
-            .to_string_lossy()
-        ),
-        app_handle.app_handle(),
-      )?);
+    .setup(|app| {
+      app.manage(IpcState::new(format!(
+        "rocksdb://{}/state.db",
+        app.path().app_data_dir().unwrap().to_string_lossy()
+      ))?);
       Ok(())
     })
-    .build()
 }
 
 #[derive(Debug, thiserror::Error)]

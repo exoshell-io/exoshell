@@ -29,9 +29,9 @@ export const queryClient = new QueryClient({
   },
 });
 
-export const ReactQueryProvider: React.FC<React.PropsWithChildren> = ({
-  children,
-}) => {
+export const ReactQueryProvider: React.FC<
+  Readonly<React.PropsWithChildren>
+> = ({ children }) => {
   return (
     <QueryClientProvider client={queryClient}>
       <ReactQueryDevtools buttonPosition='bottom-left' />

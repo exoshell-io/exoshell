@@ -1,20 +1,11 @@
-mod prelude;
-use prelude::*;
+use clap::Parser;
 
-// #[derive(Parser)]
-// #[command(
-//   author,
-//   version,
-//   about,
-//   arg_required_else_help(true),
-//   styles(clap::builder::Styles::styled()
-//   .header(AnsiColor::Green.on_default())
-//   .usage(AnsiColor::Green.on_default())
-//   .literal(AnsiColor::Cyan.on_default())
-//   .placeholder(AnsiColor::Blue.bright(true).on_default()))
-// )]
-// struct Cli {}
+#[tokio::main]
+async fn main() -> anyhow::Result<()> {
+  tracing_subscriber::fmt::init();
 
-fn main() -> Result<()> {
+  let cli = exoshell::cli::Cli::parse();
+  cli.run().await?;
+
   Ok(())
 }

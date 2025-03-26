@@ -1,1 +1,14 @@
+match_block_trailing_comma = true
+newline_style = 'Unix'
 tab_spaces = 2
+use_field_init_shorthand = true
+
+### Enable when stable
+# group_imports = 'StdExternalCrate'
+# condense_wildcard_suffixes = true
+# version = 'Two'
+# imports_granularity = 'One'
+# format_macro_matchers = true
+# format_strings = true
+# wrap_comments = true
+# normalize_comments = true

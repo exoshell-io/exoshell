@@ -8,10 +8,10 @@ pub async fn query(
 ) -> IpcResult<String> {
   let mut q = state.get_ng().await?.db.db.query(query);
   if let Some(vars) = vars {
-    for (k, v) in vars.iter() {
+    for (k, v) in vars.into_iter() {
       q = q.bind((k, v));
     }
   }
-  let resp: surrealdb::sql::Value = q.await?.take(0)?;
+  let resp: surrealdb::Value = q.await?.take(0)?;
   Ok(serde_json::to_string_pretty(&resp).with_context(|| "")?)
 }

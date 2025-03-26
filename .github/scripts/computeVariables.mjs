@@ -9,17 +9,33 @@ const defaultOutputs = {
   /** @type {false | 'draft' | 'prerelease' | 'stable'} */
   shouldRelease: false,
   appVersion: '0.0.0',
-  releaseVersion: 'v0.0.0',
+  releaseVersion: '0.0.0',
+  cdCliMatrix: '{}',
   cdTauriMatrix: '{}',
   rustVersion: '',
 };
 
+const defaultCdCli = {
+  include: [
+    // { platform: 'ubuntu-latest', target: 'x86_64-unknown-linux-gnu' },
+    // { platform: 'ubuntu-latest', target: 'aarch64-unknown-linux-gnu' },
+    // { platform: 'macos-latest', target: 'x86_64-apple-darwin' },
+    { platform: 'macos-latest', target: 'aarch64-apple-darwin' },
+    // { platform: 'windows-latest', target: 'x86_64-pc-windows-msvc' },
+    // { platform: 'windows-latest', target: 'aarch64-pc-windows-msvc' },
+  ],
+};
+
 const defaultCdTauriMatrix = {
   include: [
-    { platform: 'ubuntu-22.04', tauriBuildTarget: 'x86_64-unknown-linux-gnu' },
+    // { platform: 'ubuntu-latest', tauriBuildTarget: 'x86_64-unknown-linux-gnu' },
+    // {
+    //   platform: 'ubuntu-latest',
+    //   tauriBuildTarget: 'aarch64-unknown-linux-gnu',
+    // },
+    // { platform: 'macos-latest', tauriBuildTarget: 'x86_64-apple-darwin' },
     { platform: 'macos-latest', tauriBuildTarget: 'aarch64-apple-darwin' },
-    { platform: 'macos-latest', tauriBuildTarget: 'x86_64-apple-darwin' },
-    { platform: 'windows-latest', tauriBuildTarget: 'x86_64-pc-windows-msvc' },
+    // { platform: 'windows-latest', tauriBuildTarget: 'x86_64-pc-windows-msvc' },
     // { platform: 'macos-latest', tauriBuildArgs: '--target universal-apple-darwin', rustTargets: 'x86_64-apple-darwin,aarch64-apple-darwin' },
   ],
 };
@@ -66,10 +82,10 @@ export default async function (context, core) {
 
     if (channel === undefined) {
       outputs.shouldRelease = 'stable';
-      outputs.releaseVersion = `v${major}.${minor}.${patch}`;
+      outputs.releaseVersion = `${major}.${minor}.${patch}`;
     } else {
       outputs.shouldRelease = 'prerelease';
-      outputs.releaseVersion = `v${major}.${minor}.${patch}-${channel}.${channelPatch}`;
+      outputs.releaseVersion = `${major}.${minor}.${patch}-${channel}.${channelPatch}`;
     }
     outputs.appVersion = computeAppVersion(
       major,
@@ -83,7 +99,7 @@ export default async function (context, core) {
     getVariableFromPullRequestBody(context, 'test-release') === 'true'
   ) {
     outputs.shouldRelease = 'draft';
-    outputs.releaseVersion = `v0.0.0-pr.${context.payload.pull_request?.number}`;
+    outputs.releaseVersion = `0.0.0-pr.${context.payload.pull_request?.number}`;
     outputs.appVersion = computeAppVersion(
       0,
       0,
@@ -92,6 +108,8 @@ export default async function (context, core) {
       context.payload.pull_request?.number,
     );
   }
+
+  outputs.cdCliMatrix = JSON.stringify(defaultCdCli, undefined, 2);
 
   outputs.cdTauriMatrix = JSON.stringify(defaultCdTauriMatrix, undefined, 2);
 
@@ -102,6 +120,9 @@ export default async function (context, core) {
   outputs.rustVersion = castNonNull(
     castNonNull(miseToml.match(/^rust = '(.+)'$/m))[1],
   );
+  if (outputs.rustVersion === '1') {
+    outputs.rustVersion = 'stable';
+  }
   // #endregion
 
   core.summary.addHeading('Computed variables', 2);
@@ -115,7 +136,7 @@ const channelToNumber = { pr: 0, alpha: 1, beta: 2, rc: 3, undefined: 4 };
  * @param {number} major
  * @param {number} minor
  * @param {number} patch
- * @param {keyof typeof channelToNumber} channel
+ * @param {keyof typeof channelToNumber | undefined} channel
  * @param {number | undefined} channelPatch
  * @returns {string}
  */
@@ -124,7 +145,9 @@ function computeAppVersion(major, minor, patch, channel, channelPatch) {
     `computeAppVersion(${major}, ${minor}, ${patch}, ${channel}, ${channelPatch})`,
   );
   const encodedPatch =
-    patch * 2048 + (channelToNumber[channel] ?? 0) * 32 + (channelPatch ?? 0);
+    patch * 2048 +
+    (channel === undefined ? 0 : channelToNumber[channel]) * 32 +
+    (channelPatch ?? 0);
   return `${major}.${minor}.${encodedPatch}`;
 }
 

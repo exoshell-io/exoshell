@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 
-export const NoSsr: React.FC<React.PropsWithChildren> = ({ children }) => {
+export const NoSsr: React.FC<Readonly<React.PropsWithChildren>> = ({
+  children,
+}) => {
   const [hasMounted, setHasMounted] = useState(false);
 
   useEffect(() => {

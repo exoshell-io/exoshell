@@ -13,55 +13,68 @@ version = "0.0.0"
 
 [workspace.dependencies]
 # Helpers
-anyhow = { version = "1.0.86" }
-thiserror = { version = "1.0.61" }
-clap = { version = "4.5.4", features = ["derive"] }
-chrono = { version = "0.4.38" }
-derive_builder = { version = "0.20.0" }
+anyhow = { version = "1.0.96" }
+thiserror = { version = "2.0.11" }
+clap = { version = "4.5.31", features = ["derive"] }
+chrono = { version = "0.4.39" }
+derive_builder = { version = "0.20.2" }
 tap = { version = "1.0.1" }
+directories = { version = "6.0.0" }
+sysinfo = { version = "0.33.1" }
 
 # Serialization
-serde = { version = "1.0.203", features = ["derive"] }
-serde_json = { version = "1.0.117" }
-serde_with = { version = "3.8.1" }
+serde = { version = "1.0.218", features = ["derive"] }
+serde_json = { version = "1.0.139" }
+serde_yml = { version = "0.0.12" }
+serde_with = { version = "3.12.0" }
 heck = { version = "0.5.0" }
 shell-words = { version = "1.1.0" }
-ts-rs = { version = "8.1.0", features = ["chrono-impl"] }
+ts-rs = { version = "10.1.0", features = ["chrono-impl"] }
+config = { version = "0.15.8" }
+
+# OCI
+oci-spec = { version = "0.7.1" }
 
 # Tracing
-tracing = { version = "0.1.40" }
-tracing-subscriber = { version = "0.3.18", features = [
+tracing = { version = "0.1.41" }
+tracing-subscriber = { version = "0.3.19", features = [
   "parking_lot",
   "tracing",
 ] }
 
 # Database
-surrealdb = { version = "1.5.1", features = ["kv-rocksdb", "kv-mem"] }
+surrealdb = { version = "2.2.1", features = ["kv-rocksdb", "kv-mem"] }
 
 # Async
-tokio = { version = "1.38.0", features = ["process", "sync"] }
-tokio-util = { version = "0.7.11", features = ["io"] }
-tokio-stream = { version = "0.1.15", features = ["io-util"] }
-futures = { version = "0.3.30" }
+tokio = { version = "1.43.0", features = ["process", "sync", "signal"] }
+tokio-util = { version = "0.7.13", features = ["io", "rt"] }
+tokio-stream = { version = "0.1.17", features = ["io-util"] }
+futures = { version = "0.3.31" }
 
 # Macro helpers
-syn = { version = "2.0.66" }
-quote = { version = "1.0.36" }
-proc-macro2 = { version = "1.0.85" }
-darling = { version = "0.20.9" }
+syn = { version = "2.0.98" }
+quote = { version = "1.0.38" }
+proc-macro2 = { version = "1.0.93" }
+darling = { version = "0.20.10" }
 
 # Tauri
-tauri = { version = "1.6.8", features = [
-  "window-start-dragging",
-  "window-hide",
-  "global-shortcut",
-  "macos-private-api",
-  "system-tray",
-  "updater",
-] }
-tauri-build = { version = "1.5.2", features = [] }
+tauri = { version = "2.2.5", features = ["macos-private-api", "tray-icon"] }
+tauri-build = { version = "2.0.5", features = [] }
+
+# API
+axum = { version = "0.8.1" }
+tonic = { version = "0.12.3" }
+tonic-build = { version = "0.12.3" }
+prost = { version = "0.13.5" }
+
 
 [workspace.lints.clippy]
 type_complexity = 'allow'
 single_match = 'allow'
 collapsible_else_if = 'allow'
+
+[workspace.metadata.cross.target.x86_64-apple-darwin]
+image = "ghcr.io/cross-rs/x86_64-apple-darwin-cross:local"
+
+[workspace.metadata.cross.target.aarch64-apple-darwin]
+image = "ghcr.io/cross-rs/aarch64-apple-darwin-cross:local"

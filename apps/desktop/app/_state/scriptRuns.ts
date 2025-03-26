@@ -5,7 +5,7 @@ import {
   type DefaultError,
   type UseQueryOptions,
 } from '@tanstack/react-query';
-import { invoke } from '@tauri-apps/api/tauri';
+import { invoke } from '@tauri-apps/api/core';
 import { queryKeys, type ScriptRun } from '.';
 
 export const useScriptRuns = <T = ScriptRun[]>(
@@ -19,7 +19,7 @@ export const useScriptRuns = <T = ScriptRun[]>(
     queryKey: [...queryKeys['scriptRuns'], scriptId],
     queryFn: async () => {
       const scriptRuns = await invoke<ScriptRun[]>(
-        'plugin:ipc|list_script_runs_by_script',
+        'list_script_runs_by_script',
         { scriptId },
       );
       return scriptRuns;
@@ -33,8 +33,8 @@ export const useDeleteScriptRun = () => {
   return useMutation({
     mutationKey: ['deleteScriptRun'],
     mutationFn: async ({ scriptId, id }: { scriptId?: string; id: string }) => {
-      await invoke('plugin:ipc|delete_script_run', { id });
-      queryClient.invalidateQueries({
+      await invoke('delete_script_run', { id });
+      await queryClient.invalidateQueries({
         queryKey: [...queryKeys['scriptRuns'], scriptId],
       });
     },
@@ -46,8 +46,8 @@ export const useDeleteScriptRuns = () => {
   return useMutation({
     mutationKey: ['deleteScriptRuns'],
     mutationFn: async ({ scriptId }: { scriptId: string }) => {
-      await invoke('plugin:ipc|delete_script_runs', { scriptId });
-      queryClient.invalidateQueries({
+      await invoke('delete_script_runs', { scriptId });
+      await queryClient.invalidateQueries({
         queryKey: [...queryKeys['scriptRuns'], scriptId],
       });
     },
@@ -59,8 +59,10 @@ export const useDropScriptRuns = () => {
   return useMutation({
     mutationKey: ['dropScriptRuns'],
     mutationFn: async () => {
-      await invoke('plugin:ipc|drop_script_runs');
-      queryClient.invalidateQueries({ queryKey: queryKeys['scriptRuns'] });
+      await invoke('drop_script_runs');
+      await queryClient.invalidateQueries({
+        queryKey: queryKeys['scriptRuns'],
+      });
     },
   });
 };
@@ -76,8 +78,8 @@ export const useKillScriptRun = () => {
       scriptId: string;
       scriptRunId: string;
     }) => {
-      await invoke('plugin:ipc|kill_script', { id: scriptRunId });
-      queryClient.invalidateQueries({
+      await invoke('kill_script', { id: scriptRunId });
+      await queryClient.invalidateQueries({
         queryKey: [...queryKeys['scriptRuns'], scriptId],
       });
     },

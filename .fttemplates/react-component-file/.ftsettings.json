@@ -1,0 +1,5 @@
+{
+  "name": "React Component File",
+  "omitParentDirectory": true,
+  "openFilesWhenDone": ["[FTName % pascalcase].tsx"]
+}

@@ -1,13 +1,5 @@
-@layer base, tailwind, mantine;
-
-@layer base {
-  @tailwind base;
-}
-
-@layer tailwind {
-  @tailwind components;
-  @tailwind utilities;
-}
+@import 'tailwindcss';
+@plugin 'tailwindcss-animate';
 
 /* Hide devtools buttons */
 div.tsqd-open-btn-container,

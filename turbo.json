@@ -9,14 +9,14 @@
   ],
   "globalEnv": ["NODE_ENV"],
   "tasks": {
-    "//gen:types": {},
+    "//#gen:types": {},
     "build:": {
       "dependsOn": ["^build:"],
       "inputs": ["$TURBO_DEFAULT$", ".env", ".env.local"],
       "outputs": ["dist/**"]
     },
     "clean": { "cache": false },
-    "lint:": {},
+    "lint:": { "cache": false },
     "test": {}
   }
 }

@@ -1,0 +1,6 @@
+@import 'tailwindcss';
+@import '@mantine/core/styles.css';
+
+@plugin 'tailwindcss-animate';
+
+@variant dark (&:is(.dark *));

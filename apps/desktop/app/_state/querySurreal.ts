@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { invoke } from '@tauri-apps/api/tauri';
+import { invoke } from '@tauri-apps/api/core';
 
 export function useQuerySurreal() {
   return useMutation({
@@ -8,7 +8,7 @@ export function useQuerySurreal() {
       query: string;
       vars: { [key: string]: unknown };
     }) => {
-      return invoke<string>('plugin:ipc|query', args);
+      return invoke<string>('query', args);
     },
   });
 }
